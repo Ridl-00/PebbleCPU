@@ -54,7 +54,8 @@ wire        adder_cout;
 
 assign adder_a   = alu_src1;
 assign adder_b   = (op_sub | op_slt | op_sltu) ? ~alu_src2 : alu_src2;  //src1 - src2 rj-rk
-assign adder_cin = (op_sub | op_slt | op_sltu) ? 1'b1      : 1'b0;
+assign adder_cin = (op_sub | op_slt | op_sltu) ? 1'b1      : 1'b0; //上面变反，此处为补码的+1
+//adder_cout 为进位，cin为前一位的进位
 assign {adder_cout, adder_result} = adder_a + adder_b + adder_cin;
 
 // ADD, SUB result
