@@ -216,9 +216,10 @@ assign src2_is_imm   = inst_slli_w |
 
 assign res_from_mem  = inst_ld_w;
 assign dst_is_r1     = inst_bl; //bl写进r1
-assign gr_we         = ~inst_st_w & ~inst_beq & ~inst_bne & ~inst_b & ~inst_bl;//不是不写的其他都是写的
+assign gr_we         = ~inst_st_w & ~inst_beq & ~inst_bne & ~inst_b;//不是不写的其他都是写的
 assign mem_we        = inst_st_w;
 assign dest          = dst_is_r1 ? 5'd1 : rd; //写寄存器的目的地
+//？只有bl写进r1的话：直接判inst_b而不是dst_is_r1或许更快
 
 assign rf_raddr1 = rj;
 assign rf_raddr2 = src_reg_is_rd ? rd :rk;
