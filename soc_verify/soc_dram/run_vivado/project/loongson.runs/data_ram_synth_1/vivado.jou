@@ -1,0 +1,14 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Sun Dec  1 15:01:36 2024
+# Process ID: 19664
+# Current directory: D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_dram/run_vivado/project/loongson.runs/data_ram_synth_1
+# Command line: vivado.exe -log data_ram.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source data_ram.tcl
+# Log file: D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_dram/run_vivado/project/loongson.runs/data_ram_synth_1/data_ram.vds
+# Journal file: D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_dram/run_vivado/project/loongson.runs/data_ram_synth_1\vivado.jou
+# Running On: DESKTOP-HHJ88ET, OS: Windows, CPU Frequency: 2096 MHz, CPU Physical cores: 12, Host memory: 14887 MB
+#-----------------------------------------------------------
+source data_ram.tcl -notrace

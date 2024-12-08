@@ -1,0 +1,867 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Sun Dec  1 18:04:59 2024
+# Process ID: 15864
+# Current directory: D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent17836 D:\Code\CPUshizhan\cdp_ede_local-master\cdp_ede_local-master\mycpu_env\soc_verify\soc_bram\run_vivado\project\loongson.xpr
+# Log file: D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/vivado.log
+# Journal file: D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project\vivado.jou
+# Running On: DESKTOP-HHJ88ET, OS: Windows, CPU Frequency: 2096 MHz, CPU Physical cores: 12, Host memory: 14887 MB
+#-----------------------------------------------------------
+start_gui
+open_project D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.xpr
+INFO: [ProjectBase 1-489] The host OS only allows 260 characters in a normal path. The project is stored in a path with more than 80 characters. If you experience issues with IP, Block Designs, or files not being found, please consider moving the project to a location with a shorter path. Alternately consider using the OS subst command to map part of the path to a drive letter.
+Current project path is 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project'
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kc705:part0:1.6 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kc705/1.6/board.xml as part xc7k325tffg900-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu105:part0:1.6 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu105/1.6/board.xml as part xcku040-ffva1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu105:part0:1.7 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu105/1.7/board.xml as part xcku040-ffva1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:kcu1500:part0:1.2 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/kcu1500/1.2/board.xml as part xcku115-flvb2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vc707:part0:1.4 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vc707/1.4/board.xml as part xc7vx485tffg1761-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vc709:part0:1.8 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vc709/1.8/board.xml as part xc7vx690tffg1761-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:2.2 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/production/2.2/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/production/3.0/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.1 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/production/3.1/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190:part0:3.2 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190/production/3.2/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190_newl/production/1.0/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vck190_newl:part0:1.1 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vck190_newl/production/1.1/board.xml as part xcvc1902-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu108:part0:1.6 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu108/1.6/board.xml as part xcvu095-ffva2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu108:part0:1.7 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu108/1.7/board.xml as part xcvu095-ffva2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu110:part0:1.4 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu110/1.4/board.xml as part xcvu190-flgc2104-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu118/2.0/board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.3 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu118/2.3/board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu118:part0:2.4 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu118/2.4/board.xml as part xcvu9p-flga2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu129:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu129/production/1.0/board.xml as part xcvu29p-fsga2577-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vcu1525:part0:1.3 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu1525/1.3/board.xml as part xcvu9p-fsgd2104-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/production/1.0/board.xml as part xcve2802-vsvh1760-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/rev_a/1.0/board.xml as part xcve2802-vsvh1760-2lp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es:part0:1.1 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/rev_a/1.1/board.xml as part xcve2802-vsvh1760-2lp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es_revb:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/rev_b/1.0/board.xml as part xcve2802-vsvh1760-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es_revb:part0:1.1 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/rev_b/1.1/board.xml as part xcve2802-vsvh1760-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vermeo_t1_mpsoc:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vermeo_t1_mpsoc/1.0/board.xml as part xczu19eg-ffvd1760-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vermeo_t1_rfsoc:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vermeo_t1_rfsoc/1.0/board.xml as part xczu21dr-ffvd1156-2l-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/production/1.0/board.xml as part xcvh1582-vsva3697-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158:part0:1.1 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/production/1.1/board.xml as part xcvh1582-vsva3697-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158_es:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/es/1.0/board.xml as part xcvh1582-vsva3697-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158_es:part0:1.1 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/es/1.1/board.xml as part xcvh1582-vsva3697-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:2.2 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/2.2/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.0/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.1 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.1/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180:part0:3.2 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180/production/3.2/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180_newl:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180_newl/production/1.0/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vmk180_newl:part0:1.1 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vmk180_newl/production/1.1/board.xml as part xcvm1802-vsva2197-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/production/1.0/board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.1 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/production/1.1/board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120:part0:1.2 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/production/1.2/board.xml as part xcvp1202-vsva2785-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/production/1.0/board.xml as part xcvp1802-lsvc4072-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180:part0:1.1 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/production/1.1/board.xml as part xcvp1802-lsvc4072-2mp-e-s specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zc706:part0:1.4 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zc706/1.4/board.xml as part xc7z045ffg900-2 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu102:part0:3.3 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu102/3.3/board.xml as part xczu9eg-ffvb1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu102:part0:3.4 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu102/3.4/board.xml as part xczu9eg-ffvb1156-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu111:part0:1.2 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu111/1.2/board.xml as part xczu28dr-ffvg1517-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu111:part0:1.3 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu111/1.3/board.xml as part xczu28dr-ffvg1517-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu111:part0:1.4 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu111/1.4/board.xml as part xczu28dr-ffvg1517-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu1275:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu1275/1.0/board.xml as part xczu29dr-ffvf1760-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu1285:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu1285/1.0/board.xml as part xczu39dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208:part0:2.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208/production/2.0/board.xml as part xczu48dr-fsvg1517-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208ld/production/2.0/board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216:part0:2.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216/production/2.0/board.xml as part xczu49dr-ffvf1760-2-e specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216ld/production/2.0/board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670:part0:2.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670/2.0/board.xml as part xczu67dr-fsve1156-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at D:/visaulXilinx/Vivado/2023.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670ld/1.0/board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
+INFO: [filemgmt 56-3] Default IP Output Path : Could not find the directory 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.gen/sources_1'.
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/visaulXilinx/Vivado/2023.2/data/ip'.
+open_project: Time (s): cpu = 00:00:15 ; elapsed = 00:00:13 . Memory (MB): peak = 1536.707 ; gain = 200.164
+update_compile_order -fileset sources_1
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+set_property CONFIG.Use_Byte_Write_Enable {false} [get_ips inst_ram]
+generate_target all [get_files  D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/inst_ram/inst_ram.xci]
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'inst_ram'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'inst_ram'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'inst_ram'...
+INFO: [IP_Flow 19-1686] Generating 'Miscellaneous' target for IP 'inst_ram'...
+INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'inst_ram'...
+catch { config_ip_cache -export [get_ips -all inst_ram] }
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: inst_ram
+export_ip_user_files -of_objects [get_files D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/inst_ram/inst_ram.xci] -no_script -sync -force -quiet
+reset_run inst_ram_synth_1
+launch_runs inst_ram_synth_1 -jobs 12
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: inst_ram
+[Sun Dec  1 18:08:50 2024] Launched inst_ram_synth_1...
+Run output will be captured here: D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.runs/inst_ram_synth_1/runme.log
+export_simulation -of_objects [get_files D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/inst_ram/inst_ram.xci] -directory D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+INFO: [Project 1-1160] Copying file D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.runs/synth_1/soc_lite_top.dcp to D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.srcs/utils_1/imports/synth_1 and adding it to utils fileset
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.runs/synth_1
+
+launch_runs synth_1 -jobs 12
+INFO: [Vivado 12-4149] The synthesis checkpoint for IP 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/data_ram/data_ram.xci' is already up-to-date
+[Sun Dec  1 18:11:58 2024] Launched inst_ram_synth_1...
+Run output will be captured here: D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.runs/inst_ram_synth_1/runme.log
+[Sun Dec  1 18:11:59 2024] Launched synth_1...
+Run output will be captured here: D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.runs/synth_1/runme.log
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+launch_runs impl_1 -jobs 12
+INFO: [Vivado 12-4149] The synthesis checkpoint for IP 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/data_ram/data_ram.xci' is already up-to-date
+[Sun Dec  1 18:13:44 2024] Launched impl_1...
+Run output will be captured here: D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.runs/impl_1/runme.log
+launch_simulation
+Command: launch_simulation 
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from 'D:/visaulXilinx/Vivado/2023.2/tps/boost_1_72_0'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'D:/visaulXilinx/Vivado/2023.2/data/xsim/xsim.ini' copied to run dir:'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-54] Inspecting design source files for 'tb_top' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim/inst_ram.mif'
+INFO: [SIM-utils-43] Exported 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim/inst_ram.coe'
+INFO: [SIM-utils-43] Exported 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim/data_ram.coe'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj tb_top_vlog.prj"
+ECHO is off.
+ECHO is off.
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/clk_pll/clk_pll_clk_wiz.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_pll_clk_wiz
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/clk_pll/clk_pll.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_pll
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/data_ram/sim/data_ram.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module data_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/inst_ram/sim/inst_ram.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module inst_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/alu.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module alu
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/BRIDGE/bridge_1x2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bridge_1x2
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/CONFREG/confreg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module confreg
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/mycpu_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mycpu_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/regfile.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module regfile
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module soc_lite_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/tools.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module decoder_2_4
+INFO: [VRFC 10-311] analyzing module decoder_4_16
+INFO: [VRFC 10-311] analyzing module decoder_5_32
+INFO: [VRFC 10-311] analyzing module decoder_6_64
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tb_top
+WARNING: [VRFC 10-2096] empty statement in sequential block [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v:237]
+INFO: [USF-XSim-69] 'compile' step finished in '3' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log"
+ECHO is off.
+ECHO is off.
+Vivado Simulator v2023.2
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/visaulXilinx/Vivado/2023.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'inst_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:146]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'data_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:152]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'wea' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:169]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.decoder_6_64
+Compiling module xil_defaultlib.decoder_4_16
+Compiling module xil_defaultlib.decoder_2_4
+Compiling module xil_defaultlib.decoder_5_32
+Compiling module xil_defaultlib.regfile
+Compiling module xil_defaultlib.alu
+Compiling module xil_defaultlib.mycpu_top
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_output_stage(...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7(C_FAMILY="art...
+Compiling module xil_defaultlib.inst_ram
+Compiling module xil_defaultlib.bridge_1x2
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_output_stage(...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7(C_FAMILY="art...
+Compiling module xil_defaultlib.data_ram
+Compiling module xil_defaultlib.confreg(SIMULATION=1'b1)
+Compiling module xil_defaultlib.soc_lite_top(SIMULATION=1'b1)
+Compiling module xil_defaultlib.tb_top
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot tb_top_behav
+run_program: Time (s): cpu = 00:00:01 ; elapsed = 00:00:12 . Memory (MB): peak = 1659.277 ; gain = 0.000
+INFO: [USF-XSim-69] 'elaborate' step finished in '12' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "tb_top_behav -key {Behavioral:sim_1:Functional:tb_top} -tclbatch {tb_top.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Time resolution is 1 ps
+source tb_top.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# log_wave -r /
+# run 1000ns
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module tb_top.soc_lite.inst_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module tb_top.soc_lite.data_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+xsim: Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 1659.277 ; gain = 0.000
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'tb_top_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:07 ; elapsed = 00:00:24 . Memory (MB): peak = 1659.277 ; gain = 0.000
+run all
+==============================================================
+Test begin!
+--------------------------------------------------------------
+[   2037 ns] Error!!!
+    reference: PC = 0x1c000000, wb_rf_wnum = 0x0c, wb_rf_wdata = 0xffffffff
+    mycpu    : PC = 0x1c000004, wb_rf_wnum = 0x0c, wb_rf_wdata = 0x00000000
+--------------------------------------------------------------
+$finish called at time : 2077 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+open_run impl_1
+INFO: [Device 21-403] Loading part xc7a200tfbg676-1
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.089 . Memory (MB): peak = 2103.172 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 614 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2023.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Read ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.010 . Memory (MB): peak = 2208.531 ; gain = 0.312
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+INFO: [Designutils 20-5722] Start Reading Physical Databases.
+Reading placement.
+Read Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 2858.254 ; gain = 0.000
+Reading placer database...
+Read Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 2858.254 ; gain = 0.000
+Read PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.264 . Memory (MB): peak = 2858.254 ; gain = 0.000
+Read PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2858.254 ; gain = 0.000
+Reading routing.
+Read RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.218 . Memory (MB): peak = 2858.254 ; gain = 0.000
+Read Physdb Files: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.518 . Memory (MB): peak = 2858.254 ; gain = 0.000
+Restored from archive | CPU: 0.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.519 . Memory (MB): peak = 2858.254 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2858.254 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 4 instances were transformed.
+  RAM32X1D => RAM32X1D (RAMD32(x2)): 4 instances
+
+open_run: Time (s): cpu = 00:00:23 ; elapsed = 00:00:23 . Memory (MB): peak = 2996.254 ; gain = 1326.879
+close_design
+run all
+--------------------------------------------------------------
+[   2087 ns] Error!!!
+    reference: PC = 0x1c010018, wb_rf_wnum = 0x05, wb_rf_wdata = 0xbfaff000
+    mycpu    : PC = 0x1c01000c, wb_rf_wnum = 0x05, wb_rf_wdata = 0x00000000
+--------------------------------------------------------------
+$finish called at time : 2127 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+relaunch_sim
+Command: launch_simulation -step compile -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+boost::filesystem::remove: 另一个程序正在使用此文件，进程无法访问。: "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim/simulate.log"
+INFO: [Common 17-17] undo 'relaunch_sim'
+INFO: [Common 17-17] undo 'relaunch_sim'
+ERROR: [Common 17-69] Command failed: boost::filesystem::remove: 另一个程序正在使用此文件，进程无法访问。: "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim/simulate.log"
+relaunch_sim
+Command: launch_simulation -step compile -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from 'D:/visaulXilinx/Vivado/2023.2/tps/boost_1_72_0'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'D:/visaulXilinx/Vivado/2023.2/data/xsim/xsim.ini' copied to run dir:'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-54] Inspecting design source files for 'tb_top' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim/inst_ram.mif'
+INFO: [SIM-utils-43] Exported 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim/inst_ram.coe'
+INFO: [SIM-utils-43] Exported 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim/data_ram.coe'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj tb_top_vlog.prj"
+ECHO is off.
+ECHO is off.
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/clk_pll/clk_pll_clk_wiz.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_pll_clk_wiz
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/clk_pll/clk_pll.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_pll
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/data_ram/sim/data_ram.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module data_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/inst_ram/sim/inst_ram.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module inst_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/alu.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module alu
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/BRIDGE/bridge_1x2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bridge_1x2
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/CONFREG/confreg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module confreg
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/mycpu_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mycpu_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/regfile.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module regfile
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module soc_lite_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/tools.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module decoder_2_4
+INFO: [VRFC 10-311] analyzing module decoder_4_16
+INFO: [VRFC 10-311] analyzing module decoder_5_32
+INFO: [VRFC 10-311] analyzing module decoder_6_64
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tb_top
+WARNING: [VRFC 10-2096] empty statement in sequential block [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v:237]
+INFO: [USF-XSim-69] 'compile' step finished in '3' seconds
+Command: launch_simulation -step elaborate -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log"
+ECHO is off.
+ECHO is off.
+Vivado Simulator v2023.2
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/visaulXilinx/Vivado/2023.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'inst_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:146]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'data_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:152]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'wea' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:169]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.decoder_6_64
+Compiling module xil_defaultlib.decoder_4_16
+Compiling module xil_defaultlib.decoder_2_4
+Compiling module xil_defaultlib.decoder_5_32
+Compiling module xil_defaultlib.regfile
+Compiling module xil_defaultlib.alu
+Compiling module xil_defaultlib.mycpu_top
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_output_stage(...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7(C_FAMILY="art...
+Compiling module xil_defaultlib.inst_ram
+Compiling module xil_defaultlib.bridge_1x2
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_output_stage(...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7(C_FAMILY="art...
+Compiling module xil_defaultlib.data_ram
+Compiling module xil_defaultlib.confreg(SIMULATION=1'b1)
+Compiling module xil_defaultlib.soc_lite_top(SIMULATION=1'b1)
+Compiling module xil_defaultlib.tb_top
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot tb_top_behav
+run_program: Time (s): cpu = 00:00:00 ; elapsed = 00:00:12 . Memory (MB): peak = 3106.496 ; gain = 0.000
+INFO: [USF-XSim-69] 'elaborate' step finished in '12' seconds
+launch_simulation: Time (s): cpu = 00:00:00 ; elapsed = 00:00:12 . Memory (MB): peak = 3106.496 ; gain = 0.000
+Time resolution is 1 ps
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module tb_top.soc_lite.inst_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module tb_top.soc_lite.data_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+relaunch_sim: Time (s): cpu = 00:00:04 ; elapsed = 00:00:20 . Memory (MB): peak = 3106.496 ; gain = 0.000
+run all
+==============================================================
+Test begin!
+--------------------------------------------------------------
+[   2037 ns] Error!!!
+    reference: PC = 0x1c000000, wb_rf_wnum = 0x0c, wb_rf_wdata = 0xffffffff
+    mycpu    : PC = 0x1c000004, wb_rf_wnum = 0x0c, wb_rf_wdata = 0x00000000
+--------------------------------------------------------------
+$finish called at time : 2077 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+run all
+--------------------------------------------------------------
+[   2087 ns] Error!!!
+    reference: PC = 0x1c010018, wb_rf_wnum = 0x05, wb_rf_wdata = 0xbfaff000
+    mycpu    : PC = 0x1c01000c, wb_rf_wnum = 0x05, wb_rf_wdata = 0x00000000
+--------------------------------------------------------------
+$finish called at time : 2127 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+run all
+--------------------------------------------------------------
+[   2137 ns] Error!!!
+    reference: PC = 0x1c01005c, wb_rf_wnum = 0x18, wb_rf_wdata = 0xbfaff050
+    mycpu    : PC = 0x1c010020, wb_rf_wnum = 0x18, wb_rf_wdata = 0x00000000
+--------------------------------------------------------------
+$finish called at time : 2177 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+relaunch_sim
+Command: launch_simulation -step compile -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj tb_top_vlog.prj"
+ECHO is off.
+ECHO is off.
+INFO: [USF-XSim-69] 'compile' step finished in '3' seconds
+Command: launch_simulation -step elaborate -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log"
+ECHO is off.
+ECHO is off.
+Vivado Simulator v2023.2
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/visaulXilinx/Vivado/2023.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'inst_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:146]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'data_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:152]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'wea' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:169]
+Completed static elaboration
+INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+INFO: [USF-XSim-69] 'elaborate' step finished in '3' seconds
+Time resolution is 1 ps
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module tb_top.soc_lite.inst_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module tb_top.soc_lite.data_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+relaunch_sim: Time (s): cpu = 00:00:03 ; elapsed = 00:00:11 . Memory (MB): peak = 3106.496 ; gain = 0.000
+run all
+==============================================================
+Test begin!
+--------------------------------------------------------------
+[   2037 ns] Error!!!
+    reference: PC = 0x1c000000, wb_rf_wnum = 0x0c, wb_rf_wdata = 0xffffffff
+    mycpu    : PC = 0x1c000004, wb_rf_wnum = 0x0c, wb_rf_wdata = 0x00000000
+--------------------------------------------------------------
+$finish called at time : 2077 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+relaunch_sim
+Command: launch_simulation -step compile -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+boost::filesystem::remove: 另一个程序正在使用此文件，进程无法访问。: "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim/simulate.log"
+INFO: [Common 17-17] undo 'relaunch_sim'
+INFO: [Common 17-17] undo 'relaunch_sim'
+ERROR: [Common 17-69] Command failed: boost::filesystem::remove: 另一个程序正在使用此文件，进程无法访问。: "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim/simulate.log"
+relaunch_sim
+Command: launch_simulation -step compile -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj tb_top_vlog.prj"
+ECHO is off.
+ECHO is off.
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/clk_pll/clk_pll_clk_wiz.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_pll_clk_wiz
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/clk_pll/clk_pll.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_pll
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/data_ram/sim/data_ram.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module data_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/inst_ram/sim/inst_ram.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module inst_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/alu.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module alu
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/BRIDGE/bridge_1x2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bridge_1x2
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/CONFREG/confreg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module confreg
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/mycpu_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mycpu_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/regfile.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module regfile
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module soc_lite_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/tools.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module decoder_2_4
+INFO: [VRFC 10-311] analyzing module decoder_4_16
+INFO: [VRFC 10-311] analyzing module decoder_5_32
+INFO: [VRFC 10-311] analyzing module decoder_6_64
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tb_top
+WARNING: [VRFC 10-2096] empty statement in sequential block [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v:237]
+INFO: [USF-XSim-69] 'compile' step finished in '3' seconds
+Command: launch_simulation -step elaborate -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log"
+ECHO is off.
+ECHO is off.
+Vivado Simulator v2023.2
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/visaulXilinx/Vivado/2023.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'inst_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:146]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'data_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:152]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'wea' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:169]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.decoder_6_64
+Compiling module xil_defaultlib.decoder_4_16
+Compiling module xil_defaultlib.decoder_2_4
+Compiling module xil_defaultlib.decoder_5_32
+Compiling module xil_defaultlib.regfile
+Compiling module xil_defaultlib.alu
+Compiling module xil_defaultlib.mycpu_top
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_output_stage(...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7(C_FAMILY="art...
+Compiling module xil_defaultlib.inst_ram
+Compiling module xil_defaultlib.bridge_1x2
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_output_stage(...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7(C_FAMILY="art...
+Compiling module xil_defaultlib.data_ram
+Compiling module xil_defaultlib.confreg(SIMULATION=1'b1)
+Compiling module xil_defaultlib.soc_lite_top(SIMULATION=1'b1)
+Compiling module xil_defaultlib.tb_top
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot tb_top_behav
+run_program: Time (s): cpu = 00:00:00 ; elapsed = 00:00:12 . Memory (MB): peak = 3106.496 ; gain = 0.000
+INFO: [USF-XSim-69] 'elaborate' step finished in '12' seconds
+launch_simulation: Time (s): cpu = 00:00:00 ; elapsed = 00:00:12 . Memory (MB): peak = 3106.496 ; gain = 0.000
+Time resolution is 1 ps
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module tb_top.soc_lite.inst_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module tb_top.soc_lite.data_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+relaunch_sim: Time (s): cpu = 00:00:03 ; elapsed = 00:00:19 . Memory (MB): peak = 3106.496 ; gain = 0.000
+run all
+==============================================================
+Test begin!
+--------------------------------------------------------------
+[   2037 ns] Error!!!
+    reference: PC = 0x1c000000, wb_rf_wnum = 0x0c, wb_rf_wdata = 0xffffffff
+    mycpu    : PC = 0x1c000004, wb_rf_wnum = 0x0c, wb_rf_wdata = 0x00000000
+--------------------------------------------------------------
+$finish called at time : 2077 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+relaunch_sim
+Command: launch_simulation -step compile -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj tb_top_vlog.prj"
+ECHO is off.
+ECHO is off.
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/clk_pll/clk_pll_clk_wiz.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_pll_clk_wiz
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/clk_pll/clk_pll.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_pll
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/data_ram/sim/data_ram.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module data_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/xilinx_ip/inst_ram/sim/inst_ram.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module inst_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/alu.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module alu
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/BRIDGE/bridge_1x2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bridge_1x2
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/CONFREG/confreg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module confreg
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/mycpu_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mycpu_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/regfile.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module regfile
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module soc_lite_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/myCPU/tools.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module decoder_2_4
+INFO: [VRFC 10-311] analyzing module decoder_4_16
+INFO: [VRFC 10-311] analyzing module decoder_5_32
+INFO: [VRFC 10-311] analyzing module decoder_6_64
+INFO: [VRFC 10-2263] Analyzing Verilog file "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tb_top
+WARNING: [VRFC 10-2096] empty statement in sequential block [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v:237]
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+Command: launch_simulation -step elaborate -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log"
+ECHO is off.
+ECHO is off.
+Vivado Simulator v2023.2
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/visaulXilinx/Vivado/2023.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'inst_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:146]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'data_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:152]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'wea' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:169]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.decoder_6_64
+Compiling module xil_defaultlib.decoder_4_16
+Compiling module xil_defaultlib.decoder_2_4
+Compiling module xil_defaultlib.decoder_5_32
+Compiling module xil_defaultlib.regfile
+Compiling module xil_defaultlib.alu
+Compiling module xil_defaultlib.mycpu_top
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_output_stage(...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7(C_FAMILY="art...
+Compiling module xil_defaultlib.inst_ram
+Compiling module xil_defaultlib.bridge_1x2
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_output_stage(...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_7.blk_mem_gen_v8_4_7(C_FAMILY="art...
+Compiling module xil_defaultlib.data_ram
+Compiling module xil_defaultlib.confreg(SIMULATION=1'b1)
+Compiling module xil_defaultlib.soc_lite_top(SIMULATION=1'b1)
+Compiling module xil_defaultlib.tb_top
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot tb_top_behav
+run_program: Time (s): cpu = 00:00:00 ; elapsed = 00:00:12 . Memory (MB): peak = 3106.496 ; gain = 0.000
+INFO: [USF-XSim-69] 'elaborate' step finished in '12' seconds
+launch_simulation: Time (s): cpu = 00:00:00 ; elapsed = 00:00:12 . Memory (MB): peak = 3106.496 ; gain = 0.000
+Time resolution is 1 ps
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module tb_top.soc_lite.inst_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module tb_top.soc_lite.data_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+relaunch_sim: Time (s): cpu = 00:00:04 ; elapsed = 00:00:20 . Memory (MB): peak = 3106.496 ; gain = 0.000
+run all
+==============================================================
+Test begin!
+--------------------------------------------------------------
+[   2037 ns] Error!!!
+    reference: PC = 0x1c000000, wb_rf_wnum = 0x0c, wb_rf_wdata = 0xffffffff
+    mycpu    : PC = 0x1c000004, wb_rf_wnum = 0x0c, wb_rf_wdata = 0xfffffffe
+--------------------------------------------------------------
+$finish called at time : 2077 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+run all
+--------------------------------------------------------------
+[   2087 ns] Error!!!
+    reference: PC = 0x1c010018, wb_rf_wnum = 0x05, wb_rf_wdata = 0xbfaff000
+    mycpu    : PC = 0x1c01000c, wb_rf_wnum = 0x05, wb_rf_wdata = 0xbfaff000
+--------------------------------------------------------------
+$finish called at time : 2127 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+current_wave_config {Untitled 1}
+Untitled 1
+add_wave {{/tb_top/soc_lite/cpu/inst}} {{/tb_top/soc_lite/cpu/pc}} 
+relaunch_sim
+Command: launch_simulation -step compile -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj tb_top_vlog.prj"
+ECHO is off.
+ECHO is off.
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+Command: launch_simulation -step elaborate -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log"
+ECHO is off.
+ECHO is off.
+Vivado Simulator v2023.2
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/visaulXilinx/Vivado/2023.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'inst_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:146]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'data_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:152]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'wea' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:169]
+Completed static elaboration
+INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+INFO: [USF-XSim-69] 'elaborate' step finished in '3' seconds
+Time resolution is 1 ps
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module tb_top.soc_lite.inst_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module tb_top.soc_lite.data_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+relaunch_sim: Time (s): cpu = 00:00:03 ; elapsed = 00:00:11 . Memory (MB): peak = 3510.773 ; gain = 22.277
+run all
+==============================================================
+Test begin!
+--------------------------------------------------------------
+[   2037 ns] Error!!!
+    reference: PC = 0x1c000000, wb_rf_wnum = 0x0c, wb_rf_wdata = 0xffffffff
+    mycpu    : PC = 0x1c000004, wb_rf_wnum = 0x0c, wb_rf_wdata = 0xfffffffe
+--------------------------------------------------------------
+$finish called at time : 2077 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+run all
+--------------------------------------------------------------
+[   2087 ns] Error!!!
+    reference: PC = 0x1c010018, wb_rf_wnum = 0x05, wb_rf_wdata = 0xbfaff000
+    mycpu    : PC = 0x1c01000c, wb_rf_wnum = 0x05, wb_rf_wdata = 0xbfaff000
+--------------------------------------------------------------
+$finish called at time : 2127 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+relaunch_sim
+Command: launch_simulation -step compile -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -prj tb_top_vlog.prj"
+ECHO is off.
+ECHO is off.
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+Command: launch_simulation -step elaborate -simset sim_1 -mode behavioral
+INFO: [Vivado 12-12493] Simulation top is 'tb_top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/loongson.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log"
+ECHO is off.
+ECHO is off.
+Vivado Simulator v2023.2
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/visaulXilinx/Vivado/2023.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'inst_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:146]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'data_sram_we' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:152]
+WARNING: [VRFC 10-3091] actual bit length 4 differs from formal bit length 1 for port 'wea' [D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/rtl/soc_lite_top.v:169]
+Completed static elaboration
+INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+INFO: [USF-XSim-69] 'elaborate' step finished in '3' seconds
+Time resolution is 1 ps
+ Block Memory Generator module loading initial data...
+ Block Memory Generator data initialization complete.
+Block Memory Generator module tb_top.soc_lite.inst_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+Block Memory Generator module tb_top.soc_lite.data_ram.inst.\native_mem_module.blk_mem_gen_v8_4_7_inst  is using a behavioral model for simulation which will not precisely model memory collision behavior.
+relaunch_sim: Time (s): cpu = 00:00:04 ; elapsed = 00:00:12 . Memory (MB): peak = 3510.773 ; gain = 0.000
+run all
+==============================================================
+Test begin!
+--------------------------------------------------------------
+[   2037 ns] Error!!!
+    reference: PC = 0x1c000000, wb_rf_wnum = 0x0c, wb_rf_wdata = 0xffffffff
+    mycpu    : PC = 0x1c000004, wb_rf_wnum = 0x0c, wb_rf_wdata = 0xfffffffe
+--------------------------------------------------------------
+$finish called at time : 2077 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+run all
+--------------------------------------------------------------
+[   2087 ns] Error!!!
+    reference: PC = 0x1c010018, wb_rf_wnum = 0x05, wb_rf_wdata = 0xbfaff000
+    mycpu    : PC = 0x1c01000c, wb_rf_wnum = 0x05, wb_rf_wdata = 0xbfaff000
+--------------------------------------------------------------
+$finish called at time : 2127 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+run all
+--------------------------------------------------------------
+[   2137 ns] Error!!!
+    reference: PC = 0x1c01005c, wb_rf_wnum = 0x18, wb_rf_wdata = 0xbfaff050
+    mycpu    : PC = 0x1c010020, wb_rf_wnum = 0x18, wb_rf_wdata = 0x000000a0
+--------------------------------------------------------------
+$finish called at time : 2177 ns : File "D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/testbench/mycpu_tb.v" Line 169
+save_wave_config {D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/tb_top_behav.wcfg}
+add_files -fileset sim_1 -norecurse D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/tb_top_behav.wcfg
+set_property xsim.view D:/Code/CPUshizhan/cdp_ede_local-master/cdp_ede_local-master/mycpu_env/soc_verify/soc_bram/run_vivado/project/tb_top_behav.wcfg [get_filesets sim_1]
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+exit
+INFO: [Common 17-206] Exiting Vivado at Sun Dec  1 21:57:24 2024...
