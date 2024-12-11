@@ -3,18 +3,21 @@
 # SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Wed Dec 11 23:50:59 2024
-# Process ID: 23112
+# Start of session at: Sun Dec  1 18:59:16 2024
+# Process ID: 118884
 # Current directory: E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/gettrace
-# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent28884 E:\projects_2024\Loong_Team\mycpu_env_try\mycpu_env_try\gettrace\gettrace.xpr
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent119792 E:\projects_2024\Loong_Team\mycpu_env_try\mycpu_env_try\gettrace\gettrace.xpr
 # Log file: E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/gettrace/vivado.log
 # Journal file: E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/gettrace\vivado.jou
 # Running On: Super-EvilLoong, OS: Windows, CPU Frequency: 2688 MHz, CPU Physical cores: 10, Host memory: 16793 MB
 #-----------------------------------------------------------
 start_gui
 open_project E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/gettrace/gettrace.xpr
+upgrade_project -migrate_output_products
 update_compile_order -fileset sources_1
 launch_simulation
 source tb_top.tcl
-run all
 close_sim
+launch_simulation
+source tb_top.tcl
+run all

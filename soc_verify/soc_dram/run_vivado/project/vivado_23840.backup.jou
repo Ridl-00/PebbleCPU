@@ -1,0 +1,25 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Wed Dec 11 23:55:25 2024
+# Process ID: 23840
+# Current directory: E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent28724 E:\projects_2024\Loong_Team\mycpu_env_try\mycpu_env_try\soc_verify\soc_dram\run_vivado\project\loongson.xpr
+# Log file: E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/vivado.log
+# Journal file: E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project\vivado.jou
+# Running On: Super-EvilLoong, OS: Windows, CPU Frequency: 2688 MHz, CPU Physical cores: 10, Host memory: 16793 MB
+#-----------------------------------------------------------
+start_gui
+open_project E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.xpr
+update_compile_order -fileset sources_1
+generate_target Simulation [get_files E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/xilinx_ip/relaunch_sim
+run all
+save_wave_config {E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/tb_top_behav.wcfg}
+add_files -fileset sim_1 -norecurse E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/tb_top_behav.wcfg
+set_property xsim.view E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/tb_top_behav.wcfg [get_filesets sim_1]
+close_sim
+t/loongson.ip_user_files/sim_scripts -ip_user_files_dir E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+launch_simulation
+close_project
