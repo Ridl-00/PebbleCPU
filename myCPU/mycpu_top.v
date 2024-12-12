@@ -46,7 +46,6 @@ wire        dst_is_r1;
 wire        gr_we;
 wire        mem_we;
 wire        src_reg_is_rd;
-wire        jirl_wen;  //是jirl但不写时为高
 wire [4: 0] dest;
 wire [31:0] rj_value;
 wire [31:0] rkd_value;
