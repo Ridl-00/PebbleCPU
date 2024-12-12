@@ -14,22 +14,27 @@ ECHO 处于关闭状态。
     ** Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 
 source soc_lite_top.tcl -notrace
-create_project: Time (s): cpu = 00:00:01 ; elapsed = 00:00:08 . Memory (MB): peak = 485.297 ; gain = 179.734
+create_project: Time (s): cpu = 00:00:03 ; elapsed = 00:00:09 . Memory (MB): peak = 485.070 ; gain = 183.551
+Command: read_checkpoint -auto_incremental -incremental E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.srcs/utils_1/imports/synth_1/soc_lite_top.dcp
+INFO: [Vivado 12-5825] Read reference checkpoint from E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.srcs/utils_1/imports/synth_1/soc_lite_top.dcp for incremental synthesis
+INFO: [Vivado 12-7989] Please ensure there are no constraint changes
 Command: synth_design -top soc_lite_top -part xc7a200tfbg676-1
 Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7a200t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a200t'
 INFO: [Device 21-403] Loading part xc7a200tfbg676-1
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 15588
+INFO: [Synth 8-7075] Helper process launched with PID 22680
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:00 ; elapsed = 00:00:07 . Memory (MB): peak = 1384.027 ; gain = 438.535
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:07 . Memory (MB): peak = 1387.621 ; gain = 439.926
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-11241] undeclared symbol 'rj_eq_rd', assumed default net type 'wire' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/mycpu_top.v:239]
+INFO: [Synth 8-11241] undeclared symbol 'rj_eq_rd', assumed default net type 'wire' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/mycpu_top.v:241]
 INFO: [Synth 8-6157] synthesizing module 'soc_lite_top' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-INFO: [Synth 8-6157] synthesizing module 'clk_pll' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/.Xil/Vivado-179972-Super-EvilLoong/realtime/clk_pll_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'clk_pll' (0#1) [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/.Xil/Vivado-179972-Super-EvilLoong/realtime/clk_pll_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'clk_pll' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/.Xil/Vivado-11792-Super-EvilLoong/realtime/clk_pll_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'clk_pll' (0#1) [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/.Xil/Vivado-11792-Super-EvilLoong/realtime/clk_pll_stub.v:6]
 INFO: [Synth 8-6157] synthesizing module 'mycpu_top' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/mycpu_top.v:1]
 INFO: [Synth 8-6157] synthesizing module 'decoder_6_64' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/tools.v:40]
 INFO: [Synth 8-6155] done synthesizing module 'decoder_6_64' (0#1) [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/tools.v:40]
@@ -44,13 +49,13 @@ INFO: [Synth 8-6155] done synthesizing module 'regfile' (0#1) [E:/projects_2024/
 INFO: [Synth 8-6157] synthesizing module 'alu' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:1]
 INFO: [Synth 8-6155] done synthesizing module 'alu' (0#1) [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:1]
 INFO: [Synth 8-6155] done synthesizing module 'mycpu_top' (0#1) [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/mycpu_top.v:1]
-INFO: [Synth 8-6157] synthesizing module 'inst_ram' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/.Xil/Vivado-179972-Super-EvilLoong/realtime/inst_ram_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'inst_ram' (0#1) [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/.Xil/Vivado-179972-Super-EvilLoong/realtime/inst_ram_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'inst_ram' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/.Xil/Vivado-11792-Super-EvilLoong/realtime/inst_ram_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'inst_ram' (0#1) [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/.Xil/Vivado-11792-Super-EvilLoong/realtime/inst_ram_stub.v:6]
 WARNING: [Synth 8-689] width (16) of port connection 'a' does not match port width (15) of module 'inst_ram' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:166]
 INFO: [Synth 8-6157] synthesizing module 'bridge_1x2' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/BRIDGE/bridge_1x2.v:50]
 INFO: [Synth 8-6155] done synthesizing module 'bridge_1x2' (0#1) [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/BRIDGE/bridge_1x2.v:50]
-INFO: [Synth 8-6157] synthesizing module 'data_ram' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/.Xil/Vivado-179972-Super-EvilLoong/realtime/data_ram_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'data_ram' (0#1) [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/.Xil/Vivado-179972-Super-EvilLoong/realtime/data_ram_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'data_ram' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/.Xil/Vivado-11792-Super-EvilLoong/realtime/data_ram_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'data_ram' (0#1) [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/.Xil/Vivado-11792-Super-EvilLoong/realtime/data_ram_stub.v:6]
 WARNING: [Synth 8-689] width (16) of port connection 'a' does not match port width (10) of module 'data_ram' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:198]
 INFO: [Synth 8-6157] synthesizing module 'confreg' [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/CONFREG/confreg.v:73]
 	Parameter SIMULATION bound to: 1'b0 
@@ -77,18 +82,18 @@ WARNING: [Synth 8-7129] Port conf_addr[16] in module confreg is either unconnect
 WARNING: [Synth 8-7129] Port clk in module bridge_1x2 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port resetn in module bridge_1x2 is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:01 ; elapsed = 00:00:09 . Memory (MB): peak = 1501.934 ; gain = 556.441
+Finished RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:09 . Memory (MB): peak = 1504.684 ; gain = 556.988
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:01 ; elapsed = 00:00:09 . Memory (MB): peak = 1501.934 ; gain = 556.441
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:05 ; elapsed = 00:00:10 . Memory (MB): peak = 1504.684 ; gain = 556.988
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:01 ; elapsed = 00:00:09 . Memory (MB): peak = 1501.934 ; gain = 556.441
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:10 . Memory (MB): peak = 1504.684 ; gain = 556.988
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.032 . Memory (MB): peak = 1501.934 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.060 . Memory (MB): peak = 1504.684 ; gain = 0.000
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
@@ -109,21 +114,23 @@ INFO: [Project 1-236] Implementation specific constraints were found while readi
 Resolution: To avoid this warning, move constraints listed in [.Xil/soc_lite_top_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1586.234 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1609.395 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
 系统找不到指定的路径。
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 1586.234 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 1609.395 ; gain = 0.000
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:02 ; elapsed = 00:00:20 . Memory (MB): peak = 1586.234 ; gain = 640.742
+Finished Constraint Validation : Time (s): cpu = 00:00:09 ; elapsed = 00:00:21 . Memory (MB): peak = 1609.395 ; gain = 661.699
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a200tfbg676-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:02 ; elapsed = 00:00:20 . Memory (MB): peak = 1586.234 ; gain = 640.742
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:09 ; elapsed = 00:00:21 . Memory (MB): peak = 1609.395 ; gain = 661.699
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
@@ -134,7 +141,7 @@ Applied set_property KEEP_HIERARCHY = SOFT for inst_ram. (constraint file  auto 
 Applied set_property KEEP_HIERARCHY = SOFT for \pll.clk_pll . (constraint file  auto generated constraint).
 Applied set_property KEEP_HIERARCHY = SOFT for data_ram. (constraint file  auto generated constraint).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:02 ; elapsed = 00:00:20 . Memory (MB): peak = 1586.234 ; gain = 640.742
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:09 ; elapsed = 00:00:21 . Memory (MB): peak = 1609.395 ; gain = 661.699
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'confreg'
 ---------------------------------------------------------------------------------------------------
@@ -149,7 +156,7 @@ INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'confr
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'one-hot' in module 'confreg'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:02 ; elapsed = 00:00:21 . Memory (MB): peak = 1586.234 ; gain = 640.742
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:22 . Memory (MB): peak = 1609.395 ; gain = 661.699
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -199,7 +206,7 @@ Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:17 ; elapsed = 00:01:06 . Memory (MB): peak = 1586.234 ; gain = 640.742
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:17 ; elapsed = 00:00:41 . Memory (MB): peak = 1609.395 ; gain = 661.699
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start ROM, RAM, DSP, Shift Register and Retiming Reporting
@@ -221,13 +228,13 @@ Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-565] redefining clock 'clk'
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:19 ; elapsed = 00:01:11 . Memory (MB): peak = 1586.234 ; gain = 640.742
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:21 ; elapsed = 00:00:48 . Memory (MB): peak = 1609.395 ; gain = 661.699
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:26 ; elapsed = 00:01:37 . Memory (MB): peak = 1652.258 ; gain = 706.766
+Finished Timing Optimization : Time (s): cpu = 00:00:41 ; elapsed = 00:01:36 . Memory (MB): peak = 1684.176 ; gain = 736.480
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start ROM, RAM, DSP, Shift Register and Retiming Reporting
@@ -246,492 +253,8 @@ Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
-Found timing loop:
-     0: i_1109/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1109/I1 (LUT2)
-     2: i_574/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_574/I5 (LUT6)
-     4: i_630/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_630/I3 (LUT6)
-     6: i_1109/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1109"
-Found timing loop:
-     0: i_1109/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1109/O (LUT2)
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Found timing loop:
-     0: i_1111/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1111/I0 (LUT2)
-     2: i_573/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_573/I2 (LUT5)
-     4: i_619/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_619/I4 (LUT5)
-     6: i_621/O (LUT3)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     7: i_621/I0 (LUT3)
-     8: i_1111/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_1111"
-Found timing loop:
-     0: i_1111/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1111/O (LUT2)
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Found timing loop:
-     0: i_1112/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1112/I1 (LUT2)
-     2: i_571/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_571/I2 (LUT6)
-     4: i_601/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_601/I2 (LUT6)
-     6: i_1112/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1112"
-Found timing loop:
-     0: i_1112/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1112/O (LUT2)
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Found timing loop:
-     0: i_1110/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1110/I0 (LUT2)
-     2: i_591/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_591/I0 (LUT5)
-     4: i_698/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_698/I3 (LUT6)
-     6: i_1110/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_1110"
-Found timing loop:
-     0: i_1116/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1116/I1 (LUT2)
-     2: i_562/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_562/I1 (LUT6)
-     4: i_570/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_570/I5 (LUT6)
-     6: i_582/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     7: i_582/I3 (LUT5)
-     8: i_1116/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1116"
-Found timing loop:
-     0: i_1115/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1115/I1 (LUT2)
-     2: i_576/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_576/I4 (LUT5)
-     4: i_653/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_653/I3 (LUT6)
-     6: i_1115/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1115"
-Found timing loop:
-     0: i_1117/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1117/I0 (LUT2)
-     2: i_593/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_593/I0 (LUT5)
-     4: i_688/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_688/I3 (LUT6)
-     6: i_1117/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_1117"
-Found timing loop:
-     0: i_1118/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1118/I0 (LUT2)
-     2: i_611/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_611/I0 (LUT5)
-     4: i_693/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_693/I4 (LUT6)
-     6: i_1118/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_1118"
-Found timing loop:
-     0: i_1114/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1114/I1 (LUT2)
-     2: i_594/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_594/I0 (LUT5)
-     4: i_682/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_682/I4 (LUT6)
-     6: i_1114/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1114"
-Found timing loop:
-     0: i_1121/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1121/I1 (LUT2)
-     2: i_586/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_586/I2 (LUT5)
-     4: i_660/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_660/I4 (LUT6)
-     6: i_1121/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1121"
-Found timing loop:
-     0: i_1120/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1120/I1 (LUT2)
-     2: i_587/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_587/I2 (LUT5)
-     4: i_667/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_667/I4 (LUT6)
-     6: i_1120/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1120"
-Found timing loop:
-     0: i_1119/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1119/I1 (LUT2)
-     2: i_584/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_584/I0 (LUT5)
-     4: i_672/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_672/I3 (LUT5)
-     6: i_1119/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1119"
-Found timing loop:
-     0: i_1122/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1122/I1 (LUT2)
-     2: i_606/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_606/I0 (LUT5)
-     4: i_676/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_676/I1 (LUT5)
-     6: i_1122/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1122"
-Found timing loop:
-     0: i_1128/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1128/I0 (LUT2)
-     2: i_381/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_381/I0 (LUT5)
-     4: i_462/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_462/I4 (LUT5)
-     6: i_463/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     7: i_463/I0 (LUT6)
-     8: i_1128/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_1128"
-Found timing loop:
-     0: i_1128/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1128/O (LUT2)
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Found timing loop:
-     0: i_1129/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1129/I0 (LUT2)
-     2: i_435/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_435/I0 (LUT5)
-     4: i_447/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_447/I4 (LUT6)
-     6: i_1129/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_1129"
-Found timing loop:
-     0: i_1132/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1132/I1 (LUT2)
-     2: i_419/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_419/I0 (LUT6)
-     4: i_542/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_542/I4 (LUT6)
-     6: i_1132/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1132"
-Found timing loop:
-     0: i_1127/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1127/I0 (LUT2)
-     2: i_361/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_361/I0 (LUT5)
-     4: i_362/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_362/I3 (LUT6)
-     6: i_1127/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_1127"
-Found timing loop:
-     0: i_1133/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1133/I0 (LUT2)
-     2: i_387/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_387/I0 (LUT5)
-     4: i_508/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_508/I3 (LUT6)
-     6: i_1133/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_1133"
-Found timing loop:
-     0: i_1125/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1125/I1 (LUT2)
-     2: i_431/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_431/I0 (LUT5)
-     4: i_488/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_488/I4 (LUT6)
-     6: i_1125/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1125"
-Found timing loop:
-     0: i_1130/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1130/I1 (LUT2)
-     2: i_428/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_428/I0 (LUT5)
-     4: i_516/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_516/I4 (LUT6)
-     6: i_1130/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1130"
-Found timing loop:
-     0: i_1135/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1135/I0 (LUT2)
-     2: i_383/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_383/I0 (LUT5)
-     4: i_411/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_411/I3 (LUT6)
-     6: i_1135/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_1135"
-Found timing loop:
-     0: i_1124/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1124/I1 (LUT2)
-     2: i_423/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_423/I0 (LUT5)
-     4: i_524/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_524/I4 (LUT6)
-     6: i_1124/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1124"
-Found timing loop:
-     0: i_1134/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1134/I1 (LUT2)
-     2: i_422/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_422/I0 (LUT5)
-     4: i_529/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_529/I4 (LUT6)
-     6: i_1134/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1134"
-Found timing loop:
-     0: i_1123/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1123/I1 (LUT2)
-     2: i_390/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_390/I0 (LUT5)
-     4: i_479/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_479/I4 (LUT6)
-     6: i_1123/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1123"
-Found timing loop:
-     0: i_1126/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1126/I1 (LUT2)
-     2: i_388/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_388/I0 (LUT5)
-     4: i_497/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_497/I4 (LUT6)
-     6: i_1126/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1126"
-Found timing loop:
-     0: i_1131/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1131/I1 (LUT2)
-     2: i_420/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_420/I0 (LUT5)
-     4: i_537/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_537/I4 (LUT6)
-     6: i_1131/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1131"
-Found timing loop:
-     0: i_1136/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1136/I0 (LUT2)
-     2: i_577/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_577/I2 (LUT5)
-     4: i_648/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_648/I3 (LUT6)
-     6: i_1136/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_1136"
-Found timing loop:
-     0: i_346/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_346/I0 (LUT5)
-     2: i_93/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_93/I3 (LUT6)
-     4: i_95/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_95/I2 (LUT6)
-     6: i_346/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_346"
-Found timing loop:
-     0: i_346/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_346/O (LUT5)
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Found timing loop:
-     0: i_1113/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1113/I0 (LUT2)
-     2: i_579/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_579/I2 (LUT5)
-     4: i_637/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_637/I3 (LUT6)
-     6: i_1113/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_1113"
-Found timing loop:
-     0: i_1137/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1137/I1 (LUT2)
-     2: i_416/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_416/I0 (LUT5)
-     4: i_549/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_549/I4 (LUT6)
-     6: i_1137/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1137"
-Found timing loop:
-     0: i_1138/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1138/I1 (LUT2)
-     2: i_415/O (LUT5)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_415/I0 (LUT5)
-     4: i_556/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     5: i_556/I4 (LUT6)
-     6: i_1138/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I1 -to O i_1138"
-Found timing loop:
-     0: i_1139/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1139/I0 (LUT2)
-     2: i_564/O (LUT6)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     3: i_564/I3 (LUT6)
-     4: i_1139/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
-Inferred a: "set_disable_timing -from I0 -to O i_1139"
-Found timing loop:
-     0: i_1139/O (LUT2)
-      [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v:66]
-     1: i_1139/O (LUT2)
-CRITICAL WARNING: [Synth 8-295] found timing loop. [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/soc_lite_top.v:67]
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:27 ; elapsed = 00:01:38 . Memory (MB): peak = 1661.293 ; gain = 715.801
+Finished Technology Mapping : Time (s): cpu = 00:00:42 ; elapsed = 00:01:37 . Memory (MB): peak = 1693.254 ; gain = 745.559
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -749,99 +272,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:28 ; elapsed = 00:01:41 . Memory (MB): peak = 1661.293 ; gain = 715.801
+Finished IO Insertion : Time (s): cpu = 00:00:44 ; elapsed = 00:01:43 . Memory (MB): peak = 1693.254 ; gain = 745.559
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:28 ; elapsed = 00:01:41 . Memory (MB): peak = 1661.293 ; gain = 715.801
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:44 ; elapsed = 00:01:43 . Memory (MB): peak = 1693.254 ; gain = 745.559
 ---------------------------------------------------------------------------------
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_0_5_i_80/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through data_ram_i_8/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through num_monitor_i_2/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through data_ram_i_44/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_6_11_i_26/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through data_ram_i_51/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_6_11_i_13/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_0_5_i_104/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_12_17_i_15/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through \cr2[31]_i_2 /O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_12_17_i_65/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_12_17_i_7/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_12_17_i_71/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_12_17_i_11/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_12_17_i_91/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_12_17_i_27/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_12_17_i_83/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_12_17_i_23/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through \cr2[31]_i_12 /O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through \cr2[31]_i_11 /O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_0_5_i_14/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_84/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_19/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_90/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_22/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_78/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_16/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_71/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_13/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through data_ram_i_123/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through data_ram_i_121/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through data_ram_i_116/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through data_ram_i_114/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_0_5_i_87/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through data_ram_i_1/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_6_11_i_22/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through data_ram_i_111/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_6_11_i_18/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_12_17_i_102/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_12_17_i_19/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_100/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_10/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_96/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_95/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_18_23_i_7/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through data_ram_i_184/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through data_ram_i_183/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_24_29_i_102/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_24_29_i_13/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_24_29_i_104/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_24_29_i_16/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_24_29_i_98/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_24_29_i_7/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_24_29_i_101/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through data_ram_i_128/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_24_29_i_10/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_24_29_i_87/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_30_31_i_14__0/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_24_29_i_115/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_24_29_i_23/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_30_31_i_7__0/O'
-WARNING: [Synth 8-326] inferred exception to break timing loop: 'set_false_path -through rf_reg_r1_0_31_30_31_i_16/O'
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:28 ; elapsed = 00:01:42 . Memory (MB): peak = 1661.293 ; gain = 715.801
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:44 ; elapsed = 00:01:43 . Memory (MB): peak = 1693.254 ; gain = 745.559
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:28 ; elapsed = 00:01:42 . Memory (MB): peak = 1661.293 ; gain = 715.801
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:44 ; elapsed = 00:01:43 . Memory (MB): peak = 1693.254 ; gain = 745.559
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:28 ; elapsed = 00:01:42 . Memory (MB): peak = 1661.293 ; gain = 715.801
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:44 ; elapsed = 00:01:44 . Memory (MB): peak = 1693.254 ; gain = 745.559
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:28 ; elapsed = 00:01:42 . Memory (MB): peak = 1661.293 ; gain = 715.801
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:44 ; elapsed = 00:01:44 . Memory (MB): peak = 1693.254 ; gain = 745.559
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -864,12 +325,12 @@ Report Cell Usage:
 |2     |data_ram |     1|
 |3     |inst_ram |     1|
 |4     |CARRY4   |    56|
-|5     |LUT1     |    10|
-|6     |LUT2     |    99|
-|7     |LUT3     |   230|
-|8     |LUT4     |   132|
-|9     |LUT5     |   242|
-|10    |LUT6     |   494|
+|5     |LUT1     |     9|
+|6     |LUT2     |   100|
+|7     |LUT3     |    97|
+|8     |LUT4     |   221|
+|9     |LUT5     |   204|
+|10    |LUT6     |   576|
 |11    |MUXF7    |     4|
 |12    |RAM32M   |    10|
 |13    |RAM32X1D |     4|
@@ -879,31 +340,30 @@ Report Cell Usage:
 |17    |OBUF     |    71|
 +------+---------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:28 ; elapsed = 00:01:42 . Memory (MB): peak = 1661.293 ; gain = 715.801
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:44 ; elapsed = 00:01:44 . Memory (MB): peak = 1693.254 ; gain = 745.559
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 38 critical warnings and 64 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:27 ; elapsed = 00:01:37 . Memory (MB): peak = 1661.293 ; gain = 631.500
-Synthesis Optimization Complete : Time (s): cpu = 00:00:28 ; elapsed = 00:01:42 . Memory (MB): peak = 1661.293 ; gain = 715.801
+Synthesis finished with 0 errors, 0 critical warnings and 2 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:38 ; elapsed = 00:01:40 . Memory (MB): peak = 1693.254 ; gain = 640.848
+Synthesis Optimization Complete : Time (s): cpu = 00:00:44 ; elapsed = 00:01:44 . Memory (MB): peak = 1693.254 ; gain = 745.559
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.026 . Memory (MB): peak = 1673.184 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.041 . Memory (MB): peak = 1699.133 ; gain = 0.000
 INFO: [Netlist 29-17] Analyzing 74 Unisim elements for replacement
-INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Netlist 29-28] Unisim Transformation completed in 1 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1679.445 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1699.133 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
   A total of 14 instances were transformed.
   RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 10 instances
   RAM32X1D => RAM32X1D (RAMD32(x2)): 4 instances
 
 系统找不到指定的路径。
-Synth Design complete | Checksum: d2c2f22d
+Synth Design complete | Checksum: c4625ad2
 INFO: [Common 17-83] Releasing license: Synthesis
-44 Infos, 90 Warnings, 38 Critical Warnings and 0 Errors encountered.
+50 Infos, 28 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:28 ; elapsed = 00:01:59 . Memory (MB): peak = 1679.445 ; gain = 1182.098
-INFO: [runtcl-6] Synthesis results are not added to the cache due to CRITICAL_WARNING
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 1679.445 ; gain = 0.000
+synth_design: Time (s): cpu = 00:00:47 ; elapsed = 00:01:52 . Memory (MB): peak = 1699.133 ; gain = 1202.145
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 1699.133 ; gain = 0.000
 INFO: [Common 17-1381] The checkpoint 'E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/soc_lite_top.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file soc_lite_top_utilization_synth.rpt -pb soc_lite_top_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Mon Dec  2 21:02:33 2024...
+INFO: [Common 17-206] Exiting Vivado at Thu Dec 12 00:28:53 2024...

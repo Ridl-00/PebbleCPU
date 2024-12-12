@@ -3,8 +3,8 @@
 # SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Mon Dec  2 21:00:18 2024
-# Process ID: 179972
+# Start of session at: Thu Dec 12 00:26:47 2024
+# Process ID: 11792
 # Current directory: E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1
 # Command line: vivado.exe -log soc_lite_top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source soc_lite_top.tcl
 # Log file: E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/soc_lite_top.vds

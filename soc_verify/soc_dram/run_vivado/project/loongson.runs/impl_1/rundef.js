@@ -24,7 +24,7 @@ eval( EAInclude(ISEJScriptLib) );
 
 
 // pre-commands:
-ISETouchFile( "route_design", "begin" );
+ISETouchFile( "init_design", "begin" );
 ISEStep( "vivado",
          "-log soc_lite_top.vdi -applog -m64 -product Vivado -messageDb vivado.pb -mode batch -source soc_lite_top.tcl -notrace" );
 

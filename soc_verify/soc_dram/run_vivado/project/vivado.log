@@ -18594,3 +18594,21 @@ Test end!
 ----PASS!!!
 $finish called at time : 121965 ns : File "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/testbench/mycpu_tb.v" Line 269
 run: Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1678.652 ; gain = 0.000
+reset_run synth_1
+INFO: [Project 1-1160] Copying file E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/soc_lite_top.dcp to E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.srcs/utils_1/imports/synth_1 and adding it to utils fileset
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1
+
+reset_run inst_ram_synth_1
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/inst_ram_synth_1
+
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'inst_ram'...
+[Thu Dec 12 00:19:49 2024] Launched inst_ram_synth_1, synth_1...
+Run output will be captured here:
+inst_ram_synth_1: E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/inst_ram_synth_1/runme.log
+synth_1: E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/synth_1/runme.log
+[Thu Dec 12 00:19:49 2024] Launched impl_1...
+Run output will be captured here: E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.runs/impl_1/runme.log
+launch_runs: Time (s): cpu = 00:00:02 ; elapsed = 00:00:05 . Memory (MB): peak = 1706.355 ; gain = 0.000

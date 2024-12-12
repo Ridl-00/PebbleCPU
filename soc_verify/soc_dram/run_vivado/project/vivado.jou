@@ -24,3 +24,7 @@ relaunch_sim
 run all
 relaunch_sim
 run all
+reset_run synth_1
+reset_run inst_ram_synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+wait_on_run impl_1

@@ -86,7 +86,7 @@ set_property ip_output_repo e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
-add_files e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/func/obj/inst_ram.coe
+add_files E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/func/obj/inst_ram.coe
 read_verilog -library xil_defaultlib {
   E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v
   E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/rtl/BRIDGE/bridge_1x2.v
@@ -120,6 +120,8 @@ read_xdc E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_
 set_property used_in_implementation false [get_files E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/constraints/soc_lite_top.xdc]
 
 set_param ips.enableIPCacheLiteLoad 1
+
+read_checkpoint -auto_incremental -incremental E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_dram/run_vivado/project/loongson.srcs/utils_1/imports/synth_1/soc_lite_top.dcp
 close [open __synthesis_is_running__ w]
 
 OPTRACE "synth_design" START { }
