@@ -443,7 +443,7 @@ assign src_reg_is_rd = inst_beq    |
                        inst_st_b   |
                        inst_st_h   |
                        inst_st_w   |
-                       inst_sc_w   |
+                      //  inst_sc_w   |
                       //  inst_csrwr  |
                       //  inst_csrxchg
                        ;
@@ -506,7 +506,7 @@ assign gr_we         = ~inst_st_b       &
 					  //  ~inst_nop        
             ;
 
-assign store_op      = inst_st_b | inst_st_h | inst_st_w | (inst_sc_w & ds_llbit);
+assign store_op      = inst_st_b | inst_st_h | inst_st_w /*| (inst_sc_w & ds_llbit)*/;
 
 assign dest          = (dst_is_r1) ? 5'd1 :
                        (dst_is_rj) ? rj   : rd;
@@ -603,7 +603,7 @@ assign inst_need_rkd = inst_add_w   |
                        inst_st_b    |
                        inst_st_h    |
                        inst_st_w    |
-                       inst_sc_w    |
+                      //  inst_sc_w    |
                       //  inst_csrwr   |
                       //  inst_csrxchg |
                       //  inst_invtlb  
@@ -638,7 +638,7 @@ assign need_si12     =  inst_addi_w     |
                         inst_preld      ;
 
 assign need_ui12     =  inst_andi | inst_ori | inst_xori;
-assign need_si14_pc  =  inst_ll_w | inst_sc_w;
+// assign need_si14_pc  =  inst_ll_w | inst_sc_w;
 assign need_si16_pc  =  inst_jirl |
                         inst_beq  | 
                         inst_bne  | 
@@ -684,7 +684,7 @@ assign br_taken  = (   inst_beq  &&  rj_eq_rd
                     || inst_jirl
                     || inst_bl
                     || inst_b
-                    ) && ds_valid && !ds_excp; 
+                    ) /*&& ds_valid && !ds_excp*/; 
 assign br_target = ({32{inst_beq || inst_bne || inst_bl || inst_b || 
                     inst_blt || inst_bge || inst_bltu || inst_bgeu}} & (ds_pc + ds_imm   ))            |
                    ({32{inst_jirl}}                                  & (rj_value_forward_exe + ds_imm)) ;
@@ -714,5 +714,53 @@ assign br_need_reg_data = inst_beq   ||
 //     end
 // end
 
+  assign id_to_if_bus = {br_taken, br_target/*, br_taken_cancel*/};
+
+assign id_to_exe_bus = {inst_csr_rstat_en,  // 349:349 for difftest
+                       inst_st_en       ,  // 348:341 for difftest
+                       inst_ld_en       ,  // 340:333 for difftest
+                      //  (inst_rdcntvl_w | inst_rdcntvh_w | inst_rdcntid_w), //332:332  for difftest
+                      //  timer_64      ,  //331:268  for difftest
+                       id_inst       ,  //267:236  for difftest
+                      //  inst_idle     ,  //235:235
+                      //  btb_pre_error_flush, //234:234
+                      //  br_to_btb     ,  //233:233
+                      //  ds_icache_miss,  //232:232
+                       br_inst       ,  //231:231
+                      //  inst_preld    ,  //230:230
+                      //  inst_valid_cacop,  //229:229
+                      //  mem_sign_exted,  //228:228
+                      //  inst_invtlb   ,  //227:227
+                      //  inst_tlbrd    ,  //226:226
+                      //  refetch       ,  //225:225
+                      //  inst_tlbfill  ,  //224:224
+                      //  inst_tlbwr    ,  //223:223
+                      //  inst_tlbsrch  ,  //222:222
+                      //  inst_sc_w     ,  //221:221
+                      //  inst_ll_w     ,  //220:220
+                      //  excp_num      ,  //219:211
+                      //  csr_mask      ,  //210:210
+                      //  csr_we        ,  //209:209
+                      //  csr_idx       ,  //208:195
+                      //  res_from_csr  ,  //194:194
+                      //  csr_data      ,  //193:162
+                      //  inst_ertn     ,  //161:161
+                      //  excp          ,  //160:160
+                       mem_size      ,  //159:158
+                      //  mul_div_op    ,  //157:154
+                      //  mul_div_sign  ,  //153:153
+                       alu_op        ,  //152:139
+                       load_op       ,  //138:138 bug2 load_op
+                       src1_is_pc    ,  //137:137
+                       src2_is_imm   ,  //136:136
+                       src2_is_4     ,  //135:135
+                       gr_we         ,  //134:134
+                       store_op      ,  //133:133
+                       dest          ,  //132:128
+                       ds_imm        ,  //127:96
+                       rj_value      ,  //95 :64
+                       rkd_value     ,  //63 :32
+                       id_pc            //31 :0
+                      };
 
 endmodule
