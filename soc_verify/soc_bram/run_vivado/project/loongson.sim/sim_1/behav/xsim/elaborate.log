@@ -1,0 +1,12 @@
+Vivado Simulator v2023.2
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/Xilinx/Vivado/2023.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L blk_mem_gen_v8_4_7 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_top_behav xil_defaultlib.tb_top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+ERROR: [VRFC 10-3180] cannot find port 'data_sram_en' on this module [e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/soc_lite_top.v:151]
+ERROR: [VRFC 10-3180] cannot find port 'inst_sram_en' on this module [e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/soc_lite_top.v:145]
+ERROR: [VRFC 10-8530] module 'confreg(SIMULATION=1'b1)' is ignored due to previous errors [e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/CONFREG/confreg.v:74]
+ERROR: [VRFC 10-8530] module 'blk_mem_gen_v8_4_7(C_FAMILY="artix7",C_XDEVICEFAMILY="artix7",C_ELABORATION_DIR="./",C_AXI_TYPE=1,C_MEM_TYPE=0,C_BYTE_SIZE=8,C_PRIM_TYPE=1,C_LOAD_INIT_FILE=1,C_INIT_FILE_NAME="inst_ram.mif",C_INIT_FILE="inst_ram.mem",C_USE_BYTE_WEA=1,C_WEA_WIDTH=4,C_WRITE_DEPTH_A=262144,C_READ_DEPTH_A=262144,C_ADDRA_WIDTH=18,C_INITB_VAL="0",C_HAS_ENB=0,C_USE_BYTE_WEB=1,C_WEB_WIDTH=4,C_WRITE_DEPTH_B=262144,C_READ_DEPTH_B=262144,C_ADDRB_WIDTH=18,C_SIM_COLLISION_CHECK="ALL",C_COMMON_CLK=0,C_COUNT_36K_BRAM="256",C_COUNT_18K_BRAM="0",C_EST_POWER_SUMMARY="Estimated_Power_for_IP_____:_____10.194003_mW")' is ignored due to previous errors [/wrk/ci/prod/2023.2/sw/continuous/3079/packages/customer/vivado/data/ip/xilinx/blk_mem_gen_v8_4/simulation/blk_mem_gen_v8_4.v:3457]
+ERROR: [XSIM 43-3322] Static elaboration of top level Verilog design unit(s) in library work failed.
