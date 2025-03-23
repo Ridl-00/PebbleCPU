@@ -1,0 +1,661 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0x0",
+      "device": "xc7a200tfbg676-1",
+      "name": "mycpu_top_block",
+      "rev_ctrl_bd_flag": "RevCtrlBdOff",
+      "synth_flow_mode": "Hierarchical",
+      "tool_version": "2023.2"
+    },
+    "design_tree": {
+      "if_stage_0": "",
+      "id_stage_0": "",
+      "exe_stage_0": "",
+      "mem_stage_0": "",
+      "wb_stage_0": ""
+    },
+    "ports": {
+      "data_sram_rdata": {
+        "direction": "I",
+        "left": "31",
+        "right": "0"
+      },
+      "inst_sram_addr": {
+        "direction": "O",
+        "left": "31",
+        "right": "0"
+      },
+      "inst_sram_wdata": {
+        "direction": "O",
+        "left": "31",
+        "right": "0"
+      },
+      "inst_sram_rdata": {
+        "direction": "I",
+        "left": "31",
+        "right": "0"
+      },
+      "data_sram_en": {
+        "direction": "O"
+      },
+      "data_sram_addr": {
+        "direction": "O",
+        "left": "31",
+        "right": "0"
+      },
+      "data_sram_wdata": {
+        "direction": "O",
+        "left": "31",
+        "right": "0"
+      },
+      "debug_wb_pc": {
+        "direction": "O",
+        "left": "31",
+        "right": "0"
+      },
+      "debug_wb_rf_we": {
+        "direction": "O",
+        "left": "3",
+        "right": "0"
+      },
+      "debug_wb_rf_wnum": {
+        "direction": "O",
+        "left": "4",
+        "right": "0"
+      },
+      "debug_wb_rf_wdata": {
+        "direction": "O",
+        "left": "31",
+        "right": "0"
+      },
+      "inst_sram_en": {
+        "direction": "O"
+      },
+      "inst_sram_we": {
+        "direction": "O",
+        "left": "3",
+        "right": "0"
+      },
+      "data_sram_we": {
+        "direction": "O",
+        "left": "3",
+        "right": "0"
+      },
+      "clk": {
+        "direction": "I"
+      },
+      "resetn": {
+        "direction": "I"
+      }
+    },
+    "components": {
+      "if_stage_0": {
+        "vlnv": "xilinx.com:module_ref:if_stage:1.0",
+        "ip_revision": "1",
+        "xci_name": "mycpu_top_block_if_stage_0_0",
+        "xci_path": "ip\\mycpu_top_block_if_stage_0_0\\mycpu_top_block_if_stage_0_0.xci",
+        "inst_hier_path": "if_stage_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "if_stage",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "resetn",
+                "value_src": "constant"
+              }
+            }
+          },
+          "resetn": {
+            "type": "rst",
+            "direction": "I",
+            "parameters": {
+              "POLARITY": {
+                "value": "ACTIVE_LOW",
+                "value_src": "constant"
+              }
+            }
+          },
+          "id_allowin": {
+            "direction": "I"
+          },
+          "if_to_id_valid": {
+            "direction": "O"
+          },
+          "if_to_id_bus": {
+            "direction": "O",
+            "left": "63",
+            "right": "0"
+          },
+          "id_to_if_bus": {
+            "direction": "I",
+            "left": "33",
+            "right": "0"
+          },
+          "inst_sram_en": {
+            "direction": "O"
+          },
+          "inst_sram_we": {
+            "direction": "O",
+            "left": "3",
+            "right": "0"
+          },
+          "inst_sram_addr": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "inst_sram_wdata": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "inst_sram_rdata": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      },
+      "id_stage_0": {
+        "vlnv": "xilinx.com:module_ref:id_stage:1.0",
+        "ip_revision": "1",
+        "xci_name": "mycpu_top_block_id_stage_0_0",
+        "xci_path": "ip\\mycpu_top_block_id_stage_0_0\\mycpu_top_block_id_stage_0_0.xci",
+        "inst_hier_path": "id_stage_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "id_stage",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "resetn",
+                "value_src": "constant"
+              }
+            }
+          },
+          "resetn": {
+            "type": "rst",
+            "direction": "I",
+            "parameters": {
+              "POLARITY": {
+                "value": "ACTIVE_LOW",
+                "value_src": "constant"
+              }
+            }
+          },
+          "id_allowin": {
+            "direction": "O"
+          },
+          "if_to_id_valid": {
+            "direction": "I"
+          },
+          "if_to_id_bus": {
+            "direction": "I",
+            "left": "63",
+            "right": "0"
+          },
+          "exe_allowin": {
+            "direction": "I"
+          },
+          "id_to_exe_valid": {
+            "direction": "O"
+          },
+          "id_to_exe_bus": {
+            "direction": "O",
+            "left": "156",
+            "right": "0"
+          },
+          "id_to_if_bus": {
+            "direction": "O",
+            "left": "33",
+            "right": "0"
+          },
+          "exe_to_id_bus": {
+            "direction": "I",
+            "left": "39",
+            "right": "0"
+          },
+          "mem_to_id_bus": {
+            "direction": "I",
+            "left": "38",
+            "right": "0"
+          },
+          "wb_to_rf_bus": {
+            "direction": "I",
+            "left": "38",
+            "right": "0"
+          }
+        }
+      },
+      "exe_stage_0": {
+        "vlnv": "xilinx.com:module_ref:exe_stage:1.0",
+        "ip_revision": "1",
+        "xci_name": "mycpu_top_block_exe_stage_0_0",
+        "xci_path": "ip\\mycpu_top_block_exe_stage_0_0\\mycpu_top_block_exe_stage_0_0.xci",
+        "inst_hier_path": "exe_stage_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "exe_stage",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "resetn",
+                "value_src": "constant"
+              }
+            }
+          },
+          "resetn": {
+            "type": "rst",
+            "direction": "I",
+            "parameters": {
+              "POLARITY": {
+                "value": "ACTIVE_LOW",
+                "value_src": "constant"
+              }
+            }
+          },
+          "exe_allowin": {
+            "direction": "O"
+          },
+          "id_to_exe_valid": {
+            "direction": "I"
+          },
+          "id_to_exe_bus": {
+            "direction": "I",
+            "left": "156",
+            "right": "0"
+          },
+          "mem_allowin": {
+            "direction": "I"
+          },
+          "exe_to_mem_valid": {
+            "direction": "O"
+          },
+          "exe_to_mem_bus": {
+            "direction": "O",
+            "left": "73",
+            "right": "0"
+          },
+          "exe_to_id_bus": {
+            "direction": "O",
+            "left": "39",
+            "right": "0"
+          },
+          "data_sram_en": {
+            "direction": "O"
+          },
+          "data_sram_we": {
+            "direction": "O",
+            "left": "3",
+            "right": "0"
+          },
+          "data_sram_addr": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "data_sram_wdata": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      },
+      "mem_stage_0": {
+        "vlnv": "xilinx.com:module_ref:mem_stage:1.0",
+        "ip_revision": "1",
+        "xci_name": "mycpu_top_block_mem_stage_0_0",
+        "xci_path": "ip\\mycpu_top_block_mem_stage_0_0\\mycpu_top_block_mem_stage_0_0.xci",
+        "inst_hier_path": "mem_stage_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "mem_stage",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "resetn",
+                "value_src": "constant"
+              }
+            }
+          },
+          "resetn": {
+            "type": "rst",
+            "direction": "I",
+            "parameters": {
+              "POLARITY": {
+                "value": "ACTIVE_LOW",
+                "value_src": "constant"
+              }
+            }
+          },
+          "mem_allowin": {
+            "direction": "O"
+          },
+          "exe_to_mem_valid": {
+            "direction": "I"
+          },
+          "exe_to_mem_bus": {
+            "direction": "I",
+            "left": "73",
+            "right": "0"
+          },
+          "wb_allowin": {
+            "direction": "I"
+          },
+          "mem_to_wb_valid": {
+            "direction": "O"
+          },
+          "mem_to_wb_bus": {
+            "direction": "O",
+            "left": "69",
+            "right": "0"
+          },
+          "mem_to_id_bus": {
+            "direction": "O",
+            "left": "38",
+            "right": "0"
+          },
+          "data_sram_rdata": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      },
+      "wb_stage_0": {
+        "vlnv": "xilinx.com:module_ref:wb_stage:1.0",
+        "ip_revision": "1",
+        "xci_name": "mycpu_top_block_wb_stage_0_0",
+        "xci_path": "ip\\mycpu_top_block_wb_stage_0_0\\mycpu_top_block_wb_stage_0_0.xci",
+        "inst_hier_path": "wb_stage_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "wb_stage",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "resetn",
+                "value_src": "constant"
+              }
+            }
+          },
+          "resetn": {
+            "type": "rst",
+            "direction": "I",
+            "parameters": {
+              "POLARITY": {
+                "value": "ACTIVE_LOW",
+                "value_src": "constant"
+              }
+            }
+          },
+          "wb_allowin": {
+            "direction": "O"
+          },
+          "mem_to_wb_valid": {
+            "direction": "I"
+          },
+          "mem_to_wb_bus": {
+            "direction": "I",
+            "left": "69",
+            "right": "0"
+          },
+          "wb_to_id_bus": {
+            "direction": "O",
+            "left": "38",
+            "right": "0"
+          },
+          "debug_wb_pc": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "debug_wb_rf_we": {
+            "direction": "O",
+            "left": "3",
+            "right": "0"
+          },
+          "debug_wb_rf_wnum": {
+            "direction": "O",
+            "left": "4",
+            "right": "0"
+          },
+          "debug_wb_rf_wdata": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          }
+        }
+      }
+    },
+    "nets": {
+      "clk_1": {
+        "ports": [
+          "clk",
+          "exe_stage_0/clk",
+          "mem_stage_0/clk",
+          "id_stage_0/clk",
+          "wb_stage_0/clk",
+          "if_stage_0/clk"
+        ]
+      },
+      "data_sram_rdata_1": {
+        "ports": [
+          "data_sram_rdata",
+          "mem_stage_0/data_sram_rdata"
+        ]
+      },
+      "exe_stage_0_data_sram_addr": {
+        "ports": [
+          "exe_stage_0/data_sram_addr",
+          "data_sram_addr"
+        ]
+      },
+      "exe_stage_0_data_sram_en": {
+        "ports": [
+          "exe_stage_0/data_sram_en",
+          "data_sram_en"
+        ]
+      },
+      "exe_stage_0_data_sram_wdata": {
+        "ports": [
+          "exe_stage_0/data_sram_wdata",
+          "data_sram_wdata"
+        ]
+      },
+      "exe_stage_0_data_sram_we": {
+        "ports": [
+          "exe_stage_0/data_sram_we",
+          "data_sram_we"
+        ]
+      },
+      "exe_stage_0_exe_allowin": {
+        "ports": [
+          "exe_stage_0/exe_allowin",
+          "id_stage_0/exe_allowin"
+        ]
+      },
+      "exe_stage_0_exe_to_id_bus": {
+        "ports": [
+          "exe_stage_0/exe_to_id_bus",
+          "id_stage_0/exe_to_id_bus"
+        ]
+      },
+      "exe_stage_0_exe_to_mem_bus": {
+        "ports": [
+          "exe_stage_0/exe_to_mem_bus",
+          "mem_stage_0/exe_to_mem_bus"
+        ]
+      },
+      "exe_stage_0_exe_to_mem_valid": {
+        "ports": [
+          "exe_stage_0/exe_to_mem_valid",
+          "mem_stage_0/exe_to_mem_valid"
+        ]
+      },
+      "id_stage_0_id_allowin": {
+        "ports": [
+          "id_stage_0/id_allowin",
+          "if_stage_0/id_allowin"
+        ]
+      },
+      "id_stage_0_id_to_exe_bus": {
+        "ports": [
+          "id_stage_0/id_to_exe_bus",
+          "exe_stage_0/id_to_exe_bus"
+        ]
+      },
+      "id_stage_0_id_to_exe_valid": {
+        "ports": [
+          "id_stage_0/id_to_exe_valid",
+          "exe_stage_0/id_to_exe_valid"
+        ]
+      },
+      "id_stage_0_id_to_if_bus": {
+        "ports": [
+          "id_stage_0/id_to_if_bus",
+          "if_stage_0/id_to_if_bus"
+        ]
+      },
+      "if_stage_0_if_to_id_bus": {
+        "ports": [
+          "if_stage_0/if_to_id_bus",
+          "id_stage_0/if_to_id_bus"
+        ]
+      },
+      "if_stage_0_if_to_id_valid": {
+        "ports": [
+          "if_stage_0/if_to_id_valid",
+          "id_stage_0/if_to_id_valid"
+        ]
+      },
+      "if_stage_0_inst_sram_addr": {
+        "ports": [
+          "if_stage_0/inst_sram_addr",
+          "inst_sram_addr"
+        ]
+      },
+      "if_stage_0_inst_sram_en": {
+        "ports": [
+          "if_stage_0/inst_sram_en",
+          "inst_sram_en"
+        ]
+      },
+      "if_stage_0_inst_sram_wdata": {
+        "ports": [
+          "if_stage_0/inst_sram_wdata",
+          "inst_sram_wdata"
+        ]
+      },
+      "if_stage_0_inst_sram_we": {
+        "ports": [
+          "if_stage_0/inst_sram_we",
+          "inst_sram_we"
+        ]
+      },
+      "inst_sram_rdata_1": {
+        "ports": [
+          "inst_sram_rdata",
+          "if_stage_0/inst_sram_rdata"
+        ]
+      },
+      "mem_stage_0_mem_allowin": {
+        "ports": [
+          "mem_stage_0/mem_allowin",
+          "exe_stage_0/mem_allowin"
+        ]
+      },
+      "mem_stage_0_mem_to_id_bus": {
+        "ports": [
+          "mem_stage_0/mem_to_id_bus",
+          "id_stage_0/mem_to_id_bus"
+        ]
+      },
+      "mem_stage_0_mem_to_wb_bus": {
+        "ports": [
+          "mem_stage_0/mem_to_wb_bus",
+          "wb_stage_0/mem_to_wb_bus"
+        ]
+      },
+      "mem_stage_0_mem_to_wb_valid": {
+        "ports": [
+          "mem_stage_0/mem_to_wb_valid",
+          "wb_stage_0/mem_to_wb_valid"
+        ]
+      },
+      "resetn_1": {
+        "ports": [
+          "resetn",
+          "mem_stage_0/resetn",
+          "id_stage_0/resetn",
+          "exe_stage_0/resetn",
+          "wb_stage_0/resetn",
+          "if_stage_0/resetn"
+        ]
+      },
+      "wb_stage_0_debug_wb_pc": {
+        "ports": [
+          "wb_stage_0/debug_wb_pc",
+          "debug_wb_pc"
+        ]
+      },
+      "wb_stage_0_debug_wb_rf_wdata": {
+        "ports": [
+          "wb_stage_0/debug_wb_rf_wdata",
+          "debug_wb_rf_wdata"
+        ]
+      },
+      "wb_stage_0_debug_wb_rf_we": {
+        "ports": [
+          "wb_stage_0/debug_wb_rf_we",
+          "debug_wb_rf_we"
+        ]
+      },
+      "wb_stage_0_debug_wb_rf_wnum": {
+        "ports": [
+          "wb_stage_0/debug_wb_rf_wnum",
+          "debug_wb_rf_wnum"
+        ]
+      },
+      "wb_stage_0_wb_allowin": {
+        "ports": [
+          "wb_stage_0/wb_allowin",
+          "mem_stage_0/wb_allowin"
+        ]
+      },
+      "wb_stage_0_wb_to_id_bus": {
+        "ports": [
+          "wb_stage_0/wb_to_id_bus",
+          "id_stage_0/wb_to_rf_bus"
+        ]
+      }
+    }
+  }
+}
