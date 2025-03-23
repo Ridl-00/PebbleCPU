@@ -28,11 +28,15 @@
 `define ID_TO_EXE_WD 157-1:0
 `define EXE_TO_MEM_WD 74-1:0
 `define MEM_TO_WB_WD 70-1:0
-`define WB_TO_ID_WD 39-1:0
+
+
 `define EXE_TO_ID_WD 40-1:0
 `define MEM_TO_ID_WD 39-1:0
+`define WB_TO_ID_WD 39-1:0
 
-ID_DATA_Reset 64'b0
+`define WB_TO_RF_WD 39-1:0
+
+`define ID_DATA_Reset 64'b0
 
 //pc
 `define PcReset 32'h1bff_fffc

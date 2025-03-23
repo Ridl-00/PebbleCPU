@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+// `timescale 1ns / 1ps
 `include "defines.v"
 
 module if_stage (
@@ -15,7 +15,7 @@ module if_stage (
 
     //对接insRAM接口
     output wire        inst_sram_en,
-    output wire [`InstWriteEnable_WD] inst_sram_wen,
+    output wire [`InstWriteEnable_WD] inst_sram_we,
     output wire [`InstAddrBus       ] inst_sram_addr,
     output wire [`InstBus           ] inst_sram_wdata,
     input  wire [`InstBus           ] inst_sram_rdata
@@ -73,7 +73,8 @@ always @(posedge clk) begin
     end else if (if_allowin) begin
       if_valid <= preIf_to_if_valid;
     //id被阻塞时 即使br_taken有效，if_valid也不行
-    end else if (br_taken_cancel) begin  //if_valid & (~id_allowin | ~if_ready_go)
+    // end else if (br_taken_cancel) begin  //if_valid & (~id_allowin | ~if_ready_go)
+    end else if(if_valid & (~id_allowin | ~if_ready_go)) begin
       if_valid <= `StageInvalid;
     end
 end
@@ -89,7 +90,7 @@ end
 //不 写 inst_sram i.e.只是读
   //赋值instRAM接口
   assign inst_sram_en    = preIf_to_if_valid & if_allowin; //相当于instram_valid
-  assign inst_sram_wen   = 4'h0;
+  assign inst_sram_we   = 4'h0;
   assign inst_sram_addr  = nextpc;
   assign inst_sram_wdata = 32'b0;
 
