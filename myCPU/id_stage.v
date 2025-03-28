@@ -22,7 +22,7 @@ module id_stage (
     input wire [`EXE_TO_ID_WD] exe_to_id_bus,
     input wire [`MEM_TO_ID_WD] mem_to_id_bus,
     //wb-rf
-    input wire [`WB_TO_RF_WD] wb_to_rf_bus      
+    input wire [`WB_TO_ID_WD] wb_to_rf_bus      
 
 );
 
@@ -238,7 +238,7 @@ wire [31:0] id_imm; //立即数扩展后
 wire need_ui5;
 wire need_si12;
 wire need_ui12;
-wire need_si14_pc;
+// wire need_si14_pc;
 wire need_si16_pc;
 wire need_si20;
 wire need_si20_pc;
@@ -616,7 +616,7 @@ assign inst_need_rkd = inst_add_w   |
 assign id_imm = ({32{need_ui5    }} & {27'b0, rk}               ) |
                 ({32{need_si12   }} & {{20{i12[11]}}, i12}      ) |
                 ({32{need_ui12   }} & {20'b0, i12}              ) |
-                ({32{need_si14_pc}} & {{16{i14[13]}}, i14, 2'b0}) |
+                // ({32{need_si14_pc}} & {{16{i14[13]}}, i14, 2'b0}) |
                 ({32{need_si16_pc}} & {{14{i16[15]}}, i16, 2'b0}) |
                 ({32{need_si20   }} & {i20, 12'b0}              ) |
                 ({32{need_si20_pc}} & {{10{i20[19]}}, i20, 2'b0}) |

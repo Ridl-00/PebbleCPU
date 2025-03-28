@@ -129,6 +129,10 @@ assign {
     } = wb_data;
 
 //wb-id(rf)
-  assign wb_to_id_bus   = {wb_gr_we, wb_dest, wb_final_result};
+  assign wb_to_id_bus   = {
+                            wb_gr_we,         //64:64
+                            wb_dest,          //63:32
+                            wb_final_result   //31:0
+                            };
 
 endmodule

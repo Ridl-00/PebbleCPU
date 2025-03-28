@@ -1,12 +1,13 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x0",
+      "boundary_crc": "0xF7A330670AD36966",
       "device": "xc7a200tfbg676-1",
       "name": "mycpu_top_block",
       "rev_ctrl_bd_flag": "RevCtrlBdOff",
       "synth_flow_mode": "Hierarchical",
-      "tool_version": "2023.2"
+      "tool_version": "2023.2",
+      "validated": "true"
     },
     "design_tree": {
       "if_stage_0": "",
@@ -214,7 +215,7 @@
           },
           "id_to_exe_bus": {
             "direction": "O",
-            "left": "156",
+            "left": "160",
             "right": "0"
           },
           "id_to_if_bus": {
@@ -224,7 +225,7 @@
           },
           "exe_to_id_bus": {
             "direction": "I",
-            "left": "39",
+            "left": "38",
             "right": "0"
           },
           "mem_to_id_bus": {
@@ -234,7 +235,7 @@
           },
           "wb_to_rf_bus": {
             "direction": "I",
-            "left": "38",
+            "left": "64",
             "right": "0"
           }
         }
@@ -279,7 +280,7 @@
           },
           "id_to_exe_bus": {
             "direction": "I",
-            "left": "156",
+            "left": "160",
             "right": "0"
           },
           "mem_allowin": {
@@ -290,12 +291,12 @@
           },
           "exe_to_mem_bus": {
             "direction": "O",
-            "left": "73",
+            "left": "78",
             "right": "0"
           },
           "exe_to_id_bus": {
             "direction": "O",
-            "left": "39",
+            "left": "38",
             "right": "0"
           },
           "data_sram_en": {
@@ -358,7 +359,7 @@
           },
           "exe_to_mem_bus": {
             "direction": "I",
-            "left": "73",
+            "left": "78",
             "right": "0"
           },
           "wb_allowin": {
@@ -429,7 +430,7 @@
           },
           "wb_to_id_bus": {
             "direction": "O",
-            "left": "38",
+            "left": "64",
             "right": "0"
           },
           "debug_wb_pc": {
@@ -459,11 +460,11 @@
       "clk_1": {
         "ports": [
           "clk",
-          "exe_stage_0/clk",
           "mem_stage_0/clk",
-          "id_stage_0/clk",
           "wb_stage_0/clk",
-          "if_stage_0/clk"
+          "id_stage_0/clk",
+          "if_stage_0/clk",
+          "exe_stage_0/clk"
         ]
       },
       "data_sram_rdata_1": {
@@ -614,10 +615,10 @@
         "ports": [
           "resetn",
           "mem_stage_0/resetn",
-          "id_stage_0/resetn",
-          "exe_stage_0/resetn",
           "wb_stage_0/resetn",
-          "if_stage_0/resetn"
+          "id_stage_0/resetn",
+          "if_stage_0/resetn",
+          "exe_stage_0/resetn"
         ]
       },
       "wb_stage_0_debug_wb_pc": {

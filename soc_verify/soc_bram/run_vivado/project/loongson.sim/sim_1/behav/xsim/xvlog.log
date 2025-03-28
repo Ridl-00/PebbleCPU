@@ -1,28 +1,57 @@
-INFO: [VRFC 10-2263] Analyzing Verilog file "e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/xilinx_ip/clk_pll/clk_pll_clk_wiz.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module clk_pll_clk_wiz
-INFO: [VRFC 10-2263] Analyzing Verilog file "e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/xilinx_ip/clk_pll/clk_pll.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module clk_pll
-INFO: [VRFC 10-2263] Analyzing Verilog file "e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/xilinx_ip/data_ram/sim/data_ram.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module data_ram
-INFO: [VRFC 10-2263] Analyzing Verilog file "e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/xilinx_ip/inst_ram/sim/inst_ram.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module inst_ram
-INFO: [VRFC 10-2263] Analyzing Verilog file "e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module alu
-INFO: [VRFC 10-2263] Analyzing Verilog file "e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/BRIDGE/bridge_1x2.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module bridge_1x2
-INFO: [VRFC 10-2263] Analyzing Verilog file "e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/CONFREG/confreg.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module confreg
-INFO: [VRFC 10-2263] Analyzing Verilog file "e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/mycpu_top.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module mycpu_top
-INFO: [VRFC 10-2263] Analyzing Verilog file "e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/regfile.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/if_stage.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module if_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/regfile.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module regfile
-INFO: [VRFC 10-2263] Analyzing Verilog file "e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/soc_lite_top.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module soc_lite_top
-INFO: [VRFC 10-2263] Analyzing Verilog file "e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/tools.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/tools.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module decoder_2_4
 INFO: [VRFC 10-311] analyzing module decoder_4_16
 INFO: [VRFC 10-311] analyzing module decoder_5_32
 INFO: [VRFC 10-311] analyzing module decoder_6_64
-INFO: [VRFC 10-2263] Analyzing Verilog file "e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/testbench/mycpu_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/id_stage.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module id_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/alu.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module alu
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/div.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module div
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/mul.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module YDecoder
+INFO: [VRFC 10-311] analyzing module BoothBase
+INFO: [VRFC 10-311] analyzing module BoothInterBase
+INFO: [VRFC 10-311] analyzing module addr
+INFO: [VRFC 10-311] analyzing module WallaceTreeBase
+INFO: [VRFC 10-311] analyzing module mul
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/exe_stage.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module exe_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/mem_stage.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mem_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/wb_stage.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module wb_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/xilinx_ip/clk_pll/clk_pll_clk_wiz.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_pll_clk_wiz
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/xilinx_ip/clk_pll/clk_pll.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_pll
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/xilinx_ip/data_ram/sim/data_ram.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module data_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/xilinx_ip/inst_ram/sim/inst_ram.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module inst_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/run_vivado/project/loongson.ip_user_files/bd/mycpu_top_block/ip/mycpu_top_block_if_stage_0_0/sim/mycpu_top_block_if_stage_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mycpu_top_block_if_stage_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/run_vivado/project/loongson.ip_user_files/bd/mycpu_top_block/ip/mycpu_top_block_id_stage_0_0/sim/mycpu_top_block_id_stage_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mycpu_top_block_id_stage_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/run_vivado/project/loongson.ip_user_files/bd/mycpu_top_block/ip/mycpu_top_block_exe_stage_0_0/sim/mycpu_top_block_exe_stage_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mycpu_top_block_exe_stage_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/run_vivado/project/loongson.ip_user_files/bd/mycpu_top_block/ip/mycpu_top_block_mem_stage_0_0/sim/mycpu_top_block_mem_stage_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mycpu_top_block_mem_stage_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/run_vivado/project/loongson.ip_user_files/bd/mycpu_top_block/ip/mycpu_top_block_wb_stage_0_0/sim/mycpu_top_block_wb_stage_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mycpu_top_block_wb_stage_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/run_vivado/project/loongson.ip_user_files/bd/mycpu_top_block/sim/mycpu_top_block.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mycpu_top_block
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/BRIDGE/bridge_1x2.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bridge_1x2
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/CONFREG/confreg.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module confreg
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/rtl/soc_lite_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module soc_lite_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/testbench/mycpu_tb.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module tb_top
-WARNING: [VRFC 10-2096] empty statement in sequential block [e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/testbench/mycpu_tb.v:237]
+WARNING: [VRFC 10-2096] empty statement in sequential block [E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/testbench/mycpu_tb.v:237]

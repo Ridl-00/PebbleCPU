@@ -36,7 +36,7 @@ module exe_stage (
   wire exe_ready_go;
   reg [`ID_TO_EXE_WD] exe_data;
 
-wire [13:0] exe_alu_op      ;
+wire [`AluOpBus] exe_alu_op      ;
 wire        exe_src1_is_pc  ;
 wire        exe_src2_is_imm ; 
 wire        exe_src2_is_4   ;
@@ -136,11 +136,11 @@ wire div_complete;
 //======================================================
   assign exe_allowin = ~exe_valid | exe_ready_go & mem_allowin;
   assign exe_to_mem_valid = exe_valid & exe_ready_go;
-assign exe_ready_go    = (!div_stall && (/*(dcache_req_or_inst_en && data_addr_ok) ||*/ !(access_mem /*|| dcacop_inst || preld_inst*/)) /*&& !tlbsrch_stall && !icacop_inst_stall*/)/* || excp*/;
+assign exe_ready_go    = (!div_stall & (/*(dcache_req_or_inst_en && data_addr_ok) ||*/ !(access_mem /*|| dcacop_inst || preld_inst*/)) /*&& !tlbsrch_stall && !icacop_inst_stall*/)/* || excp*/;
 
 // assign exe_to_ds_valid = exe_valid;
 
-assign access_mem = exe_load_op || exe_store_op;
+assign access_mem = exe_load_op | exe_store_op;
 
 // assign exe_flush_sign  = excp_flush || ertn_flush || refetch_flush || icacop_flush || idle_flush;
 
@@ -154,8 +154,14 @@ assign access_mem = exe_load_op || exe_store_op;
     end else if (exe_allowin) begin
       exe_valid <= id_to_exe_valid;
     end
+  end
+
+  always @(posedge clk) begin
     if (exe_allowin & id_to_exe_valid) begin
       exe_data <= id_to_exe_bus;
+    end
+    else begin
+      exe_data <= 'b0;
     end
   end
 
@@ -204,7 +210,7 @@ alu u_alu(
   wire [63:0] exe_mul_result;
   mul u_mul (
       .mul_clk   (clk),
-      .resetn    (resetn),
+      .reset     (~resetn),
       .mul_signed(exe_mul_div_sign),
       .x         (exe_alu_src1),
       .y         (exe_alu_src2),
@@ -217,14 +223,14 @@ alu u_alu(
   wire complete_delay;
   div u_div (
       .div_clk       (clk),
-      .resetn        (resetn),
+      .reset         (~resetn),
       .div           (div_enable),
       .div_signed    (exe_mul_div_sign),
       .x             (exe_alu_src1),
       .y             (exe_alu_src2),
       .s             (s),
       .r             (r),
-      .complete_delay(div_complete)
+      .complete      (div_complete)
   );
 
 // assign exe_result     = /*exe_res_from_csr ? exe_csr_data : */exe_alu_result;

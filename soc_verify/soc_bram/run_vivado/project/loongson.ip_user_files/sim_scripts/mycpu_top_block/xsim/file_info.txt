@@ -1,0 +1,7 @@
+mycpu_top_block_if_stage_0_0.v,verilog,xil_defaultlib,../../../bd/mycpu_top_block/ip/mycpu_top_block_if_stage_0_0/sim/mycpu_top_block_if_stage_0_0.v,
+mycpu_top_block_id_stage_0_0.v,verilog,xil_defaultlib,../../../bd/mycpu_top_block/ip/mycpu_top_block_id_stage_0_0/sim/mycpu_top_block_id_stage_0_0.v,
+mycpu_top_block_exe_stage_0_0.v,verilog,xil_defaultlib,../../../bd/mycpu_top_block/ip/mycpu_top_block_exe_stage_0_0/sim/mycpu_top_block_exe_stage_0_0.v,
+mycpu_top_block_mem_stage_0_0.v,verilog,xil_defaultlib,../../../bd/mycpu_top_block/ip/mycpu_top_block_mem_stage_0_0/sim/mycpu_top_block_mem_stage_0_0.v,
+mycpu_top_block_wb_stage_0_0.v,verilog,xil_defaultlib,../../../bd/mycpu_top_block/ip/mycpu_top_block_wb_stage_0_0/sim/mycpu_top_block_wb_stage_0_0.v,
+mycpu_top_block.v,verilog,xil_defaultlib,../../../bd/mycpu_top_block/sim/mycpu_top_block.v,
+glbl.v,Verilog,xil_defaultlib,glbl.v

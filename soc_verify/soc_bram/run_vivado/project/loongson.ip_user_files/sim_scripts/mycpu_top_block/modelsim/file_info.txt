@@ -1,0 +1,10 @@
+xpm_cdc.sv,systemverilog,xpm,D:/Xilinx/Vivado/2023.2/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv,
+xpm_memory.sv,systemverilog,xpm,D:/Xilinx/Vivado/2023.2/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv,
+xpm_VCOMP.vhd,vhdl,xpm,D:/Xilinx/Vivado/2023.2/data/ip/xpm/xpm_VCOMP.vhd,
+mycpu_top_block_if_stage_0_0.v,verilog,xil_defaultlib,../../../bd/mycpu_top_block/ip/mycpu_top_block_if_stage_0_0/sim/mycpu_top_block_if_stage_0_0.v,
+mycpu_top_block_id_stage_0_0.v,verilog,xil_defaultlib,../../../bd/mycpu_top_block/ip/mycpu_top_block_id_stage_0_0/sim/mycpu_top_block_id_stage_0_0.v,
+mycpu_top_block_exe_stage_0_0.v,verilog,xil_defaultlib,../../../bd/mycpu_top_block/ip/mycpu_top_block_exe_stage_0_0/sim/mycpu_top_block_exe_stage_0_0.v,
+mycpu_top_block_mem_stage_0_0.v,verilog,xil_defaultlib,../../../bd/mycpu_top_block/ip/mycpu_top_block_mem_stage_0_0/sim/mycpu_top_block_mem_stage_0_0.v,
+mycpu_top_block_wb_stage_0_0.v,verilog,xil_defaultlib,../../../bd/mycpu_top_block/ip/mycpu_top_block_wb_stage_0_0/sim/mycpu_top_block_wb_stage_0_0.v,
+mycpu_top_block.v,verilog,xil_defaultlib,../../../bd/mycpu_top_block/sim/mycpu_top_block.v,
+glbl.v,Verilog,xil_defaultlib,glbl.v

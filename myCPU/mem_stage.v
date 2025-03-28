@@ -173,11 +173,6 @@ assign mem_final_result = ({32{mem_load_op      }} & mem_result       )  |
 assign dest_zero            = (mem_dest == 5'b0);
 assign forward_enable       = mem_gr_we & ~dest_zero & mem_valid;
 assign dep_need_stall       = mem_load_op && !mem_to_wb_valid;
-assign mem_to_ds_forward_bus = {dep_need_stall,  //38:38
-                               forward_enable,  //37:37
-                               mem_dest       ,  //36:32
-                               mem_final_result  //31:0
-                              };
 
 //exe-mem
 assign {
@@ -227,7 +222,7 @@ assign {
 } = mem_data;
 
 //mem-wb
-assign ms_to_ws_bus = {
+assign mem_to_wb_bus = {
                     //    mem_csr_data    ,  //492:461 for difftest
                     //    mem_csr_rstat_en,  //460:460 for difftest
                     //    mem_st_data     ,  //459:428 for difftest
@@ -274,6 +269,9 @@ assign ms_to_ws_bus = {
                       };
 
 //mem-id
-  assign mem_to_id_bus = {mem_gr_we, mem_dest, mem_final_result};
-
+assign mem_to_id_bus = {dep_need_stall,  //38:38
+                               forward_enable,  //37:37
+                               mem_dest       ,  //36:32
+                               mem_final_result  //31:0
+                              };
 endmodule
