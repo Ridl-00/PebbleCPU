@@ -677,15 +677,15 @@ assign rj_lt_rd_unsign = (rj_value_forward_exe < rkd_value_forward_exe);   //ope
 assign rj_lt_rd_sign   = (rj_value_forward_exe[31] && ~rkd_value_forward_exe[31]) ? 1'b1 :
                          (~rj_value_forward_exe[31] && rkd_value_forward_exe[31]) ? 1'b0 : rj_lt_rd_unsign;                         
 
-assign br_taken  = (   inst_beq  &&  rj_eq_rd
-                    || inst_bne  && !rj_eq_rd
-                    || inst_blt  &&  rj_lt_rd_sign
-                    || inst_bge  && !rj_lt_rd_sign
-                    || inst_bltu &&  rj_lt_rd_unsign
-                    || inst_bgeu && !rj_lt_rd_unsign
-                    || inst_jirl
-                    || inst_bl
-                    || inst_b
+assign br_taken  = (  inst_beq  &  rj_eq_rd
+                    | inst_bne  & !rj_eq_rd
+                    | inst_blt  &  rj_lt_rd_sign
+                    | inst_bge  & !rj_lt_rd_sign
+                    | inst_bltu &  rj_lt_rd_unsign
+                    | inst_bgeu & !rj_lt_rd_unsign
+                    | inst_jirl
+                    | inst_bl
+                    | inst_b
                     ) /*&& ds_valid && !ds_excp*/; 
 assign br_target = ({32{inst_beq || inst_bne || inst_bl || inst_b || 
                     inst_blt || inst_bge || inst_bltu || inst_bgeu}} & (id_pc + id_imm   ))            |

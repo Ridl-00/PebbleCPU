@@ -461,10 +461,10 @@
         "ports": [
           "clk",
           "mem_stage_0/clk",
-          "wb_stage_0/clk",
-          "id_stage_0/clk",
           "if_stage_0/clk",
-          "exe_stage_0/clk"
+          "wb_stage_0/clk",
+          "exe_stage_0/clk",
+          "id_stage_0/clk"
         ]
       },
       "data_sram_rdata_1": {
@@ -615,10 +615,10 @@
         "ports": [
           "resetn",
           "mem_stage_0/resetn",
-          "wb_stage_0/resetn",
-          "id_stage_0/resetn",
           "if_stage_0/resetn",
-          "exe_stage_0/resetn"
+          "wb_stage_0/resetn",
+          "exe_stage_0/resetn",
+          "id_stage_0/resetn"
         ]
       },
       "wb_stage_0_debug_wb_pc": {

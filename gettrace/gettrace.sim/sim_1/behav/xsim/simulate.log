@@ -1,0 +1,68 @@
+Time resolution is 1 ps
+==============================================================
+Test begin!
+----[  12055 ns] Number 8'd01 Functional Test Point PASS!!!
+        [  22000 ns] Test is running, debug_wb_pc = 0x1c03976c
+        [  32000 ns] Test is running, debug_wb_pc = 0x1c03a70c
+----[  36405 ns] Number 8'd02 Functional Test Point PASS!!!
+        [  42000 ns] Test is running, debug_wb_pc = 0x1c03b660
+        [  52000 ns] Test is running, debug_wb_pc = 0x1c03c600
+----[  54735 ns] Number 8'd03 Functional Test Point PASS!!!
+        [  62000 ns] Test is running, debug_wb_pc = 0x1c03d554
+        [  72000 ns] Test is running, debug_wb_pc = 0x1c03e4f4
+----[  79085 ns] Number 8'd04 Functional Test Point PASS!!!
+        [  82000 ns] Test is running, debug_wb_pc = 0x1c03f448
+        [  92000 ns] Test is running, debug_wb_pc = 0x1c0403e8
+        [ 102000 ns] Test is running, debug_wb_pc = 0x1c041388
+----[ 103435 ns] Number 8'd05 Functional Test Point PASS!!!
+        [ 112000 ns] Test is running, debug_wb_pc = 0x1c0422dc
+        [ 122000 ns] Test is running, debug_wb_pc = 0x1c04327c
+----[ 127785 ns] Number 8'd06 Functional Test Point PASS!!!
+        [ 132000 ns] Test is running, debug_wb_pc = 0x1c0441d0
+        [ 142000 ns] Test is running, debug_wb_pc = 0x1c045170
+        [ 152000 ns] Test is running, debug_wb_pc = 0x1c046110
+----[ 152135 ns] Number 8'd07 Functional Test Point PASS!!!
+        [ 162000 ns] Test is running, debug_wb_pc = 0x1c047064
+        [ 172000 ns] Test is running, debug_wb_pc = 0x1c048004
+----[ 176485 ns] Number 8'd08 Functional Test Point PASS!!!
+        [ 182000 ns] Test is running, debug_wb_pc = 0x1c048f58
+        [ 192000 ns] Test is running, debug_wb_pc = 0x1c049ef8
+----[ 200835 ns] Number 8'd09 Functional Test Point PASS!!!
+        [ 202000 ns] Test is running, debug_wb_pc = 0x1c0107e4
+        [ 212000 ns] Test is running, debug_wb_pc = 0x1c011784
+        [ 222000 ns] Test is running, debug_wb_pc = 0x1c012724
+----[ 225185 ns] Number 8'd10 Functional Test Point PASS!!!
+        [ 232000 ns] Test is running, debug_wb_pc = 0x1c013678
+        [ 242000 ns] Test is running, debug_wb_pc = 0x1c014618
+----[ 243515 ns] Number 8'd11 Functional Test Point PASS!!!
+        [ 252000 ns] Test is running, debug_wb_pc = 0x1c01556c
+----[ 261845 ns] Number 8'd12 Functional Test Point PASS!!!
+        [ 262000 ns] Test is running, debug_wb_pc = 0x1c010190
+        [ 272000 ns] Test is running, debug_wb_pc = 0x1c017460
+----[ 280175 ns] Number 8'd13 Functional Test Point PASS!!!
+        [ 282000 ns] Test is running, debug_wb_pc = 0x1c0183b4
+----[ 290685 ns] Number 8'd14 Functional Test Point PASS!!!
+        [ 292000 ns] Test is running, debug_wb_pc = 0x1c019308
+----[ 301995 ns] Number 8'd15 Functional Test Point PASS!!!
+        [ 302000 ns] Test is running, debug_wb_pc = 0x1c0100c4
+        [ 312000 ns] Test is running, debug_wb_pc = 0x1c01b6d4
+        [ 322000 ns] Test is running, debug_wb_pc = 0x1c01cb24
+        [ 332000 ns] Test is running, debug_wb_pc = 0x1c01dc14
+        [ 342000 ns] Test is running, debug_wb_pc = 0x1c01ed1c
+        [ 352000 ns] Test is running, debug_wb_pc = 0x1c0200d4
+        [ 362000 ns] Test is running, debug_wb_pc = 0x1c021564
+----[ 363495 ns] Number 8'd16 Functional Test Point PASS!!!
+        [ 372000 ns] Test is running, debug_wb_pc = 0x1c02267c
+        [ 382000 ns] Test is running, debug_wb_pc = 0x1c023760
+        [ 392000 ns] Test is running, debug_wb_pc = 0x1c024a5c
+        [ 402000 ns] Test is running, debug_wb_pc = 0x1c025eec
+        [ 412000 ns] Test is running, debug_wb_pc = 0x1c027144
+        [ 422000 ns] Test is running, debug_wb_pc = 0x1c028234
+----[ 428955 ns] Number 8'd17 Functional Test Point PASS!!!
+        [ 432000 ns] Test is running, debug_wb_pc = 0x1c0292e4
+        [ 442000 ns] Test is running, debug_wb_pc = 0x1c02a3c8
+        [ 452000 ns] Test is running, debug_wb_pc = 0x1c02b48c
+        [ 462000 ns] Test is running, debug_wb_pc = 0x1c02c55c
+        [ 472000 ns] Test is running, debug_wb_pc = 0x1c02d634
+----[ 481225 ns] Number 8'd18 Functional Test Point PASS!!!
+        [ 482000 ns

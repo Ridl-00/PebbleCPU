@@ -136,7 +136,8 @@ wire div_complete;
 //======================================================
   assign exe_allowin = ~exe_valid | exe_ready_go & mem_allowin;
   assign exe_to_mem_valid = exe_valid & exe_ready_go;
-assign exe_ready_go    = (!div_stall & (/*(dcache_req_or_inst_en && data_addr_ok) ||*/ !(access_mem /*|| dcacop_inst || preld_inst*/)) /*&& !tlbsrch_stall && !icacop_inst_stall*/)/* || excp*/;
+// assign exe_ready_go    = (!div_stall & (/*(dcache_req_or_inst_en && data_addr_ok) ||*/ !(access_mem /*|| dcacop_inst || preld_inst*/)) /*&& !tlbsrch_stall && !icacop_inst_stall*/)/* || excp*/;
+assign exe_ready_go = !div_stall;
 
 // assign exe_to_ds_valid = exe_valid;
 

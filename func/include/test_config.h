@@ -16,7 +16,7 @@
   //SHORT_TEST1: less test case for n1~n20.
   //             Only set for exp6.
   //==================================================================
-  #define SHORT_TEST1 1
+  #define SHORT_TEST1 0
   
   //==================================================================
   //NOP_INSERT: Insert 4 nop insts between every alu operation.

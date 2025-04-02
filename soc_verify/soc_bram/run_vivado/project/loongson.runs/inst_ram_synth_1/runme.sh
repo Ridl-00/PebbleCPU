@@ -25,7 +25,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/run_vivado/project/loongson.runs/inst_ram_synth_1'
+HD_PWD='E:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/soc_verify/soc_bram/run_vivado/project/loongson.runs/inst_ram_synth_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log

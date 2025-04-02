@@ -134,5 +134,8 @@ assign {
                             wb_dest,          //63:32
                             wb_final_result   //31:0
                             };
-
+assign  debug_wb_pc        = wb_pc            ;
+assign  debug_wb_rf_we     = {4{wb_gr_we}}    ;
+assign  debug_wb_rf_wnum   = wb_dest          ;
+assign  debug_wb_rf_wdata  = wb_final_result  ;
 endmodule
