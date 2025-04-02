@@ -161,9 +161,11 @@ assign access_mem = exe_load_op | exe_store_op;
     if (exe_allowin & id_to_exe_valid) begin
       exe_data <= id_to_exe_bus;
     end
-    else begin
-      exe_data <= 'b0;
-    end
+  //？如果不传新的bus进来，原版是保持不变，如果换成赋为0
+  //由于上一拍已经处理过这批数据，照理来说已经不需要了，可以赋值为0
+    // else begin
+    //   exe_data <= 'b0;
+    // end
   end
 
 // exe_mul_div_op[ 0] = inst_mul_w;
