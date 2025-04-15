@@ -1,9 +1,0 @@
-{
-	"version": "1.0",
-	"modules": {
-		"mycpu_top_block": {
-			"proto_instances": {
-			}
-		}
-	}
-}
