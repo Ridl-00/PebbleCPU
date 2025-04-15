@@ -1,4 +1,3 @@
-`timescale 1ns / 1ps
 
 // global
 `define RstEnable           1'b0
@@ -56,3 +55,34 @@
 `define RegNum 32 //通用寄存器的数量
 `define RegNumLog2 5 //寻址通用寄存器使用的地址位数
 `define NOPRegAddr 5'b00000 //用于无操作指令的寄存器地址
+
+//csr
+
+`define CLR       0
+//TLBRENTRY
+`define TLBRENTRY_PA 31:6
+//DMW
+`define PLV0      0
+`define PLV3      3 
+`define DMW_MAT   5:4
+`define PSEG      27:25
+`define VSEG      31:29
+//PGDL PGDH PGD
+`define BASE      31:12
+
+`define ECODE_INT  6'h0
+`define ECODE_PIL  6'h1
+`define ECODE_PIS  6'h2
+`define ECODE_PIF  6'h3
+`define ECODE_PME  6'h4
+`define ECODE_PPI  6'h7
+`define ECODE_ADEF 6'h8
+`define ECODE_ALE  6'h9
+`define ECODE_SYS  6'hb
+`define ECODE_BRK  6'hc
+`define ECODE_INE  6'hd
+`define ECODE_IPE  6'he
+`define ECODE_FPD  6'hf
+`define ECODE_TLBR 6'h3f
+
+`define ESUBCODE_ADEF  9'h0

@@ -137,11 +137,16 @@ assign mem_to_id_valid = mem_valid;
     end else if (mem_allowin) begin
       mem_valid <= exe_to_mem_valid;
     end
-    if (mem_allowin & exe_to_mem_valid) begin
-      mem_data <= exe_to_mem_bus;
-    end
   end
 
+always @(posedge clk) begin
+  if (mem_allowin & exe_to_mem_valid) begin
+    mem_data <= exe_to_mem_bus;
+  end
+  // else begin
+  //   mem_data <= 'b0;
+  // end
+end
 
 assign access_mem = mem_store_op || mem_load_op;
 

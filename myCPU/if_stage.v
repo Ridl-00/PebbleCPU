@@ -40,11 +40,11 @@ wire [`InstAddrBus] nextpc;  //最终更新到PC寄存器的指令地址
 
 //id-if
   //拆解id组合逻辑传递给if组合逻辑的数据
-  wire br_taken;
+  wire br_really_taken;
   // wire br_taken_cancel;
   wire [`InstAddrBus] br_target;
   // assign {br_taken, br_target, br_taken_cancel} = id_to_if_bus;
-  assign {br_taken, br_target} = id_to_if_bus;
+  assign {br_really_taken, br_target} = id_to_if_bus;
 
 //if-id
   //组合传递给id_reg的数据
@@ -64,7 +64,7 @@ assign if_to_id_valid    = if_valid & if_ready_go;
 // preIF
 assign preIf_to_if_valid = resetn;
 assign seq_pc            = if_pc + 32'h4;
-assign nextpc            = br_taken ? br_target : seq_pc;
+assign nextpc            = br_really_taken ? br_target : seq_pc;
 
 always @(posedge clk) begin
 //！把括号内的改为判断式会不会增加逻辑层次 路径变长？
@@ -74,7 +74,8 @@ always @(posedge clk) begin
       if_valid <= preIf_to_if_valid;
     //id被阻塞时 即使br_taken有效，if_valid也不行
     // end else if (br_taken_cancel) begin  //if_valid & (~id_allowin | ~if_ready_go)
-    end else if(if_valid & (~id_allowin | ~if_ready_go)) begin
+    // end else if(if_valid & (~id_allowin | ~if_ready_go)) begin
+    end else if(br_really_taken) begin 
       if_valid <= `StageInvalid;
     end
 end

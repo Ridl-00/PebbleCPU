@@ -77,10 +77,16 @@ wire [31:0] wb_pc;
     end else if (wb_allowin) begin
       wb_valid <= mem_to_wb_valid;
     end
+  end
+
+always @(posedge clk) begin
     if (wb_allowin & mem_to_wb_valid) begin
       wb_data <= mem_to_wb_bus;
     end
-  end
+  // else begin
+  //   wb_data <= 'b0;
+  // end
+end
 
 assign {
     // wb_csr_data    ,  //492:461 for difftest
@@ -135,7 +141,7 @@ assign {
                             wb_final_result   //31:0
                             };
 assign  debug_wb_pc        = wb_pc            ;
-assign  debug_wb_rf_we     = {4{wb_gr_we}}    ;
+assign  debug_wb_rf_we     = {4{wb_gr_we}} &{4{wb_valid}}   ;
 assign  debug_wb_rf_wnum   = wb_dest          ;
 assign  debug_wb_rf_wdata  = wb_final_result  ;
 endmodule

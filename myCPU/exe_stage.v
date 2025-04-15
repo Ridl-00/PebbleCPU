@@ -163,6 +163,7 @@ assign access_mem = exe_load_op | exe_store_op;
     end
   //？如果不传新的bus进来，原版是保持不变，如果换成赋为0
   //由于上一拍已经处理过这批数据，照理来说已经不需要了，可以赋值为0
+  //！在处理div指令时，如果直接消除pc数据，会导致阻塞之后的pc为0，而不是阻塞前的pc的nextpc
     // else begin
     //   exe_data <= 'b0;
     // end
@@ -187,9 +188,9 @@ assign access_mem = exe_load_op | exe_store_op;
                           {4{exe_alu_result[1:0] == 2'b10}} & 4'b1100)
                       :(exe_mem_size == 2'b00 ? 4'b1111 : 4'b0000)));
   assign data_sram_addr = exe_alu_result;
-assign data_sram_wdata = exe_mem_size==2'b01 ? {4{exe_alu_src2[7:0]}} : 
-                         exe_mem_size==2'b10 ? {2{exe_alu_src2[15:0]}} :
-                                                  exe_alu_src2;
+assign data_sram_wdata = exe_mem_size==2'b01 ? {4{exe_rkd_value[7:0]}} : 
+                         exe_mem_size==2'b10 ? {2{exe_rkd_value[15:0]}} :
+                                                  exe_rkd_value;
 
 //alu
 assign exe_alu_src1 = exe_src1_is_pc ? exe_pc : exe_rj_value;
@@ -198,9 +199,11 @@ assign exe_alu_src2 = (exe_src2_is_imm) ? exe_imm :
                      (exe_src2_is_4)   ? 32'd4  : exe_rkd_value;
 
 assign exe_div_enable = (exe_mul_div_op[2] | exe_mul_div_op[3]) & exe_valid;
-assign exe_mul_enable = exe_mul_div_op[0] | exe_mul_div_op[1];
+assign exe_mul_enable = (exe_mul_div_op[0] | exe_mul_div_op[1]) & exe_valid;
 
-assign div_stall     = exe_div_enable & ~div_complete;
+//高有效（要暂停）
+// assign div_stall     = exe_div_enable & ~div_complete;
+assign div_stall     = exe_div_enable ? ~div_complete : 1'b0;
 
 alu u_alu(
     .alu_op     (exe_alu_op    ),
@@ -211,32 +214,123 @@ alu u_alu(
 
   //mul
   wire [63:0] exe_mul_result;
-  mul u_mul (
-      .mul_clk   (clk),
-      .reset     (~resetn),
-      .mul_signed(exe_mul_div_sign),
-      .x         (exe_alu_src1),
-      .y         (exe_alu_src2),
-      .result    (exe_mul_result)
-  );
+  wire [63:0] mul_result_signed, mul_result_unsigned;
+
+  assign mul_result_unsigned = exe_rj_value * exe_rkd_value;
+  assign mul_result_signed = $signed(exe_rj_value) * $signed(exe_rkd_value);
+  assign exe_mul_result = exe_mul_div_sign ? mul_result_signed : mul_result_unsigned;
+  // mul u_mul (
+  //     .mul_clk   (clk),
+  //     .reset     (~resetn),
+  //     .mul_signed(exe_mul_div_sign),
+  //     .x         (exe_alu_src1),
+  //     .y         (exe_alu_src2),
+  //     .result    (exe_mul_result)
+  // );
 
   //div
-  wire [31:0] s;
-  wire [31:0] r;
-  wire complete_delay;
+  wire [`RegBus] s;
+  wire [`RegBus] r;
+  // wire complete_delay;
+
+//   wire        s_axis_divisor_tvalid_signed  ;
+//   wire        s_axis_divisor_tready_signed  ;
+//   wire        s_axis_divisor_tdata_signed   ;
+//   wire        s_axis_dividend_tvalid_signed ;
+//   wire        s_axis_dividend_tready_signed ;
+//   wire        s_axis_dividend_tdata_signed  ;
+//   wire        m_axis_dout_tvalid_signed     ;
+//   wire [63:0] div_result_signed;
+
+//   wire        s_axis_divisor_tvalid_unsigned  ;
+//   wire        s_axis_divisor_tready_unsigned  ;
+//   wire        s_axis_divisor_tdata_unsigned   ; 
+//   wire        s_axis_dividend_tvalid_unsigned ;
+//   wire        s_axis_dividend_tready_unsigned ;
+//   wire        s_axis_dividend_tdata_unsigned  ;
+//   wire        m_axis_dout_tvalid_unsigned     ;
+//   wire [63:0] div_result_unsigned;
+
+
+//   reg         r_axis_divisor_tvalid_signed;
+//   reg         r_axis_dividend_tvalid_signed;
+
+//   reg         r_axis_divisor_tvalid_unsigned;
+//   reg         r_axis_dividend_tvalid_unsigned;
+
+// always @(posedge clk) begin
+//     if (~resetn) begin
+//       r_axis_divisor_tvalid_signed <= 1'b0;
+//       r_axis_dividend_tvalid_signed <= 1'b0;
+//     end else if (exe_div_enable && exe_mul_div_sign) begin
+//       r_axis_divisor_tvalid_signed <= 1'b1;
+//       r_axis_dividend_tvalid_signed <= 1'b1;
+//     end
+
+// end
+
   div u_div (
       .div_clk       (clk),
-      .reset         (~resetn),
-      .div           (div_enable),
+      .resetn        (resetn),
+      .div           (exe_div_enable),
       .div_signed    (exe_mul_div_sign),
-      .x             (exe_alu_src1),
-      .y             (exe_alu_src2),
+      .x             (exe_rj_value),
+      .y             (exe_rkd_value),
       .s             (s),
       .r             (r),
-      .complete      (div_complete)
+      .complete_delay(div_complete)
   );
+  // div u_div(
+  //     .div_clk       (clk),
+  //     .reset         (~resetn),
+  //     .div           (exe_div_enable),
+  //     .div_signed    (exe_mul_div_sign),
+  //     .x             (exe_rj_value),
+  //     .y             (exe_rkd_value),
+  //     .s             (s),
+  //     .r             (r),
+  //     .complete       (div_complete)
+  //   );
 
+
+  // assign s_axis_divisor_tvalid_signed = r_axis_divisor_tvalid_signed;
+  // assign s_axis_dividend_tvalid_signed = r_axis_dividend_tvalid_signed;
+  // assign s_axis_divisor_tdata_signed  = exe_alu_src1;
+  // assign s_axis_dividend_tdata_signed = exe_alu_src2;
+  
+
+
+
+
+  
+// div_gen_signed div_gen_signed_0 (
+//   .aclk                   (clk),                    
+//   //除数
+//   .s_axis_divisor_tvalid  (s_axis_divisor_tvalid_signed),  //in 
+//   .s_axis_divisor_tready  (s_axis_divisor_tready_signed),  //out
+//   .s_axis_divisor_tdata   (s_axis_divisor_tdata_signed ),  //in
+//   //被除数
+//   .s_axis_dividend_tvalid (s_axis_dividend_tvalid_signed), 
+//   .s_axis_dividend_tready (s_axis_dividend_tready_signed), 
+//   .s_axis_dividend_tdata  (s_axis_dividend_tdata_signed),  
+//   //结果
+//   .m_axis_dout_tvalid     (m_axis_dout_tvalid_signed),    //out 
+//   .m_axis_dout_tdata      (div_result_signed)             //out
+// );
+
+// div_gen_unsigned div_gen_unsigned_0 (
+//   .aclk                   (clk),                    
+//   .s_axis_divisor_tvalid  (s_axis_divisor_tvalid_unsigned),  
+//   .s_axis_divisor_tready  (s_axis_divisor_tready_unsigned),  
+//   .s_axis_divisor_tdata   (s_axis_divisor_tdata_unsigned),   
+//   .s_axis_dividend_tvalid (s_axis_dividend_tvalid_unsigned), 
+//   .s_axis_dividend_tready (s_axis_dividend_tready_unsigned), 
+//   .s_axis_dividend_tdata  (s_axis_dividend_tdata_unsigned),  
+//   .m_axis_dout_tvalid     (m_axis_dout_tvalid_unsigned),     
+//   .m_axis_dout_tdata      (div_result_unsigned)     
+// );
 // assign exe_result     = /*exe_res_from_csr ? exe_csr_data : */exe_alu_result;
+
 assign exe_result = exe_mul_div_op[0] ? exe_mul_result[31:0] : 
                     exe_mul_div_op[1] ? exe_mul_result[63:32]:
                     exe_mul_div_op[2] ? s:
@@ -248,8 +342,9 @@ assign exe_result = exe_mul_div_op[0] ? exe_mul_result[31:0] :
 
 //前递和阻塞
 assign dest_zero            = (exe_dest == 5'b0); 
-assign forward_enable       = exe_gr_we & ~dest_zero & exe_valid;
-assign dep_need_stall       = exe_load_op | exe_div_enable | exe_mul_enable;
+assign forward_enable       = exe_gr_we & ~dest_zero & exe_valid & exe_ready_go;
+// assign dep_need_stall       = exe_load_op | exe_div_enable | exe_mul_enable;
+assign dep_need_stall       = exe_load_op | div_stall ;
 
 //id-exe
 assign {/*exe_csr_rstat_en  ,  //349:349  for difftest
@@ -304,6 +399,7 @@ assign exe_to_id_bus = {dep_need_stall ,  //38:38
                                exe_dest        ,  //36:32
                                exe_result         //31:0
                               };
+
 assign exe_to_mem_bus = {
     // exe_csr_data      ,  //424:393  for difftest
 //                        exe_csr_rstat_en  ,  //392:392  for difftest

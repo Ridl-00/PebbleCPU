@@ -129,13 +129,13 @@ wire inst_orn;
 wire inst_andi;
 wire inst_ori;
 wire inst_xori;
-// wire inst_mul_w;
-// wire inst_mulh_w;
-// wire inst_mulh_wu;
-// wire inst_div_w;
-// wire inst_mod_w;
-// wire inst_div_wu;
-// wire inst_mod_wu;
+wire inst_mul_w;
+wire inst_mulh_w;
+wire inst_mulh_wu;
+wire inst_div_w;
+wire inst_mod_w;
+wire inst_div_wu;
+wire inst_mod_wu;
 
 wire inst_slli_w;  
 wire inst_srli_w;  
@@ -194,7 +194,7 @@ wire inst_nop;
 //控制信号译码
 wire br_taken;
 wire [`InstAddrBus] br_target;
-  // wire br_taken_cancel;
+  wire br_taken_cancel;
   // reg         branch_slot_cancel;
 wire        br_inst;
 reg         br_jirl;
@@ -230,9 +230,9 @@ wire        store_op; //是存储指令
 
 wire [1: 0] mem_size; //选择是半字节还是整个字节
 wire [`RegAddrBus ] dest; //最终的写地址
-wire [`InstBus    ] rj_value;
-wire [`InstBus    ] rkd_value;
-wire [31:0] id_imm; //立即数扩展后
+wire [`RegBus    ] rj_value;
+wire [`RegBus    ] rkd_value;
+wire [`RegBus] id_imm; //立即数扩展后
 
 //立即数控制
 wire need_ui5;
@@ -269,7 +269,8 @@ assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall/*|| idle_stall 
     if (~resetn) begin
       id_valid <= 1'b0;
     // end else if (branch_slot_cancel) begin  //如果采取分支，那么取消当前IF阶段的指令
-    end else if (br_taken) begin
+    // end else if (br_taken) begin
+    end else if (br_really_taken) begin
       id_valid <= 1'b0;
     end else if (id_allowin) begin
       id_valid <= if_to_id_valid;
@@ -284,10 +285,10 @@ assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall/*|| idle_stall 
     end
   end
 
-//前递和阻塞
+//前递和阻塞                 往exe传   exe阶段用的数据（分支判断/分支生成）
 assign {rf1_forward_stall, rj_value, rj_value_forward_exe} = ((rf_raddr1 == exe_forward_reg) && exe_forward_enable && inst_need_rj) ? {exe_dep_need_stall, exe_forward_data, exe_forward_data} :
                                                              ((rf_raddr1 == mem_forward_reg) && mem_forward_enable && inst_need_rj) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data, rf_rdata1} :
-                                                                                                                                   {1'b0, rf_rdata1, rf_rdata1}; 
+                                                                                                                                  {1'b0, rf_rdata1, rf_rdata1}; 
 
 assign {rf2_forward_stall, rkd_value, rkd_value_forward_exe} = ((rf_raddr2 == exe_forward_reg) && exe_forward_enable && inst_need_rkd) ? {exe_dep_need_stall, exe_forward_data, exe_forward_data} :
                                                                ((rf_raddr2 == mem_forward_reg) && mem_forward_enable && inst_need_rkd) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data, rf_rdata2} :
@@ -542,13 +543,13 @@ assign inst_need_rj = inst_add_w      |
                       inst_andi       |
                       inst_ori        |
                       inst_xori       |
-                      // inst_mul_w      |
-                      // inst_mulh_w     |
-                      // inst_mulh_wu    |
-                      // inst_div_w      |
-                      // inst_div_wu     |
-                      // inst_mod_w      |
-                      // inst_mod_wu     |
+                      inst_mul_w      |
+                      inst_mulh_w     |
+                      inst_mulh_wu    |
+                      inst_div_w      |
+                      inst_div_wu     |
+                      inst_mod_w      |
+                      inst_mod_wu     |
                       inst_sll_w      |
                       inst_srl_w      |
                       inst_sra_w      |
@@ -586,13 +587,13 @@ assign inst_need_rkd = inst_add_w   |
                        inst_or      |
                        inst_nor     |
                        inst_xor     |
-                      //  inst_mul_w   |
-                      //  inst_mulh_w  |
-                      //  inst_mulh_wu |
-                      //  inst_div_w   |
-                      //  inst_div_wu  |
-                      //  inst_mod_w   |
-                      //  inst_mod_wu  |
+                       inst_mul_w   |
+                       inst_mulh_w  |
+                       inst_mulh_wu |
+                       inst_div_w   |
+                       inst_div_wu  |
+                       inst_mod_w   |
+                       inst_mod_wu  |
                        inst_sll_w   |
                        inst_srl_w   |
                        inst_sra_w   |
@@ -686,7 +687,7 @@ assign br_taken  = (  inst_beq  &  rj_eq_rd
                     | inst_jirl
                     | inst_bl
                     | inst_b
-                    ) /*&& ds_valid && !ds_excp*/; 
+                    ) && id_valid /*&& !ds_excp*/; 
 assign br_target = ({32{inst_beq || inst_bne || inst_bl || inst_b || 
                     inst_blt || inst_bge || inst_bltu || inst_bgeu}} & (id_pc + id_imm   ))            |
                    ({32{inst_jirl}}                                  & (rj_value_forward_exe + id_imm)) ;
@@ -715,8 +716,10 @@ assign br_need_reg_data = inst_beq   ||
 //         branch_slot_cancel <= 1'b0;
 //     end
 // end
-
-  assign id_to_if_bus = {br_taken, br_target/*, br_taken_cancel*/};
+//！向前，应该要用allowin来判断而不是ready_go吧
+assign br_really_taken = br_taken & id_allowin;
+  // assign id_to_if_bus = {br_taken, br_target/*, br_taken_cancel*/};
+  assign id_to_if_bus = {br_really_taken, br_target/*, br_taken_cancel*/};
 
 assign id_to_exe_bus = {
                       // inst_csr_rstat_en,  // 349:349 for difftest
