@@ -191,6 +191,7 @@ assign access_mem = exe_load_op | exe_store_op;
 assign data_sram_wdata = exe_mem_size==2'b01 ? {4{exe_rkd_value[7:0]}} : 
                          exe_mem_size==2'b10 ? {2{exe_rkd_value[15:0]}} :
                                                   exe_rkd_value;
+//mem_size={h, b}
 
 //alu
 assign exe_alu_src1 = exe_src1_is_pc ? exe_pc : exe_rj_value;

@@ -33,9 +33,9 @@ module mem_stage(
 //exe-mem
   //拆解if_reg传递过来的数据
 
-// wire        dep_need_stall;
+wire        dep_need_stall;
 wire [ 3:0] mem_mul_div_op;
-// wire [ 1:0] sram_addr_low2bit;
+wire [ 1:0] sram_addr_low2bit;
 wire [ 1:0] mem_mem_size;
 wire        mem_load_op;
 wire        mem_gr_we;
@@ -169,7 +169,7 @@ assign mem_result = ({32{mem_mem_size[0] &&  mem_mem_sign_exted}} & {{24{mem_byt
                     ({32{mem_mem_size[0] && ~mem_mem_sign_exted}} & { 24'b0                  , mem_byteLoaded}) |
                     ({32{mem_mem_size[1] &&  mem_mem_sign_exted}} & {{16{mem_halfLoaded[15]}}, mem_halfLoaded}) |
                     ({32{mem_mem_size[1] && ~mem_mem_sign_exted}} & { 16'b0                  , mem_halfLoaded}) |
-                    ({32{!mem_mem_size}}                         &   mem_rdata                                  ) ;
+                    ({32{mem_mem_size==2'b00}}                         &   mem_rdata                                  ) ;
 
 //要写的数据
 assign mem_final_result = ({32{mem_load_op      }} & mem_result       )  |
@@ -177,7 +177,7 @@ assign mem_final_result = ({32{mem_load_op      }} & mem_result       )  |
 
 assign dest_zero            = (mem_dest == 5'b0);
 assign forward_enable       = mem_gr_we & ~dest_zero & mem_valid;
-assign dep_need_stall       = mem_load_op && !mem_to_wb_valid;
+assign dep_need_stall       = mem_load_op & !mem_to_wb_valid;
 
 //exe-mem
 assign {
@@ -244,7 +244,7 @@ assign mem_to_wb_bus = {
                     //    mem_br_pre_error,  //216:216
                     //    mem_br_pre      ,  //215:215
                     //    dcache_miss    ,  //214:214
-                    //    access_mem     ,  //213:213
+                       access_mem     ,  //213:213
                     //    mem_icache_miss ,  //212:212
                     //    mem_br_inst     ,  //211:211
                     //    mem_icacop_op_en,  //210:210
