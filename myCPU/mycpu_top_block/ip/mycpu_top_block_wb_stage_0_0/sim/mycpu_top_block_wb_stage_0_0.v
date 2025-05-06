@@ -61,6 +61,17 @@ module mycpu_top_block_wb_stage_0_0 (
   mem_to_wb_valid,
   mem_to_wb_bus,
   wb_to_id_bus,
+  excp_flush,
+  ertn_flush,
+  refetch_flush,
+  csr_era,
+  csr_esubcode,
+  csr_ecode,
+  csr_wr_en,
+  wr_csr_addr,
+  wr_csr_data,
+  va_error,
+  bad_va,
   debug_wb_pc,
   debug_wb_rf_we,
   debug_wb_rf_wnum,
@@ -75,8 +86,19 @@ input wire clk;
 input wire resetn;
 output wire wb_allowin;
 input wire mem_to_wb_valid;
-input wire [69 : 0] mem_to_wb_bus;
+input wire [167 : 0] mem_to_wb_bus;
 output wire [64 : 0] wb_to_id_bus;
+output wire excp_flush;
+output wire ertn_flush;
+output wire refetch_flush;
+output wire [31 : 0] csr_era;
+output wire [8 : 0] csr_esubcode;
+output wire [5 : 0] csr_ecode;
+output wire csr_wr_en;
+output wire [13 : 0] wr_csr_addr;
+output wire [31 : 0] wr_csr_data;
+output wire va_error;
+output wire [31 : 0] bad_va;
 output wire [31 : 0] debug_wb_pc;
 output wire [3 : 0] debug_wb_rf_we;
 output wire [4 : 0] debug_wb_rf_wnum;
@@ -89,6 +111,17 @@ output wire [31 : 0] debug_wb_rf_wdata;
     .mem_to_wb_valid(mem_to_wb_valid),
     .mem_to_wb_bus(mem_to_wb_bus),
     .wb_to_id_bus(wb_to_id_bus),
+    .excp_flush(excp_flush),
+    .ertn_flush(ertn_flush),
+    .refetch_flush(refetch_flush),
+    .csr_era(csr_era),
+    .csr_esubcode(csr_esubcode),
+    .csr_ecode(csr_ecode),
+    .csr_wr_en(csr_wr_en),
+    .wr_csr_addr(wr_csr_addr),
+    .wr_csr_data(wr_csr_data),
+    .va_error(va_error),
+    .bad_va(bad_va),
     .debug_wb_pc(debug_wb_pc),
     .debug_wb_rf_we(debug_wb_rf_we),
     .debug_wb_rf_wnum(debug_wb_rf_wnum),

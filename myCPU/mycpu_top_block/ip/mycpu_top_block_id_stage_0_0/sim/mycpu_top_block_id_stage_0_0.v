@@ -66,7 +66,16 @@ module mycpu_top_block_id_stage_0_0 (
   id_to_if_bus,
   exe_to_id_bus,
   mem_to_id_bus,
-  wb_to_rf_bus
+  wb_to_rf_bus,
+  excp_flush,
+  ertn_flush,
+  refetch_flush,
+  has_int,
+  rd_csr_addr,
+  rd_csr_data,
+  csr_plv,
+  timer_64,
+  csr_tid
 );
 
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME clk, ASSOCIATED_RESET resetn, FREQ_HZ 100000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, INSERT_VIP 0" *)
@@ -77,14 +86,23 @@ input wire clk;
 input wire resetn;
 output wire id_allowin;
 input wire if_to_id_valid;
-input wire [63 : 0] if_to_id_bus;
+input wire [68 : 0] if_to_id_bus;
 input wire exe_allowin;
 output wire id_to_exe_valid;
-output wire [160 : 0] id_to_exe_bus;
+output wire [220 : 0] id_to_exe_bus;
 output wire [33 : 0] id_to_if_bus;
 input wire [38 : 0] exe_to_id_bus;
 input wire [38 : 0] mem_to_id_bus;
 input wire [64 : 0] wb_to_rf_bus;
+input wire excp_flush;
+input wire ertn_flush;
+input wire refetch_flush;
+input wire has_int;
+output wire [13 : 0] rd_csr_addr;
+input wire [31 : 0] rd_csr_data;
+input wire [1 : 0] csr_plv;
+input wire [63 : 0] timer_64;
+input wire [31 : 0] csr_tid;
 
   id_stage inst (
     .clk(clk),
@@ -98,6 +116,15 @@ input wire [64 : 0] wb_to_rf_bus;
     .id_to_if_bus(id_to_if_bus),
     .exe_to_id_bus(exe_to_id_bus),
     .mem_to_id_bus(mem_to_id_bus),
-    .wb_to_rf_bus(wb_to_rf_bus)
+    .wb_to_rf_bus(wb_to_rf_bus),
+    .excp_flush(excp_flush),
+    .ertn_flush(ertn_flush),
+    .refetch_flush(refetch_flush),
+    .has_int(has_int),
+    .rd_csr_addr(rd_csr_addr),
+    .rd_csr_data(rd_csr_data),
+    .csr_plv(csr_plv),
+    .timer_64(timer_64),
+    .csr_tid(csr_tid)
   );
 endmodule

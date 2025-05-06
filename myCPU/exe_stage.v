@@ -24,7 +24,16 @@ module exe_stage (
     output wire        data_sram_en,
     output wire [ 3:0] data_sram_we,
     output wire [31:0] data_sram_addr,
-    output wire [31:0] data_sram_wdata
+    output wire [31:0] data_sram_wdata,
+
+    input         flush_from_mem  ,
+    //exception
+    input         excp_flush      ,
+    input         ertn_flush      ,
+    input         refetch_flush   //,
+    // input         icacop_flush    ,
+
+
 
 );
 
@@ -47,18 +56,18 @@ wire [31:0] exe_imm         ;
 wire [31:0] exe_pc          ;
 wire [ 3:0] exe_mul_div_op  ;
 wire [ 1:0] exe_mem_size    ;
-// wire [31:0] exe_csr_data    ;
-// wire [13:0] exe_csr_idx     ;
-// wire [31:0] exe_csr_result  ;
-// wire [31:0] csr_mask_result;
-// wire        exe_res_from_csr;
-// wire        exe_csr_we      ;
-// wire        exe_csr_mask    ;
-// wire        exe_excp        ;
-// wire        excp           ;
-// wire [ 8:0] exe_excp_num    ;
-// wire [ 9:0] excp_num       ;
-// wire        exe_ertn        ;
+wire [31:0] exe_csr_data    ;
+wire [13:0] exe_csr_idx     ;
+wire [31:0] exe_csr_result  ;
+wire [31:0] csr_mask_result;
+wire        exe_res_from_csr;
+wire        exe_csr_we      ;
+wire        exe_csr_mask    ;
+wire        exe_excp        ;
+wire        excp           ;
+wire [ 8:0] exe_excp_num    ;
+wire [ 9:0] excp_num       ;
+wire        exe_ertn        ;
 wire        exe_mul_enable  ;
 wire        exe_div_enable;
 wire        div_stall      ;
@@ -78,6 +87,8 @@ wire        div_stall      ;
 // wire        exe_icache_miss ;
 // wire        exe_idle        ;
 
+wire [31:0] error_va      ;
+
 wire        exe_load_op     ;
 
 //前递和阻塞
@@ -85,14 +96,14 @@ wire        dep_need_stall ;
 wire        forward_enable ;
 wire        dest_zero      ;
 
-// wire        excp_ale       ;
+wire        excp_ale       ; //地址对齐异常
 
-// wire        exe_flush_sign  ;
+wire        exe_flush_sign  ;
 // wire [ 3:0] wr_byte_en     ;
 
 wire        access_mem      ; //读写ram使能
 wire        exe_mem_sign_exted; //有符号的操作
-// wire [ 1:0] sram_addr_low2bit;
+wire [ 1:0] sram_addr_low2bit;
 
 // wire        tlbsrch_stall  ;
 
@@ -137,20 +148,19 @@ wire div_complete;
   assign exe_allowin = ~exe_valid | exe_ready_go & mem_allowin;
   assign exe_to_mem_valid = exe_valid & exe_ready_go;
 // assign exe_ready_go    = (!div_stall & (/*(dcache_req_or_inst_en && data_addr_ok) ||*/ !(access_mem /*|| dcacop_inst || preld_inst*/)) /*&& !tlbsrch_stall && !icacop_inst_stall*/)/* || excp*/;
-assign exe_ready_go = !div_stall;
+assign exe_ready_go = !div_stall || excp; //有异常时需要立即处理异常（忽略所有原有流水逻辑）
 
 // assign exe_to_ds_valid = exe_valid;
 
 assign access_mem = exe_load_op | exe_store_op;
 
-// assign exe_flush_sign  = excp_flush || ertn_flush || refetch_flush || icacop_flush || idle_flush;
+assign exe_flush_sign  = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
 
-// assign icacop_inst_stall = icacop_op_en && !icache_unbusy;
 
  
   
   always @(posedge clk) begin
-    if (~resetn) begin
+    if (~resetn | exe_flush_sign) begin
       exe_valid <= 1'b0;
     end else if (exe_allowin) begin
       exe_valid <= id_to_exe_valid;
@@ -175,17 +185,18 @@ assign access_mem = exe_load_op | exe_store_op;
 // exe_mul_div_op[ 3] = inst_mod_w  | inst_mod_wu;
 
   //访存接口
-//？ysx的这个写法好奇怪
-  assign data_sram_en = exe_valid & (exe_store_op | exe_load_op);
+assign sram_addr_low2bit = {exe_alu_result[1], exe_alu_result[0]};
+                                                                //前向后有例外不行&有csr来的例外不行&有mem来的例外不行
+  assign data_sram_en = exe_valid & (exe_store_op | exe_load_op) & ~excp & ~exe_flush_sign & ~flush_from_mem;
   assign data_sram_we = {4{exe_valid}} & {4{exe_store_op}}
                       & (exe_mem_size == 2'b01 ? 
-                         ({4{exe_alu_result[1:0] == 2'b00}} & 4'b0001 |
-                          {4{exe_alu_result[1:0] == 2'b01}} & 4'b0010 |
-                          {4{exe_alu_result[1:0] == 2'b10}} & 4'b0100 |
-                          {4{exe_alu_result[1:0] == 2'b11}} & 4'b1000 
+                         ({4{sram_addr_low2bit == 2'b00}} & 4'b0001 |
+                          {4{sram_addr_low2bit == 2'b01}} & 4'b0010 |
+                          {4{sram_addr_low2bit == 2'b10}} & 4'b0100 |
+                          {4{sram_addr_low2bit == 2'b11}} & 4'b1000 
                       ):(exe_mem_size == 2'b10 ?
-                         ({4{exe_alu_result[1:0] == 2'b00}} & 4'b0011 |
-                          {4{exe_alu_result[1:0] == 2'b10}} & 4'b1100)
+                         ({4{sram_addr_low2bit == 2'b00}} & 4'b0011 |
+                          {4{sram_addr_low2bit == 2'b10}} & 4'b1100)
                       :(exe_mem_size == 2'b00 ? 4'b1111 : 4'b0000)));
   assign data_sram_addr = exe_alu_result;
 assign data_sram_wdata = exe_mem_size==2'b01 ? {4{exe_rkd_value[7:0]}} : 
@@ -330,9 +341,10 @@ alu u_alu(
 //   .m_axis_dout_tvalid     (m_axis_dout_tvalid_unsigned),     
 //   .m_axis_dout_tdata      (div_result_unsigned)     
 // );
-// assign exe_result     = /*exe_res_from_csr ? exe_csr_data : */exe_alu_result;
+// assign exe_result     = exe_res_from_csr ? exe_csr_data : exe_alu_result;
 
-assign exe_result = exe_mul_div_op[0] ? exe_mul_result[31:0] : 
+assign exe_result = exe_res_from_csr  ? exe_csr_data :
+                    exe_mul_div_op[0] ? exe_mul_result[31:0] : 
                     exe_mul_div_op[1] ? exe_mul_result[63:32]:
                     exe_mul_div_op[2] ? s:
                     exe_mul_div_op[3] ? r:
@@ -346,6 +358,22 @@ assign dest_zero            = (exe_dest == 5'b0);
 assign forward_enable       = exe_gr_we & ~dest_zero & exe_valid & exe_ready_go;
 // assign dep_need_stall       = exe_load_op | exe_div_enable | exe_mul_enable;
 assign dep_need_stall       = exe_load_op | div_stall ;
+
+//exception
+assign excp_ale        = access_mem & ((exe_mem_size[0] &  1'b0)                                  | 
+                                       (exe_mem_size[1] &  exe_alu_result[0])                      | 
+                                       (!exe_mem_size   & (exe_alu_result[0] | exe_alu_result[1]))) ;
+                                
+assign excp            = exe_excp || excp_ale;
+assign excp_num        = {excp_ale, exe_excp_num};
+
+assign error_va = exe_alu_result; //把alu结果（地址）存一下，如果出错了它就是出错的地址
+
+//csr mask
+assign csr_mask_result = (exe_rj_value & exe_rkd_value) | (~exe_rj_value & exe_csr_data);
+assign exe_csr_result   = exe_csr_mask ? csr_mask_result : exe_rkd_value;
+
+
 
 //id-exe
 assign {/*exe_csr_rstat_en  ,  //349:349  for difftest
@@ -370,14 +398,14 @@ assign {/*exe_csr_rstat_en  ,  //349:349  for difftest
         // exe_tlbsrch       ,  //222:222
         // exe_sc_w          ,  //221:221
         // exe_ll_w          ,  //220:220
-        // exe_excp_num      ,  //219:211
-        // exe_csr_mask      ,  //210:210
-        // exe_csr_we        ,  //209:209
-        // exe_csr_idx       ,  //208:195
-        // exe_res_from_csr  ,  //194:194
-        // exe_csr_data      ,  //193:162
-        // exe_ertn          ,  //161:161
-        // exe_excp          ,  //160:160
+        exe_excp_num      ,  //219:211
+        exe_csr_mask      ,  //210:210
+        exe_csr_we        ,  //209:209
+        exe_csr_idx       ,  //208:195
+        exe_res_from_csr  ,  //194:194
+        exe_csr_data      ,  //193:162
+        exe_ertn          ,  //161:161
+        exe_excp          ,  //160:160
         exe_mem_size      ,  //159:158
         exe_mul_div_op    ,  //157:154
         exe_mul_div_sign  ,  //153:153
@@ -411,7 +439,7 @@ assign exe_to_mem_bus = {
                     //    exe_cnt_inst      ,  //311:311  for difftest
                     //    exe_timer_64      ,  //310:247  for difftest
                     //    exe_inst          ,  //246:215  for difftest
-                    //    error_va         ,  //214:183
+                       error_va         ,  //214:183
                     //    exe_idle          ,  //182:182
                     //    exe_cacop         ,  //181:181
                     //    preld_inst       ,  //180:180
@@ -433,12 +461,12 @@ assign exe_to_mem_bus = {
                        exe_store_op      ,  //138:138
                     //    exe_sc_w          ,  //137:137
                     //    exe_ll_w          ,  //136:136
-                    //    excp_num         ,  //135:126
-                    //    exe_csr_we        ,  //125:125
-                    //    exe_csr_idx       ,  //124:111
-                    //    exe_csr_result    ,  //110:79
-                    //    exe_ertn          ,  //78:78
-                    //    excp             ,  //77:77
+                       excp_num         ,  //135:126
+                       exe_csr_we        ,  //125:125
+                       exe_csr_idx       ,  //124:111
+                       exe_csr_result    ,  //110:79
+                       exe_ertn          ,  //78:78
+                       excp             ,  //77:77
                        exe_mem_size      ,  //76:75
                        exe_mul_div_op    ,  //74:71
                        exe_load_op       ,  //70:70

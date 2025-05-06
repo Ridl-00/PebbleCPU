@@ -40,14 +40,23 @@
         "resetn": [ { "direction": "in" } ],
         "id_allowin": [ { "direction": "out" } ],
         "if_to_id_valid": [ { "direction": "in" } ],
-        "if_to_id_bus": [ { "direction": "in", "size_left": "63", "size_right": "0" } ],
+        "if_to_id_bus": [ { "direction": "in", "size_left": "68", "size_right": "0" } ],
         "exe_allowin": [ { "direction": "in" } ],
         "id_to_exe_valid": [ { "direction": "out" } ],
-        "id_to_exe_bus": [ { "direction": "out", "size_left": "160", "size_right": "0" } ],
+        "id_to_exe_bus": [ { "direction": "out", "size_left": "220", "size_right": "0" } ],
         "id_to_if_bus": [ { "direction": "out", "size_left": "33", "size_right": "0" } ],
         "exe_to_id_bus": [ { "direction": "in", "size_left": "38", "size_right": "0" } ],
         "mem_to_id_bus": [ { "direction": "in", "size_left": "38", "size_right": "0" } ],
-        "wb_to_rf_bus": [ { "direction": "in", "size_left": "64", "size_right": "0" } ]
+        "wb_to_rf_bus": [ { "direction": "in", "size_left": "64", "size_right": "0" } ],
+        "excp_flush": [ { "direction": "in" } ],
+        "ertn_flush": [ { "direction": "in" } ],
+        "refetch_flush": [ { "direction": "in" } ],
+        "has_int": [ { "direction": "in" } ],
+        "rd_csr_addr": [ { "direction": "out", "size_left": "13", "size_right": "0" } ],
+        "rd_csr_data": [ { "direction": "in", "size_left": "31", "size_right": "0" } ],
+        "csr_plv": [ { "direction": "in", "size_left": "1", "size_right": "0" } ],
+        "timer_64": [ { "direction": "in", "size_left": "63", "size_right": "0" } ],
+        "csr_tid": [ { "direction": "in", "size_left": "31", "size_right": "0" } ]
       },
       "interfaces": {
         "resetn": {

@@ -65,7 +65,11 @@ module mycpu_top_block_mem_stage_0_0 (
   mem_to_wb_valid,
   mem_to_wb_bus,
   mem_to_id_bus,
-  data_sram_rdata
+  data_sram_rdata,
+  excp_flush,
+  ertn_flush,
+  refetch_flush,
+  mem_flush
 );
 
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME clk, ASSOCIATED_RESET resetn, FREQ_HZ 100000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, INSERT_VIP 0" *)
@@ -76,12 +80,16 @@ input wire clk;
 input wire resetn;
 output wire mem_allowin;
 input wire exe_to_mem_valid;
-input wire [78 : 0] exe_to_mem_bus;
+input wire [169 : 0] exe_to_mem_bus;
 input wire wb_allowin;
 output wire mem_to_wb_valid;
-output wire [69 : 0] mem_to_wb_bus;
+output wire [167 : 0] mem_to_wb_bus;
 output wire [38 : 0] mem_to_id_bus;
 input wire [31 : 0] data_sram_rdata;
+input wire excp_flush;
+input wire ertn_flush;
+input wire refetch_flush;
+output wire mem_flush;
 
   mem_stage inst (
     .clk(clk),
@@ -93,6 +101,10 @@ input wire [31 : 0] data_sram_rdata;
     .mem_to_wb_valid(mem_to_wb_valid),
     .mem_to_wb_bus(mem_to_wb_bus),
     .mem_to_id_bus(mem_to_id_bus),
-    .data_sram_rdata(data_sram_rdata)
+    .data_sram_rdata(data_sram_rdata),
+    .excp_flush(excp_flush),
+    .ertn_flush(ertn_flush),
+    .refetch_flush(refetch_flush),
+    .mem_flush(mem_flush)
   );
 endmodule

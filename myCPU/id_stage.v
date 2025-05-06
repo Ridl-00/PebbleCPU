@@ -22,7 +22,23 @@ module id_stage (
     input wire [`EXE_TO_ID_WD] exe_to_id_bus,
     input wire [`MEM_TO_ID_WD] mem_to_id_bus,
     //wb-rf
-    input wire [`WB_TO_ID_WD] wb_to_rf_bus      
+    input wire [`WB_TO_ID_WD]  wb_to_rf_bus,
+
+    //exception
+  //！这一串貌似只用到一次，考虑只传递一个结果
+    input                      excp_flush    ,
+    input                      ertn_flush    ,
+    input                      refetch_flush ,
+    //interrupt
+    input                      has_int       ,//是否 有外部中断请求
+    //csr
+    output [13:0]              rd_csr_addr   ,//读csr地址
+    input  [31:0]              rd_csr_data   ,//读csr数据
+    input  [ 1:0]              csr_plv       ,//确保特权指令（如 CSR 操作）仅在合法特权级别下执行，防止低特权级代码越权访问系统资源
+    //timer 64
+    input  [63:0]              timer_64      ,
+    input  [31:0]              csr_tid       
+
 
 );
 
@@ -41,7 +57,15 @@ module id_stage (
   //拆解if_reg传递过来的数据
   wire [`InstAddrBus] id_pc;
   wire [`InstBus    ] id_inst;
-  assign {id_pc, id_inst} = id_data;
+  wire [ 3:0] id_excp_num; //写着id实际上是if传来的
+  wire        id_excp; //写着id实际上是if传来的
+
+assign {
+        id_excp,        //68:68
+        id_excp_num,    //67:64
+        id_inst,        //63:32
+        id_pc           //31:0
+       } = id_data;
 
 //前递和阻塞
 //exe-id
@@ -97,7 +121,7 @@ wire [13:0] i14;
 wire [19:0] i20;
 wire [15:0] i16;
 wire [25:0] i26;
-// wire [13:0] csr_idx;
+wire [13:0] csr_idx;
 
 //译码器译码
 wire [63:0] op_31_26_d;
@@ -105,9 +129,9 @@ wire [15:0] op_25_22_d;
 wire [ 3:0] op_21_20_d;
 wire [31:0] op_19_15_d;
 //！la500里把rd rj rk也译码了
-// wire [31:0] rd_d;
-// wire [31:0] rj_d;
-// wire [31:0] rk_d;
+wire [31:0] rd_d;
+wire [31:0] rj_d;
+wire [31:0] rk_d;
 
 //指令译码
 wire inst_add_w; 
@@ -165,16 +189,16 @@ wire inst_st_b;
 wire inst_st_h;
 wire inst_st_w;
 
-// wire inst_syscall;
-// wire inst_break;
-// wire inst_csrrd;
-// wire inst_csrwr;
-// wire inst_csrxchg;
-// wire inst_ertn;
+wire inst_syscall;
+wire inst_break;
+wire inst_csrrd;
+wire inst_csrwr;
+wire inst_csrxchg;
+wire inst_ertn;
 
-// wire inst_rdcntid_w;
-// wire inst_rdcntvl_w;
-// wire inst_rdcntvh_w;
+wire inst_rdcntid_w;
+wire inst_rdcntvl_w;
+wire inst_rdcntvh_w;
 // wire inst_idle;
 
 // wire inst_tlbsrch;
@@ -189,21 +213,20 @@ wire inst_st_w;
 // wire inst_dbar;
 // wire inst_ibar;
 
-wire inst_nop;
+// wire inst_nop;
 
 //控制信号译码
 wire br_taken;
 wire [`InstAddrBus] br_target;
-  wire br_taken_cancel;
+  // wire br_taken_cancel;
   // reg         branch_slot_cancel;
+wire br_really_taken;
 wire        br_inst;
 reg         br_jirl;
 wire        br_need_reg_data; //是分支指令且此分支指令需要寄存器中的数据
 
 wire        inst_need_rj;
 wire        inst_need_rkd;
-
-wire        inst_valid;
 
 
 wire [31:0] rj_value_forward_exe; //exe阶段的前递数据
@@ -217,16 +240,16 @@ wire        src1_is_pc;
 wire        src2_is_imm;
 wire        src2_is_4;
 wire        load_op;
-// wire        res_from_csr;
-// wire        csr_mask;
+wire        res_from_csr;
+wire        csr_mask;
 wire        mem_b_size; //标识当前指令的内存访问操作的大小,byte
 wire        mem_h_size; //标识当前指令的内存访问操作的大小, half byte
 wire        mem_sign_exted; //有符号整数
 wire        dst_is_r1; //inst_bl：目标地址在r1
-// wire        dst_is_rj; //inst_rdcntid_w
+wire        dst_is_rj; //inst_rdcntid_w
 wire        gr_we; //寄存器写使能
 wire        store_op; //是存储指令
-// wire        csr_we;
+wire        csr_we;
 
 wire [1: 0] mem_size; //选择是半字节还是整个字节
 wire [`RegAddrBus ] dest; //最终的写地址
@@ -255,7 +278,24 @@ wire        rj_eq_rd;
 wire        rj_lt_rd_sign;
 wire        rj_lt_rd_unsign;
 
+//例外和中断
+wire        excp; //是否 异常发生
+wire [ 8:0] excp_num; //异常种类
+wire        inst_valid;
+wire        excp_ine; //是否 为非法指令异常
+wire        excp_ipe; //是否 为特权级错误异常
+wire [31:0] csr_data;
+// wire        refetch; //是否 重新取指
+wire        flush_sign; //是否 刷新指令流水线
 
+// wire        if_excp; //是否 if有异常(没用上)
+
+wire        kernel_inst; //是否为特权指令
+
+wire [31:0] rdcnt_result; //当前硬件计数器的值
+wire        rdcnt_en; //硬件计数器读使能
+
+// wire        tlb_inst_stall;
 
 //======================================================
 //=================== Main Code ====================
@@ -263,13 +303,13 @@ wire        rj_lt_rd_unsign;
 //当前stage控制信号
   assign id_allowin = ~id_valid | id_ready_go & exe_allowin;
   assign id_to_exe_valid = id_valid & id_ready_go;
-assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall/*|| idle_stall || tlb_inst_stall || ibar_stall || dbar_stall*/)/* || excp*/;
+// assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall/*|| idle_stall || tlb_inst_stall || ibar_stall || dbar_stall*/) || excp;
+assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
 
   always @(posedge clk) begin
-    if (~resetn) begin
+    if (~resetn | flush_sign) begin
       id_valid <= 1'b0;
     // end else if (branch_slot_cancel) begin  //如果采取分支，那么取消当前IF阶段的指令
-    // end else if (br_taken) begin
     end else if (br_really_taken) begin
       id_valid <= 1'b0;
     end else if (id_allowin) begin
@@ -312,13 +352,17 @@ assign i16  = id_inst[25:10];
 assign i26  = {id_inst[ 9: 0], id_inst[25:10]};
 
 //csr
-// assign csr_idx = id_inst[23:10];
+assign csr_idx = id_inst[23:10];
 
 //译码器译码
 decoder_6_64 u_dec0(.in(op_31_26 ), .out(op_31_26_d ));
 decoder_4_16 u_dec1(.in(op_25_22 ), .out(op_25_22_d ));
 decoder_2_4  u_dec2(.in(op_21_20 ), .out(op_21_20_d ));
 decoder_5_32 u_dec3(.in(op_19_15 ), .out(op_19_15_d ));
+//寄存器数译码
+decoder_5_32 u_dec4(.in(rd  ), .out(rd_d  ));
+decoder_5_32 u_dec5(.in(rj  ), .out(rj_d  ));
+decoder_5_32 u_dec6(.in(rk  ), .out(rk_d  ));
 
 //指令译码
 assign inst_add_w      = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h00];
@@ -341,8 +385,8 @@ assign inst_div_w      = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2]
 assign inst_mod_w      = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2] & op_19_15_d[5'h01];
 assign inst_div_wu     = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2] & op_19_15_d[5'h02];
 assign inst_mod_wu     = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2] & op_19_15_d[5'h03];
-// assign inst_break      = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2] & op_19_15_d[5'h14];
-// assign inst_syscall    = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2] & op_19_15_d[5'h16];
+assign inst_break      = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2] & op_19_15_d[5'h14];
+assign inst_syscall    = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h2] & op_19_15_d[5'h16];
 assign inst_slli_w     = op_31_26_d[6'h00] & op_25_22_d[4'h1] & op_21_20_d[2'h0] & op_19_15_d[5'h01];
 assign inst_srli_w     = op_31_26_d[6'h00] & op_25_22_d[4'h1] & op_21_20_d[2'h0] & op_19_15_d[5'h09];
 assign inst_srai_w     = op_31_26_d[6'h00] & op_25_22_d[4'h1] & op_21_20_d[2'h0] & op_19_15_d[5'h11];
@@ -378,15 +422,15 @@ assign inst_bgeu       = op_31_26_d[6'h1b];
 assign inst_lu12i_w    = op_31_26_d[6'h05] & ~id_inst[25];
 assign inst_pcaddi     = op_31_26_d[6'h06] & ~id_inst[25];
 assign inst_pcaddu12i  = op_31_26_d[6'h07] & ~id_inst[25];
-// assign inst_csrxchg    = op_31_26_d[6'h01] & ~id_inst[25] & ~id_inst[24] & (~rj_d[5'h00] & ~rj_d[5'h01]);  //rj != 0,1
+assign inst_csrxchg    = op_31_26_d[6'h01] & ~id_inst[25] & ~id_inst[24] & (~rj_d[5'h00] & ~rj_d[5'h01]);  //rj != 0,1
 // assign inst_ll_w       = op_31_26_d[6'h08] & ~id_inst[25] & ~id_inst[24];
 // assign inst_sc_w       = op_31_26_d[6'h08] & ~id_inst[25] &  id_inst[24];
-// assign inst_csrrd      = op_31_26_d[6'h01] & ~id_inst[25] & ~id_inst[24] & rj_d[5'h00];
-// assign inst_csrwr      = op_31_26_d[6'h01] & ~id_inst[25] & ~id_inst[24] & rj_d[5'h01];
-// assign inst_rdcntid_w  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h0] & op_19_15_d[5'h00] & rk_d[5'h18] & rd_d[5'h00];
-// assign inst_rdcntvl_w  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h0] & op_19_15_d[5'h00] & rk_d[5'h18] & rj_d[5'h00] & !rd_d[5'h00];
-// assign inst_rdcntvh_w  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h0] & op_19_15_d[5'h00] & rk_d[5'h19] & rj_d[5'h00];
-// assign inst_ertn       = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0] & op_19_15_d[5'h10] & rk_d[5'h0e] & rj_d[5'h00] & rd_d[5'h00];
+assign inst_csrrd      = op_31_26_d[6'h01] & ~id_inst[25] & ~id_inst[24] & rj_d[5'h00];
+assign inst_csrwr      = op_31_26_d[6'h01] & ~id_inst[25] & ~id_inst[24] & rj_d[5'h01];
+assign inst_rdcntid_w  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h0] & op_19_15_d[5'h00] & rk_d[5'h18] & rd_d[5'h00];
+assign inst_rdcntvl_w  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h0] & op_19_15_d[5'h00] & rk_d[5'h18] & rj_d[5'h00] & !rd_d[5'h00];
+assign inst_rdcntvh_w  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h0] & op_19_15_d[5'h00] & rk_d[5'h19] & rj_d[5'h00];
+assign inst_ertn       = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0] & op_19_15_d[5'h10] & rk_d[5'h0e] & rj_d[5'h00] & rd_d[5'h00];
 // assign inst_tlbsrch    = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0] & op_19_15_d[5'h10] & rk_d[5'h0a] & rj_d[5'h00] & rd_d[5'h00];
 // assign inst_tlbrd      = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0] & op_19_15_d[5'h10] & rk_d[5'h0b] & rj_d[5'h00] & rd_d[5'h00];
 // assign inst_tlbwr      = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0] & op_19_15_d[5'h10] & rk_d[5'h0c] & rj_d[5'h00] & rd_d[5'h00];
@@ -445,11 +489,11 @@ assign src_reg_is_rd = inst_beq    |
                        inst_bgeu   |
                        inst_st_b   |
                        inst_st_h   |
-                       inst_st_w   ;
+                       inst_st_w   |
                       //  inst_sc_w   |
-                      //  inst_csrwr  |
-                      //  inst_csrxchg
-                      //  ;
+                       inst_csrwr  |
+                       inst_csrxchg
+                       ;
 
 assign src1_is_pc    = inst_jirl | inst_bl | inst_pcaddi | inst_pcaddu12i;
 
@@ -495,8 +539,8 @@ assign gr_we         = ~inst_st_b       &
                        ~inst_bge        &
                        ~inst_bltu       &
                        ~inst_bgeu       &
-                       ~inst_b          ;//&
-                      //  ~inst_syscall    &
+                       ~inst_b          &
+                       ~inst_syscall    ;//&
                       //  ~inst_tlbsrch    &
                       //  ~inst_tlbrd      &
                       //  ~inst_tlbwr      &
@@ -512,20 +556,20 @@ assign gr_we         = ~inst_st_b       &
 assign store_op      = inst_st_b | inst_st_h | inst_st_w /*| (inst_sc_w & ds_llbit)*/;
 
 assign dest          = (dst_is_r1) ? 5'd1 :
-                       /*(dst_is_rj) ? rj   :*/ rd;
+                       (dst_is_rj) ? rj   : rd;
 
-// assign dst_is_rj     = inst_rdcntid_w;
+assign dst_is_rj     = inst_rdcntid_w;
 
-// assign {rdcnt_en, rdcnt_result} = ({33{inst_rdcntvl_w}} & {1'b1, timer_64[31: 0]}) |
-//                                   ({33{inst_rdcntvh_w}} & {1'b1, timer_64[63:32]}) |
-//                                   ({33{inst_rdcntid_w}} & {1'b1, csr_tid}); 
+assign {rdcnt_en, rdcnt_result} = ({33{inst_rdcntvl_w}} & {1'b1, timer_64[31: 0]}) |
+                                  ({33{inst_rdcntvh_w}} & {1'b1, timer_64[63:32]}) |
+                                  ({33{inst_rdcntid_w}} & {1'b1, csr_tid}); 
 
-// assign csr_data      = rdcnt_en  ? rdcnt_result      : 
-//                        inst_sc_w ? {31'b0, ds_llbit} : rd_csr_data;                      
+assign csr_data      = rdcnt_en  ? rdcnt_result      : 
+                       /*inst_sc_w ? {31'b0, ds_llbit} :*/ rd_csr_data;                      
                                                                         
-// assign res_from_csr  = inst_csrrd | inst_csrwr | inst_csrxchg | inst_rdcntid_w | inst_rdcntvh_w | inst_rdcntvl_w | inst_sc_w;
-// assign csr_we        = inst_csrwr | inst_csrxchg;
-// assign csr_mask      = inst_csrxchg;
+assign res_from_csr  = inst_csrrd | inst_csrwr | inst_csrxchg | inst_rdcntid_w | inst_rdcntvh_w | inst_rdcntvl_w/* | inst_sc_w*/;
+assign csr_we        = inst_csrwr | inst_csrxchg;
+assign csr_mask      = inst_csrxchg;
 
 assign mem_size  = {mem_h_size, mem_b_size};
 
@@ -570,11 +614,11 @@ assign inst_need_rj = inst_add_w      |
                       inst_ld_w       |
                       inst_st_b       |
                       inst_st_h       |
-                      inst_st_w       ; //|
+                      inst_st_w       |
                       // inst_preld      |
                       // inst_ll_w       |
                       // inst_sc_w       |
-                      // inst_csrxchg    |
+                      inst_csrxchg    ;
                       // inst_valid_cacop|
                       // inst_invtlb     
                       // ;
@@ -605,10 +649,10 @@ assign inst_need_rkd = inst_add_w   |
                        inst_bgeu    |
                        inst_st_b    |
                        inst_st_h    |
-                       inst_st_w    ;//|
+                       inst_st_w    |
                       //  inst_sc_w    |
-                      //  inst_csrwr   |
-                      //  inst_csrxchg |
+                       inst_csrwr   |
+                       inst_csrxchg ;
                       //  inst_invtlb  
                       //  ;
 
@@ -701,6 +745,116 @@ assign br_need_reg_data = inst_beq   ||
                           inst_bgeu  ||
                           inst_jirl;
 
+assign inst_valid = inst_add_w      |
+                    inst_sub_w      |
+                    inst_slt        |
+                    inst_sltu       |
+                    inst_nor        |
+                    inst_and        |
+                    inst_or         |
+                    inst_xor        |
+                    inst_sll_w      |
+                    inst_srl_w      |
+                    inst_sra_w      |
+                    inst_mul_w      |
+                    inst_mulh_w     |
+                    inst_mulh_wu    |
+                    inst_div_w      |
+                    inst_mod_w      |
+                    inst_div_wu     |
+                    inst_mod_wu     |
+                    inst_break      |
+                    inst_syscall    |
+                    inst_slli_w     |
+                    inst_srli_w     |
+                    inst_srai_w     |
+                    // inst_idle       |
+                    inst_slti       |
+                    inst_sltui      |
+                    inst_addi_w     |
+                    inst_andi       |
+                    inst_ori        |
+                    inst_xori       |
+                    inst_ld_b       |
+                    inst_ld_h       |
+                    inst_ld_w       |
+                    inst_st_b       |
+                    inst_st_h       |
+                    inst_st_w       |
+                    inst_ld_bu      |
+                    inst_ld_hu      |
+                    // inst_ll_w       |
+                    // inst_sc_w       |
+                    inst_jirl       |
+                    inst_b          |
+                    inst_bl         |
+                    inst_beq        |
+                    inst_bne        |
+                    inst_blt        |
+                    inst_bge        |
+                    inst_bltu       |
+                    inst_bgeu       |
+                    inst_lu12i_w    |
+                    inst_pcaddu12i  |
+                    inst_csrrd      |
+                    inst_csrwr      |
+                    inst_csrxchg    |
+                    inst_rdcntid_w  |
+                    inst_rdcntvh_w  |
+                    inst_rdcntvl_w  |
+                    inst_ertn       ;//|
+                    // inst_valid_cacop|
+                    // inst_preld      |
+                    // inst_dbar       |
+                    // inst_ibar       |
+                    // inst_tlbsrch    |
+                    // inst_tlbrd      |
+                    // inst_tlbwr      |
+                    // inst_tlbfill    |
+					// inst_nop        |
+                    // (inst_invtlb && (rd == 5'd0 || 
+                    //                  rd == 5'd1 || 
+                    //                  rd == 5'd2 || 
+                    //                  rd == 5'd3 || 
+                    //                  rd == 5'd4 ||
+                    //                  rd == 5'd5 || 
+                    //                  rd == 5'd6 ));  //invtlb valid op
+
+
+
+
+assign excp     = excp_ipe | inst_syscall | inst_break | id_excp | excp_ine | has_int;
+assign excp_num = {excp_ipe, excp_ine, inst_break, inst_syscall, id_excp_num, has_int};
+
+assign rd_csr_addr = csr_idx;
+
+//when cache operate icache, will refetch inst after this inst.
+// assign refetch = (inst_tlbwr || inst_tlbfill || inst_tlbrd || inst_invtlb || inst_ibar) && ds_valid;  //this inst will change addr trans 
+
+// assign tlb_inst_stall = es_tlb_inst_stall || ms_tlb_inst_stall || ws_tlb_inst_stall;
+
+assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
+
+// assign if_excp = if_to_id_bus[68]; //if阶段异常的判断信号不能用id_data,因为id_data本身可能会因为异常无法获得数据（但此处没有需求在id知道if有没有异常
+
+assign excp_ine = ~inst_valid;
+
+assign kernel_inst = inst_csrrd      |
+                     inst_csrwr      |
+                     inst_csrxchg    |
+                    //  inst_valid_cacop & (rd[4:3] != 2'b10)|
+                    //  inst_tlbsrch    |
+                    //  inst_tlbrd      |
+                    //  inst_tlbwr      |
+                    //  inst_tlbfill    |
+                    //  inst_invtlb     |
+                     inst_ertn       ;//|
+                    //  inst_idle       ;
+
+assign excp_ipe = kernel_inst && (csr_plv == 2'b11);
+
+
+
 
 // //branch slot cancel, need wait next valid inst after branch
 // //only valid br_taken sign can generate slot_cancel.
@@ -717,9 +871,9 @@ assign br_need_reg_data = inst_beq   ||
 //     end
 // end
 //！向前，应该要用allowin来判断而不是ready_go吧
-assign br_really_taken = br_taken & id_allowin;
+assign br_really_taken = flush_sign ? 1'b0 : br_taken & id_allowin;
   // assign id_to_if_bus = {br_taken, br_target/*, br_taken_cancel*/};
-  assign id_to_if_bus = {br_really_taken, br_target/*, br_taken_cancel*/};
+assign id_to_if_bus = {br_really_taken, br_target/*, br_taken_cancel*/};
 
 assign id_to_exe_bus = {
                       // inst_csr_rstat_en,  // 349:349 for difftest
@@ -744,14 +898,14 @@ assign id_to_exe_bus = {
                       //  inst_tlbsrch  ,  //222:222
                       //  inst_sc_w     ,  //221:221
                       //  inst_ll_w     ,  //220:220
-                      //  excp_num      ,  //219:211
-                      //  csr_mask      ,  //210:210
-                      //  csr_we        ,  //209:209
-                      //  csr_idx       ,  //208:195
-                      //  res_from_csr  ,  //194:194
-                      //  csr_data      ,  //193:162
-                      //  inst_ertn     ,  //161:161
-                      //  excp          ,  //160:160
+                       excp_num      ,  //219:211
+                       csr_mask      ,  //210:210
+                       csr_we        ,  //209:209
+                       csr_idx       ,  //208:195
+                       res_from_csr  ,  //194:194
+                       csr_data      ,  //193:162
+                       inst_ertn     ,  //161:161
+                       excp          ,  //160:160
                        mem_size      ,  //159:158
                        mul_div_op    ,  //157:154
                        mul_div_sign  ,  //153:153

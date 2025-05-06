@@ -65,7 +65,15 @@ module mycpu_top_block_if_stage_0_0 (
   inst_sram_we,
   inst_sram_addr,
   inst_sram_wdata,
-  inst_sram_rdata
+  inst_sram_rdata,
+  excp_flush,
+  ertn_flush,
+  refetch_flush,
+  wb_pc,
+  csr_eentry,
+  csr_era,
+  has_int,
+  csr_plv
 );
 
 (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME clk, ASSOCIATED_RESET resetn, FREQ_HZ 100000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, INSERT_VIP 0" *)
@@ -76,13 +84,21 @@ input wire clk;
 input wire resetn;
 input wire id_allowin;
 output wire if_to_id_valid;
-output wire [63 : 0] if_to_id_bus;
+output wire [68 : 0] if_to_id_bus;
 input wire [33 : 0] id_to_if_bus;
 output wire inst_sram_en;
 output wire [3 : 0] inst_sram_we;
 output wire [31 : 0] inst_sram_addr;
 output wire [31 : 0] inst_sram_wdata;
 input wire [31 : 0] inst_sram_rdata;
+input wire excp_flush;
+input wire ertn_flush;
+input wire refetch_flush;
+input wire [31 : 0] wb_pc;
+input wire [31 : 0] csr_eentry;
+input wire [31 : 0] csr_era;
+input wire has_int;
+input wire [1 : 0] csr_plv;
 
   if_stage inst (
     .clk(clk),
@@ -95,6 +111,14 @@ input wire [31 : 0] inst_sram_rdata;
     .inst_sram_we(inst_sram_we),
     .inst_sram_addr(inst_sram_addr),
     .inst_sram_wdata(inst_sram_wdata),
-    .inst_sram_rdata(inst_sram_rdata)
+    .inst_sram_rdata(inst_sram_rdata),
+    .excp_flush(excp_flush),
+    .ertn_flush(ertn_flush),
+    .refetch_flush(refetch_flush),
+    .wb_pc(wb_pc),
+    .csr_eentry(csr_eentry),
+    .csr_era(csr_era),
+    .has_int(has_int),
+    .csr_plv(csr_plv)
   );
 endmodule

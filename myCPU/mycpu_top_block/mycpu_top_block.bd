@@ -14,7 +14,8 @@
       "id_stage_0": "",
       "exe_stage_0": "",
       "mem_stage_0": "",
-      "wb_stage_0": ""
+      "wb_stage_0": "",
+      "csr_0": ""
     },
     "ports": {
       "data_sram_rdata": {
@@ -131,7 +132,7 @@
           },
           "if_to_id_bus": {
             "direction": "O",
-            "left": "63",
+            "left": "68",
             "right": "0"
           },
           "id_to_if_bus": {
@@ -160,6 +161,38 @@
           "inst_sram_rdata": {
             "direction": "I",
             "left": "31",
+            "right": "0"
+          },
+          "excp_flush": {
+            "direction": "I"
+          },
+          "ertn_flush": {
+            "direction": "I"
+          },
+          "refetch_flush": {
+            "direction": "I"
+          },
+          "wb_pc": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "csr_eentry": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "csr_era": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "has_int": {
+            "direction": "I"
+          },
+          "csr_plv": {
+            "direction": "I",
+            "left": "1",
             "right": "0"
           }
         }
@@ -204,7 +237,7 @@
           },
           "if_to_id_bus": {
             "direction": "I",
-            "left": "63",
+            "left": "68",
             "right": "0"
           },
           "exe_allowin": {
@@ -215,7 +248,7 @@
           },
           "id_to_exe_bus": {
             "direction": "O",
-            "left": "160",
+            "left": "220",
             "right": "0"
           },
           "id_to_if_bus": {
@@ -236,6 +269,43 @@
           "wb_to_rf_bus": {
             "direction": "I",
             "left": "64",
+            "right": "0"
+          },
+          "excp_flush": {
+            "direction": "I"
+          },
+          "ertn_flush": {
+            "direction": "I"
+          },
+          "refetch_flush": {
+            "direction": "I"
+          },
+          "has_int": {
+            "direction": "I"
+          },
+          "rd_csr_addr": {
+            "direction": "O",
+            "left": "13",
+            "right": "0"
+          },
+          "rd_csr_data": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "csr_plv": {
+            "direction": "I",
+            "left": "1",
+            "right": "0"
+          },
+          "timer_64": {
+            "direction": "I",
+            "left": "63",
+            "right": "0"
+          },
+          "csr_tid": {
+            "direction": "I",
+            "left": "31",
             "right": "0"
           }
         }
@@ -280,7 +350,7 @@
           },
           "id_to_exe_bus": {
             "direction": "I",
-            "left": "160",
+            "left": "220",
             "right": "0"
           },
           "mem_allowin": {
@@ -291,7 +361,7 @@
           },
           "exe_to_mem_bus": {
             "direction": "O",
-            "left": "78",
+            "left": "169",
             "right": "0"
           },
           "exe_to_id_bus": {
@@ -316,6 +386,18 @@
             "direction": "O",
             "left": "31",
             "right": "0"
+          },
+          "flush_from_mem": {
+            "direction": "I"
+          },
+          "excp_flush": {
+            "direction": "I"
+          },
+          "ertn_flush": {
+            "direction": "I"
+          },
+          "refetch_flush": {
+            "direction": "I"
           }
         }
       },
@@ -359,7 +441,7 @@
           },
           "exe_to_mem_bus": {
             "direction": "I",
-            "left": "78",
+            "left": "169",
             "right": "0"
           },
           "wb_allowin": {
@@ -370,7 +452,7 @@
           },
           "mem_to_wb_bus": {
             "direction": "O",
-            "left": "69",
+            "left": "167",
             "right": "0"
           },
           "mem_to_id_bus": {
@@ -382,6 +464,18 @@
             "direction": "I",
             "left": "31",
             "right": "0"
+          },
+          "excp_flush": {
+            "direction": "I"
+          },
+          "ertn_flush": {
+            "direction": "I"
+          },
+          "refetch_flush": {
+            "direction": "I"
+          },
+          "mem_flush": {
+            "direction": "O"
           }
         }
       },
@@ -425,12 +519,57 @@
           },
           "mem_to_wb_bus": {
             "direction": "I",
-            "left": "69",
+            "left": "167",
             "right": "0"
           },
           "wb_to_id_bus": {
             "direction": "O",
             "left": "64",
+            "right": "0"
+          },
+          "excp_flush": {
+            "direction": "O"
+          },
+          "ertn_flush": {
+            "direction": "O"
+          },
+          "refetch_flush": {
+            "direction": "O"
+          },
+          "csr_era": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "csr_esubcode": {
+            "direction": "O",
+            "left": "8",
+            "right": "0"
+          },
+          "csr_ecode": {
+            "direction": "O",
+            "left": "5",
+            "right": "0"
+          },
+          "csr_wr_en": {
+            "direction": "O"
+          },
+          "wr_csr_addr": {
+            "direction": "O",
+            "left": "13",
+            "right": "0"
+          },
+          "wr_csr_data": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "va_error": {
+            "direction": "O"
+          },
+          "bad_va": {
+            "direction": "O",
+            "left": "31",
             "right": "0"
           },
           "debug_wb_pc": {
@@ -454,17 +593,354 @@
             "right": "0"
           }
         }
+      },
+      "csr_0": {
+        "vlnv": "xilinx.com:module_ref:csr:1.0",
+        "ip_revision": "1",
+        "xci_name": "mycpu_top_block_csr_0_1",
+        "xci_path": "ip\\mycpu_top_block_csr_0_1\\mycpu_top_block_csr_0_1.xci",
+        "inst_hier_path": "csr_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "csr",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "clk": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_RESET": {
+                "value": "resetn",
+                "value_src": "constant"
+              }
+            }
+          },
+          "resetn": {
+            "type": "rst",
+            "direction": "I",
+            "parameters": {
+              "POLARITY": {
+                "value": "ACTIVE_LOW",
+                "value_src": "constant"
+              }
+            }
+          },
+          "rd_addr": {
+            "direction": "I",
+            "left": "13",
+            "right": "0"
+          },
+          "rd_data": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "timer_64_out": {
+            "direction": "O",
+            "left": "63",
+            "right": "0"
+          },
+          "tid_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "csr_wr_en": {
+            "direction": "I"
+          },
+          "wr_addr": {
+            "direction": "I",
+            "left": "13",
+            "right": "0"
+          },
+          "wr_data": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "interrupt": {
+            "type": "intr",
+            "direction": "I",
+            "left": "7",
+            "right": "0",
+            "parameters": {
+              "SENSITIVITY": {
+                "value": "LEVEL_HIGH",
+                "value_src": "constant"
+              }
+            }
+          },
+          "has_int": {
+            "direction": "O"
+          },
+          "excp_flush": {
+            "direction": "I"
+          },
+          "ertn_flush": {
+            "direction": "I"
+          },
+          "era_in": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "esubcode_in": {
+            "direction": "I",
+            "left": "8",
+            "right": "0"
+          },
+          "ecode_in": {
+            "direction": "I",
+            "left": "5",
+            "right": "0"
+          },
+          "va_error_in": {
+            "direction": "I"
+          },
+          "bad_va_in": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "tlbsrch_en": {
+            "direction": "I"
+          },
+          "tlbsrch_found": {
+            "direction": "I"
+          },
+          "tlbsrch_index": {
+            "direction": "I",
+            "left": "4",
+            "right": "0"
+          },
+          "excp_tlbrefill": {
+            "direction": "I"
+          },
+          "excp_tlb": {
+            "direction": "I"
+          },
+          "excp_tlb_vppn": {
+            "direction": "I",
+            "left": "18",
+            "right": "0"
+          },
+          "llbit_in": {
+            "direction": "I"
+          },
+          "llbit_set_in": {
+            "direction": "I"
+          },
+          "lladdr_in": {
+            "direction": "I",
+            "left": "27",
+            "right": "0"
+          },
+          "lladdr_set_in": {
+            "direction": "I"
+          },
+          "llbit_out": {
+            "direction": "O"
+          },
+          "vppn_out": {
+            "direction": "O",
+            "left": "18",
+            "right": "0"
+          },
+          "lladdr_out": {
+            "direction": "O",
+            "left": "27",
+            "right": "0"
+          },
+          "eentry_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "era_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "tlbrentry_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "disable_cache_out": {
+            "direction": "O"
+          },
+          "asid_out": {
+            "direction": "O",
+            "left": "9",
+            "right": "0"
+          },
+          "rand_index": {
+            "direction": "O",
+            "left": "4",
+            "right": "0"
+          },
+          "tlbehi_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "tlbelo0_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "tlbelo1_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "tlbidx_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "pg_out": {
+            "direction": "O"
+          },
+          "da_out": {
+            "direction": "O"
+          },
+          "dmw0_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "dmw1_out": {
+            "direction": "O",
+            "left": "31",
+            "right": "0"
+          },
+          "datf_out": {
+            "direction": "O",
+            "left": "1",
+            "right": "0"
+          },
+          "datm_out": {
+            "direction": "O",
+            "left": "1",
+            "right": "0"
+          },
+          "ecode_out": {
+            "direction": "O",
+            "left": "5",
+            "right": "0"
+          },
+          "tlbrd_en": {
+            "direction": "I"
+          },
+          "tlbehi_in": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "tlbelo0_in": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "tlbelo1_in": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "tlbidx_in": {
+            "direction": "I",
+            "left": "31",
+            "right": "0"
+          },
+          "asid_in": {
+            "direction": "I",
+            "left": "9",
+            "right": "0"
+          },
+          "plv_out": {
+            "direction": "O",
+            "left": "1",
+            "right": "0"
+          }
+        }
       }
     },
     "nets": {
+      "Net": {
+        "ports": [
+          "wb_stage_0/excp_flush",
+          "id_stage_0/excp_flush",
+          "csr_0/excp_flush",
+          "if_stage_0/excp_flush",
+          "mem_stage_0/excp_flush",
+          "exe_stage_0/excp_flush"
+        ]
+      },
+      "Net1": {
+        "ports": [
+          "wb_stage_0/ertn_flush",
+          "id_stage_0/ertn_flush",
+          "csr_0/ertn_flush",
+          "if_stage_0/ertn_flush",
+          "mem_stage_0/ertn_flush",
+          "exe_stage_0/ertn_flush"
+        ]
+      },
       "clk_1": {
         "ports": [
           "clk",
-          "if_stage_0/clk",
           "id_stage_0/clk",
+          "csr_0/clk",
           "wb_stage_0/clk",
-          "exe_stage_0/clk",
-          "mem_stage_0/clk"
+          "if_stage_0/clk",
+          "mem_stage_0/clk",
+          "exe_stage_0/clk"
+        ]
+      },
+      "csr_0_eentry_out": {
+        "ports": [
+          "csr_0/eentry_out",
+          "if_stage_0/csr_eentry"
+        ]
+      },
+      "csr_0_era_out": {
+        "ports": [
+          "csr_0/era_out",
+          "if_stage_0/csr_era"
+        ]
+      },
+      "csr_0_has_int": {
+        "ports": [
+          "csr_0/has_int",
+          "id_stage_0/has_int",
+          "if_stage_0/has_int"
+        ]
+      },
+      "csr_0_plv_out": {
+        "ports": [
+          "csr_0/plv_out",
+          "id_stage_0/csr_plv",
+          "if_stage_0/csr_plv"
+        ]
+      },
+      "csr_0_rd_data": {
+        "ports": [
+          "csr_0/rd_data",
+          "id_stage_0/rd_csr_data"
+        ]
+      },
+      "csr_0_tid_out": {
+        "ports": [
+          "csr_0/tid_out",
+          "id_stage_0/csr_tid"
+        ]
+      },
+      "csr_0_timer_64_out": {
+        "ports": [
+          "csr_0/timer_64_out",
+          "id_stage_0/timer_64"
         ]
       },
       "data_sram_rdata_1": {
@@ -545,6 +1021,12 @@
           "if_stage_0/id_to_if_bus"
         ]
       },
+      "id_stage_0_rd_csr_addr": {
+        "ports": [
+          "id_stage_0/rd_csr_addr",
+          "csr_0/rd_addr"
+        ]
+      },
       "if_stage_0_if_to_id_bus": {
         "ports": [
           "if_stage_0/if_to_id_bus",
@@ -593,6 +1075,12 @@
           "exe_stage_0/mem_allowin"
         ]
       },
+      "mem_stage_0_mem_flush": {
+        "ports": [
+          "mem_stage_0/mem_flush",
+          "exe_stage_0/flush_from_mem"
+        ]
+      },
       "mem_stage_0_mem_to_id_bus": {
         "ports": [
           "mem_stage_0/mem_to_id_bus",
@@ -614,11 +1102,43 @@
       "resetn_1": {
         "ports": [
           "resetn",
-          "if_stage_0/resetn",
           "id_stage_0/resetn",
+          "csr_0/resetn",
           "wb_stage_0/resetn",
-          "exe_stage_0/resetn",
-          "mem_stage_0/resetn"
+          "if_stage_0/resetn",
+          "mem_stage_0/resetn",
+          "exe_stage_0/resetn"
+        ]
+      },
+      "wb_stage_0_bad_va": {
+        "ports": [
+          "wb_stage_0/bad_va",
+          "csr_0/bad_va_in"
+        ]
+      },
+      "wb_stage_0_csr_ecode": {
+        "ports": [
+          "wb_stage_0/csr_ecode",
+          "csr_0/ecode_in"
+        ]
+      },
+      "wb_stage_0_csr_era": {
+        "ports": [
+          "wb_stage_0/csr_era",
+          "csr_0/era_in",
+          "if_stage_0/wb_pc"
+        ]
+      },
+      "wb_stage_0_csr_esubcode": {
+        "ports": [
+          "wb_stage_0/csr_esubcode",
+          "csr_0/esubcode_in"
+        ]
+      },
+      "wb_stage_0_csr_wr_en": {
+        "ports": [
+          "wb_stage_0/csr_wr_en",
+          "csr_0/csr_wr_en"
         ]
       },
       "wb_stage_0_debug_wb_pc": {
@@ -645,6 +1165,21 @@
           "debug_wb_rf_wnum"
         ]
       },
+      "wb_stage_0_refetch_flush": {
+        "ports": [
+          "wb_stage_0/refetch_flush",
+          "id_stage_0/refetch_flush",
+          "if_stage_0/refetch_flush",
+          "mem_stage_0/refetch_flush",
+          "exe_stage_0/refetch_flush"
+        ]
+      },
+      "wb_stage_0_va_error": {
+        "ports": [
+          "wb_stage_0/va_error",
+          "csr_0/va_error_in"
+        ]
+      },
       "wb_stage_0_wb_allowin": {
         "ports": [
           "wb_stage_0/wb_allowin",
@@ -655,6 +1190,18 @@
         "ports": [
           "wb_stage_0/wb_to_id_bus",
           "id_stage_0/wb_to_rf_bus"
+        ]
+      },
+      "wb_stage_0_wr_csr_addr": {
+        "ports": [
+          "wb_stage_0/wr_csr_addr",
+          "csr_0/wr_addr"
+        ]
+      },
+      "wb_stage_0_wr_csr_data": {
+        "ports": [
+          "wb_stage_0/wr_csr_data",
+          "csr_0/wr_data"
         ]
       }
     }

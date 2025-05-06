@@ -2,7 +2,7 @@
 // Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-// Date        : Thu Apr 17 17:57:55 2025
+// Date        : Tue May  6 10:05:21 2025
 // Host        : Super-EvilLoong running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode synth_stub
 //               e:/projects_2024/Loong_Team/mycpu_env_try/mycpu_env_try/myCPU/mycpu_top_block/ip/mycpu_top_block_exe_stage_0_0/mycpu_top_block_exe_stage_0_0_stub.v
@@ -17,20 +17,25 @@
 (* X_CORE_INFO = "exe_stage,Vivado 2023.2" *)
 module mycpu_top_block_exe_stage_0_0(clk, resetn, exe_allowin, id_to_exe_valid, 
   id_to_exe_bus, mem_allowin, exe_to_mem_valid, exe_to_mem_bus, exe_to_id_bus, data_sram_en, 
-  data_sram_we, data_sram_addr, data_sram_wdata)
-/* synthesis syn_black_box black_box_pad_pin="resetn,exe_allowin,id_to_exe_valid,id_to_exe_bus[160:0],mem_allowin,exe_to_mem_valid,exe_to_mem_bus[78:0],exe_to_id_bus[38:0],data_sram_en,data_sram_we[3:0],data_sram_addr[31:0],data_sram_wdata[31:0]" */
+  data_sram_we, data_sram_addr, data_sram_wdata, flush_from_mem, excp_flush, ertn_flush, 
+  refetch_flush)
+/* synthesis syn_black_box black_box_pad_pin="resetn,exe_allowin,id_to_exe_valid,id_to_exe_bus[220:0],mem_allowin,exe_to_mem_valid,exe_to_mem_bus[169:0],exe_to_id_bus[38:0],data_sram_en,data_sram_we[3:0],data_sram_addr[31:0],data_sram_wdata[31:0],flush_from_mem,excp_flush,ertn_flush,refetch_flush" */
 /* synthesis syn_force_seq_prim="clk" */;
   input clk /* synthesis syn_isclock = 1 */;
   input resetn;
   output exe_allowin;
   input id_to_exe_valid;
-  input [160:0]id_to_exe_bus;
+  input [220:0]id_to_exe_bus;
   input mem_allowin;
   output exe_to_mem_valid;
-  output [78:0]exe_to_mem_bus;
+  output [169:0]exe_to_mem_bus;
   output [38:0]exe_to_id_bus;
   output data_sram_en;
   output [3:0]data_sram_we;
   output [31:0]data_sram_addr;
   output [31:0]data_sram_wdata;
+  input flush_from_mem;
+  input excp_flush;
+  input ertn_flush;
+  input refetch_flush;
 endmodule
