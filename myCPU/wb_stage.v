@@ -68,7 +68,7 @@ wire [31:0] wb_error_va;
 // wire        wb_icacop_op_en;
 // wire        wb_br_inst;
 // wire        wb_icache_miss;
-// wire        wb_access_mem;
+wire        wb_access_mem;
 // wire        wb_dcache_miss;
 // wire        wb_br_pre;
 // wire        wb_br_pre_error;

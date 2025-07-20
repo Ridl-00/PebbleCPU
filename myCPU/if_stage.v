@@ -14,7 +14,7 @@ module if_stage (
     input wire [`ID_TO_IF_WD] id_to_if_bus,
 
     //对接insRAM接口
-    output wire        inst_sram_en,
+    output wire                       inst_sram_en,
     output wire [`InstWriteEnable_WD] inst_sram_we,
     output wire [`InstAddrBus       ] inst_sram_addr,
     output wire [`InstBus           ] inst_sram_wdata,

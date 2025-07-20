@@ -1,7 +1,7 @@
 {
    "ActiveEmotionalView":"Default View",
    "Default View_ScaleFactor":"1.12982",
-   "Default View_TopLeft":"1696,-180",
+   "Default View_TopLeft":"948,636",
    "ExpandedHierarchyInLayout":"",
    "guistr":"# # String gsaved with Nlview 7.5.8 2022-09-21 7111 VDI=41 GEI=38 GUI=JA:10.0
 #  -string -flagsOSRD
@@ -59,6 +59,7 @@ preplace netloc if_stage_0_inst_sram_wdata 1 1 4 790 1280 1480 620 2030 570 NJ
 preplace netloc if_stage_0_inst_sram_we 1 1 4 830 70 N 70 N 70 2590J
 preplace netloc inst_sram_rdata_1 1 0 1 -50J 780n
 preplace netloc mem_stage_0_mem_allowin 1 3 2 2140 130 2580
+preplace netloc mem_stage_0_mem_flush 1 3 2 2130 50 2540
 preplace netloc mem_stage_0_mem_to_id_bus 1 2 3 1570 110 N 110 2560
 preplace netloc mem_stage_0_mem_to_wb_bus 1 0 5 320 130 N 130 1350 80 N 80 2550
 preplace netloc mem_stage_0_mem_to_wb_valid 1 0 5 310 120 810 50 N 50 1960 40 2570
@@ -78,7 +79,6 @@ preplace netloc wb_stage_0_wb_allowin 1 1 3 800 -110 N -110 N
 preplace netloc wb_stage_0_wb_to_id_bus 1 1 2 960 390 NJ
 preplace netloc wb_stage_0_wr_csr_addr 1 1 1 940 460n
 preplace netloc wb_stage_0_wr_csr_data 1 1 1 920 480n
-preplace netloc mem_stage_0_mem_flush 1 3 2 2130 50 2540
 levelinfo -pg 1 -70 590 1180 1770 2340 2650
 pagesize -pg 1 -db -bbox -sgen -270 -250 2870 1320
 "

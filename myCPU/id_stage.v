@@ -325,14 +325,22 @@ assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
     end
   end
 
-//前递和阻塞                 往exe传   exe阶段用的数据（分支判断/分支生成）
-assign {rf1_forward_stall, rj_value, rj_value_forward_exe} = ((rf_raddr1 == exe_forward_reg) && exe_forward_enable && inst_need_rj) ? {exe_dep_need_stall, exe_forward_data, exe_forward_data} :
-                                                             ((rf_raddr1 == mem_forward_reg) && mem_forward_enable && inst_need_rj) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data, rf_rdata1} :
-                                                                                                                                  {1'b0, rf_rdata1, rf_rdata1}; 
+// //前递和阻塞                 往exe传   exe阶段用的数据（分支判断/分支生成）
+// assign {rf1_forward_stall, rj_value, rj_value_forward_exe} = ((rf_raddr1 == exe_forward_reg) && exe_forward_enable && inst_need_rj) ? {exe_dep_need_stall, exe_forward_data, exe_forward_data} :
+//                                                              ((rf_raddr1 == mem_forward_reg) && mem_forward_enable && inst_need_rj) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data, rf_rdata1} :
+//                                                                                                                                   {1'b0, rf_rdata1, rf_rdata1}; 
 
-assign {rf2_forward_stall, rkd_value, rkd_value_forward_exe} = ((rf_raddr2 == exe_forward_reg) && exe_forward_enable && inst_need_rkd) ? {exe_dep_need_stall, exe_forward_data, exe_forward_data} :
-                                                               ((rf_raddr2 == mem_forward_reg) && mem_forward_enable && inst_need_rkd) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data, rf_rdata2} :
-                                                                                                                                      {1'b0, rf_rdata2, rf_rdata2};
+// assign {rf2_forward_stall, rkd_value, rkd_value_forward_exe} = ((rf_raddr2 == exe_forward_reg) && exe_forward_enable && inst_need_rkd) ? {exe_dep_need_stall, exe_forward_data, exe_forward_data} :
+//                                                                ((rf_raddr2 == mem_forward_reg) && mem_forward_enable && inst_need_rkd) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data, rf_rdata2} :
+                                                                                                                                      // {1'b0, rf_rdata2, rf_rdata2};
+
+assign {rf1_forward_stall, rj_value} = ((rf_raddr1 == exe_forward_reg) && exe_forward_enable && inst_need_rj) ? {exe_dep_need_stall, exe_forward_data} :
+                                                             ((rf_raddr1 == mem_forward_reg) && mem_forward_enable && inst_need_rj) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data} :
+                                                                                                                                  {1'b0, rf_rdata1}; 
+
+assign {rf2_forward_stall, rkd_value} = ((rf_raddr2 == exe_forward_reg) && exe_forward_enable && inst_need_rkd) ? {exe_dep_need_stall, exe_forward_data} :
+                                                               ((rf_raddr2 == mem_forward_reg) && mem_forward_enable && inst_need_rkd) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data} :
+                                                                                                                                      {1'b0, rf_rdata2};
 
 //译码
 //指令拆解
@@ -716,11 +724,18 @@ regfile u_regfile(
     .wdata  (rf_wdata )
     );
 
-//分支判断
-assign rj_eq_rd        = (rj_value_forward_exe == rkd_value_forward_exe);
-assign rj_lt_rd_unsign = (rj_value_forward_exe < rkd_value_forward_exe);   //operate "<" has nice timing
-assign rj_lt_rd_sign   = (rj_value_forward_exe[31] && ~rkd_value_forward_exe[31]) ? 1'b1 :
-                         (~rj_value_forward_exe[31] && rkd_value_forward_exe[31]) ? 1'b0 : rj_lt_rd_unsign;                         
+//分支预测判断
+// assign rj_eq_rd        = (rj_value_forward_exe == rkd_value_forward_exe);
+// assign rj_lt_rd_unsign = (rj_value_forward_exe < rkd_value_forward_exe);   //operate "<" has nice timing
+// assign rj_lt_rd_sign   = (rj_value_forward_exe[31] && ~rkd_value_forward_exe[31]) ? 1'b1 :
+//                          (~rj_value_forward_exe[31] && rkd_value_forward_exe[31]) ? 1'b0 : rj_lt_rd_unsign;                         
+
+//分支实际判断
+assign rj_eq_rd        = (rj_value == rkd_value);
+assign rj_lt_rd_unsign = (rj_value < rkd_value);   //operate "<" has nice timing
+assign rj_lt_rd_sign   = (rj_value[31] && ~rkd_value[31]) ? 1'b1 :
+                         (~rj_value[31] && rkd_value[31]) ? 1'b0 : rj_lt_rd_unsign;                         
+
 
 assign br_taken  = (  inst_beq  &  rj_eq_rd
                     | inst_bne  & !rj_eq_rd
@@ -734,7 +749,7 @@ assign br_taken  = (  inst_beq  &  rj_eq_rd
                     ) && id_valid /*&& !ds_excp*/; 
 assign br_target = ({32{inst_beq || inst_bne || inst_bl || inst_b || 
                     inst_blt || inst_bge || inst_bltu || inst_bgeu}} & (id_pc + id_imm   ))            |
-                   ({32{inst_jirl}}                                  & (rj_value_forward_exe + id_imm)) ;
+                   ({32{inst_jirl}}                                  & (/*rj_value_forward_exe*/rj_value + id_imm)) ;
 
 assign br_inst = br_need_reg_data || inst_bl || inst_b;
 assign br_need_reg_data = inst_beq   ||

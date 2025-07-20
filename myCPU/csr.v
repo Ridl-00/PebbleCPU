@@ -19,7 +19,7 @@ module csr
     input  [13:0]                   wr_addr      ,
     input  [31:0]                   wr_data      ,
     //interrupt
-    input  [ 7:0]                   interrupt    ,
+    input  [ 7:0]                   interrupt    , // 外设硬中断源
     output                          has_int      ,
     //from wb
     input                           excp_flush   ,

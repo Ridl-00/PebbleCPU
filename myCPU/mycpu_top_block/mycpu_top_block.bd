@@ -6,8 +6,7 @@
       "name": "mycpu_top_block",
       "rev_ctrl_bd_flag": "RevCtrlBdOff",
       "synth_flow_mode": "Hierarchical",
-      "tool_version": "2023.2",
-      "validated": "true"
+      "tool_version": "2023.2"
     },
     "design_tree": {
       "if_stage_0": "",
@@ -871,32 +870,32 @@
       "Net": {
         "ports": [
           "wb_stage_0/excp_flush",
-          "id_stage_0/excp_flush",
-          "csr_0/excp_flush",
-          "if_stage_0/excp_flush",
           "mem_stage_0/excp_flush",
-          "exe_stage_0/excp_flush"
+          "exe_stage_0/excp_flush",
+          "id_stage_0/excp_flush",
+          "if_stage_0/excp_flush",
+          "csr_0/excp_flush"
         ]
       },
       "Net1": {
         "ports": [
           "wb_stage_0/ertn_flush",
-          "id_stage_0/ertn_flush",
-          "csr_0/ertn_flush",
-          "if_stage_0/ertn_flush",
           "mem_stage_0/ertn_flush",
-          "exe_stage_0/ertn_flush"
+          "exe_stage_0/ertn_flush",
+          "id_stage_0/ertn_flush",
+          "if_stage_0/ertn_flush",
+          "csr_0/ertn_flush"
         ]
       },
       "clk_1": {
         "ports": [
           "clk",
-          "id_stage_0/clk",
-          "csr_0/clk",
-          "wb_stage_0/clk",
-          "if_stage_0/clk",
           "mem_stage_0/clk",
-          "exe_stage_0/clk"
+          "exe_stage_0/clk",
+          "id_stage_0/clk",
+          "if_stage_0/clk",
+          "wb_stage_0/clk",
+          "csr_0/clk"
         ]
       },
       "csr_0_eentry_out": {
@@ -1102,12 +1101,12 @@
       "resetn_1": {
         "ports": [
           "resetn",
-          "id_stage_0/resetn",
-          "csr_0/resetn",
-          "wb_stage_0/resetn",
-          "if_stage_0/resetn",
           "mem_stage_0/resetn",
-          "exe_stage_0/resetn"
+          "exe_stage_0/resetn",
+          "id_stage_0/resetn",
+          "if_stage_0/resetn",
+          "wb_stage_0/resetn",
+          "csr_0/resetn"
         ]
       },
       "wb_stage_0_bad_va": {
@@ -1125,8 +1124,8 @@
       "wb_stage_0_csr_era": {
         "ports": [
           "wb_stage_0/csr_era",
-          "csr_0/era_in",
-          "if_stage_0/wb_pc"
+          "if_stage_0/wb_pc",
+          "csr_0/era_in"
         ]
       },
       "wb_stage_0_csr_esubcode": {
@@ -1168,10 +1167,10 @@
       "wb_stage_0_refetch_flush": {
         "ports": [
           "wb_stage_0/refetch_flush",
-          "id_stage_0/refetch_flush",
-          "if_stage_0/refetch_flush",
           "mem_stage_0/refetch_flush",
-          "exe_stage_0/refetch_flush"
+          "exe_stage_0/refetch_flush",
+          "id_stage_0/refetch_flush",
+          "if_stage_0/refetch_flush"
         ]
       },
       "wb_stage_0_va_error": {

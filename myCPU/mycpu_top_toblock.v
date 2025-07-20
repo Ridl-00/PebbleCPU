@@ -2,16 +2,14 @@
 //Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-//Date        : Tue May  6 09:38:55 2025
+//Date        : Wed Jul  9 02:02:43 2025
 //Host        : Super-EvilLoong running 64-bit major release  (build 9200)
 //Command     : generate_target mycpu_top_block.bd
 //Design      : mycpu_top_block
 //Purpose     : IP block netlist
 //--------------------------------------------------------------------------------
-`timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "mycpu_top_block,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=mycpu_top_block,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=6,numReposBlks=6,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=6,numPkgbdBlks=0,bdsource=USER,da_clkrst_cnt=12,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "mycpu_top_block.hwdef" *) 
-module mycpu_top_block
+module mycpu_top
    (clk,
     data_sram_addr,
     data_sram_en,
@@ -28,6 +26,7 @@ module mycpu_top_block
     inst_sram_wdata,
     inst_sram_we,
     resetn);
+
   input clk;
   output [31:0]data_sram_addr;
   output data_sram_en;
@@ -114,7 +113,7 @@ module mycpu_top_block
   assign inst_sram_wdata[31:0] = if_stage_0_inst_sram_wdata;
   assign inst_sram_we[3:0] = if_stage_0_inst_sram_we;
   assign resetn_1 = resetn;
-  mycpu_top_block_csr_0_1 csr_0
+  csr u_csr
        (.asid_in({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
         .bad_va_in(wb_stage_0_bad_va),
         .clk(clk_1),
@@ -152,7 +151,7 @@ module mycpu_top_block
         .va_error_in(wb_stage_0_va_error),
         .wr_addr(wb_stage_0_wr_csr_addr),
         .wr_data(wb_stage_0_wr_csr_data));
-  mycpu_top_block_exe_stage_0_0 exe_stage_0
+  exe_stage u_exe_stage
        (.clk(clk_1),
         .data_sram_addr(exe_stage_0_data_sram_addr),
         .data_sram_en(exe_stage_0_data_sram_en),
@@ -170,7 +169,7 @@ module mycpu_top_block
         .mem_allowin(mem_stage_0_mem_allowin),
         .refetch_flush(wb_stage_0_refetch_flush),
         .resetn(resetn_1));
-  mycpu_top_block_id_stage_0_0 id_stage_0
+  id_stage u_id_stage
        (.clk(clk_1),
         .csr_plv(csr_0_plv_out),
         .csr_tid(csr_0_tid_out),
@@ -192,7 +191,7 @@ module mycpu_top_block
         .resetn(resetn_1),
         .timer_64(csr_0_timer_64_out),
         .wb_to_rf_bus(wb_stage_0_wb_to_id_bus));
-  mycpu_top_block_if_stage_0_0 if_stage_0
+  if_stage u_if_stage
        (.clk(clk_1),
         .csr_eentry(csr_0_eentry_out),
         .csr_era(csr_0_era_out),
@@ -212,7 +211,7 @@ module mycpu_top_block
         .refetch_flush(wb_stage_0_refetch_flush),
         .resetn(resetn_1),
         .wb_pc(wb_stage_0_csr_era));
-  mycpu_top_block_mem_stage_0_0 mem_stage_0
+  mem_stage u_mem_stage
        (.clk(clk_1),
         .data_sram_rdata(data_sram_rdata_1),
         .ertn_flush(Net1),
@@ -227,7 +226,7 @@ module mycpu_top_block
         .refetch_flush(wb_stage_0_refetch_flush),
         .resetn(resetn_1),
         .wb_allowin(wb_stage_0_wb_allowin));
-  mycpu_top_block_wb_stage_0_0 wb_stage_0
+  wb_stage u_wb_stage
        (.bad_va(wb_stage_0_bad_va),
         .clk(clk_1),
         .csr_ecode(wb_stage_0_csr_ecode),
