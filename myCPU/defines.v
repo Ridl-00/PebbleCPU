@@ -32,6 +32,11 @@
 `define MEM_TO_ID_WD 39-1:0
 `define WB_TO_ID_WD 65-1:0
 
+`define CSR_TO_IF_WD  99-1:0
+`define CSR_TO_ID_WD 138-1:0
+
+`define ID_TO_CSR_WD 14-1:0
+`define WB_TO_CSR_WD 127-1:0
 
 `define ID_DATA_Reset 64'b0
 

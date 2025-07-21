@@ -15,25 +15,27 @@ module exe_stage (
     output wire exe_to_mem_valid,
     output wire [`EXE_TO_MEM_WD] exe_to_mem_bus,
 
-
     //从后向前的数据传输（均是组合逻辑）
     output wire [`EXE_TO_ID_WD] exe_to_id_bus,
     // output                              exe_to_id_valid      ,//旁路要不要valid？每级到id的valid在ibar和dbar中使用
 
-    //访dataRAM端口
-    output wire        data_sram_en,
-    output wire [ 3:0] data_sram_we,
+//mem-exe
+    input         flush_from_mem  ,
+//wb-exe
+    input         exe_flush_sign  ,
+
+  //访dataRAM端口
+    // output wire        data_sram_en,
+    // output wire [ 3:0] data_sram_we,
+    // output wire [31:0] data_sram_addr,
+    // output wire [31:0] data_sram_wdata
+    output wire        data_sram_req,
+    output wire        data_sram_wr,
+    output wire [ 3:0] data_sram_wstrb,
+    output wire [ 1:0] data_sram_size,
     output wire [31:0] data_sram_addr,
     output wire [31:0] data_sram_wdata,
-
-    input         flush_from_mem  ,
-    //exception
-    input         excp_flush      ,
-    input         ertn_flush      ,
-    input         refetch_flush   //,
-    // input         icacop_flush    ,
-
-
+    input  wire        data_sram_addr_ok
 
 );
 
@@ -98,7 +100,7 @@ wire        dest_zero      ;
 
 wire        excp_ale       ; //地址对齐异常
 
-wire        exe_flush_sign  ;
+// wire        exe_flush_sign  ;
 // wire [ 3:0] wr_byte_en     ;
 
 wire        access_mem      ; //读写ram使能
@@ -141,6 +143,12 @@ wire [31:0] exe_rj_value     ;
 wire [31:0] exe_rkd_value    ;
 wire div_complete;
 
+// //把这一坨并成一个吧 说真的
+//     //exception
+//     wire         excp_flush      ;
+//     wire         ertn_flush      ;
+//     wire         refetch_flush   ;
+//     // wire         icacop_flush ;
 
 //======================================================
 //=================== Main Code ====================
@@ -148,13 +156,14 @@ wire div_complete;
   assign exe_allowin = ~exe_valid | exe_ready_go & mem_allowin;
   assign exe_to_mem_valid = exe_valid & exe_ready_go;
 // assign exe_ready_go    = (!div_stall & (/*(dcache_req_or_inst_en && data_addr_ok) ||*/ !(access_mem /*|| dcacop_inst || preld_inst*/)) /*&& !tlbsrch_stall && !icacop_inst_stall*/)/* || excp*/;
-assign exe_ready_go = !div_stall || excp; //有异常时需要立即处理异常（忽略所有原有流水逻辑）
+//没在暂停且握手成功
+assign exe_ready_go = (!div_stall && (data_sram_req & data_sram_addr_ok))|| excp; //有异常时需要立即处理异常（忽略所有原有流水逻辑）
 
 // assign exe_to_ds_valid = exe_valid;
 
 assign access_mem = exe_load_op | exe_store_op;
 
-assign exe_flush_sign  = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
+// assign exe_flush_sign  = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
 
 
  
@@ -187,8 +196,13 @@ assign exe_flush_sign  = excp_flush || ertn_flush || refetch_flush /*|| icacop_f
   //访存接口
 assign sram_addr_low2bit = {exe_alu_result[1], exe_alu_result[0]};
                                                                 //前向后有例外不行&有csr来的例外不行&有mem来的例外不行
-  assign data_sram_en = exe_valid & (exe_store_op | exe_load_op) & ~excp & ~exe_flush_sign & ~flush_from_mem;
-  assign data_sram_we = {4{exe_valid}} & {4{exe_store_op}}
+  // assign data_sram_en = exe_valid & access_mem & ~excp & ~exe_flush_sign & ~flush_from_mem;
+  assign data_sram_req = exe_valid & access_mem & ~excp & ~exe_flush_sign & ~flush_from_mem & mem_allowin; //追究allowin，参考inst_req
+  
+  //|we
+  assign data_sram_wr = exe_valid & exe_store_op & ~excp & ~exe_flush_sign & ~flush_from_mem ;
+
+  assign data_sram_wstrb = {4{exe_valid}} & {4{exe_store_op}}
                       & (exe_mem_size == 2'b01 ? 
                          ({4{sram_addr_low2bit == 2'b00}} & 4'b0001 |
                           {4{sram_addr_low2bit == 2'b01}} & 4'b0010 |
@@ -198,6 +212,10 @@ assign sram_addr_low2bit = {exe_alu_result[1], exe_alu_result[0]};
                          ({4{sram_addr_low2bit == 2'b00}} & 4'b0011 |
                           {4{sram_addr_low2bit == 2'b10}} & 4'b1100)
                       :(exe_mem_size == 2'b00 ? 4'b1111 : 4'b0000)));
+//（诡异的转换
+  assign data_sram_size = exe_mem_size == 2'b00 ? 2'b10 : 
+                          exe_mem_size == 2'b10 ? 2'b01 : 2'b00;
+
   assign data_sram_addr = exe_alu_result;
 assign data_sram_wdata = exe_mem_size==2'b01 ? {4{exe_rkd_value[7:0]}} : 
                          exe_mem_size==2'b10 ? {2{exe_rkd_value[15:0]}} :
@@ -219,7 +237,7 @@ assign div_stall     = exe_div_enable ? ~div_complete : 1'b0;
 
 alu u_alu(
     .alu_op     (exe_alu_op    ),
-    .alu_src1   (exe_alu_src1  ),  //？？？！bug3 es_alu_src2
+    .alu_src1   (exe_alu_src1  ),
     .alu_src2   (exe_alu_src2  ),
     .alu_result (exe_alu_result)
     );

@@ -15,18 +15,12 @@ module wb_stage (
     output wire [`WB_TO_ID_WD] wb_to_id_bus,
 
     //exception
-    output        excp_flush                       ,
-    output        ertn_flush                       ,
-    output        refetch_flush                    ,
-    // output        icacop_flush                     ,
-    output [31:0] csr_era                          ,
-    output [ 8:0] csr_esubcode                     ,
-    output [ 5:0] csr_ecode                        ,
-    output        csr_wr_en                        ,
-    output [13:0] wr_csr_addr                      ,
-    output [31:0] wr_csr_data                      ,
-    output        va_error                         ,
-    output [31:0] bad_va                           ,
+    output wire       excp_flush                       ,
+    output wire       ertn_flush                       ,
+    output wire       refetch_flush                    ,
+    // output wire       icacop_flush                     ,
+
+    output wire [`WB_TO_CSR_WD]    wb_to_csr_bus,
 
     //debug trace
     output wire [31:0] debug_wb_pc,
@@ -81,6 +75,27 @@ wire real_valid;
 wire         rf_we   ;
 wire  [4:0 ] rf_waddr;
 wire  [31:0] rf_wdata;
+
+//wb-csr
+    wire [31:0] csr_era                          ;
+    wire [ 8:0] csr_esubcode                     ;
+    wire [ 5:0] csr_ecode                        ;
+    wire        csr_wr_en                        ;
+    wire [13:0] wr_csr_addr                      ;
+    wire [31:0] wr_csr_data                      ;
+    wire        va_error                         ;
+    wire [31:0] bad_va                           ;
+
+assign wb_to_csr_bus = {
+  csr_era     , //32
+  csr_esubcode, //9
+  csr_ecode   , //6
+  csr_wr_en   , //1
+  wr_csr_addr , //14
+  wr_csr_data , //32
+  va_error    , //1
+  bad_va        // 32
+};
 
 //======================================================
 //=================== Main Code ====================

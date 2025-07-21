@@ -14,32 +14,23 @@ module if_stage (
     input wire [`ID_TO_IF_WD] id_to_if_bus,
 
     //对接insRAM接口
-    output wire                       inst_sram_en,
-    output wire [`InstWriteEnable_WD] inst_sram_we,
-    output wire [`InstAddrBus       ] inst_sram_addr,
-    output wire [`InstBus           ] inst_sram_wdata,
-    input  wire [`InstBus           ] inst_sram_rdata,
+    // output wire                       inst_sram_en,
+    // output wire [`InstWriteEnable_WD] inst_sram_we,
+    // output wire [`InstAddrBus       ] inst_sram_addr,
+    // output wire [`InstBus           ] inst_sram_wdata,
+    // input  wire [`InstBus           ] inst_sram_rdata,
+      output        inst_sram_req,
+      output        inst_sram_wr,
+      output [ 3:0] inst_sram_wstrb,
+      output [ 1:0] inst_sram_size,
+      output [31:0] inst_sram_addr,
+      output [31:0] inst_sram_wdata,
+      input  [31:0] inst_sram_rdata,
+      input         inst_sram_addr_ok,
+      input         inst_sram_data_ok,
 
-    //例外
-    input                          excp_flush       ,
-    input                          ertn_flush       ,
-    input                          refetch_flush    ,
-    // input                          icacop_flush     ,
-    input  [31:0]                  wb_pc            , //wb来的pc状态(wb_csr_era) 用来刷新流水线后接着之前的pc
-    input  [31:0]                  csr_eentry       , //csr来的例外后的pc
-    input  [31:0]                  csr_era          , //if来的pc状态
-    // input                          excp_tlbrefill   ,
-    // input  [31:0]                  csr_tlbrentry    ,
-    input                          has_int          ,
-
-    //from csr
-    // input                          csr_pg            ,
-    // input                          csr_da            ,
-    // input  [31:0]                  csr_dmw0          ,
-    // input  [31:0]                  csr_dmw1          ,
-    input  [ 1:0]                  csr_plv           //,
-    // input  [ 1:0]                  csr_datf          ,
-    // input                          disable_cache     
+    //例外（实际上是wb来的）
+       input wire [`CSR_TO_IF_WD] csr_to_if_bus
 
 );
 
@@ -113,6 +104,49 @@ assign if_to_id_bus = {
                        if_pc            //31:0
                       };
 
+//csr-if
+    wire                          excp_flush       ;
+    wire                          ertn_flush       ;
+    wire                          refetch_flush    ;
+    // wire                          icacop_flush     ;
+    wire  [31:0]                  wb_pc            ; //wb来的pc状态(wb_csr_era) 用来刷新流水线后接着之前的pc
+    wire  [31:0]                  csr_eentry       ; //csr来的例外后的pc（例外入口）
+    wire  [31:0]                  csr_era          ; //被刷新前的if来的pc状态（刷新入口）
+    // wire                          excp_tlbrefill   ;
+    // wire  [31:0]                  csr_tlbrentry    ;
+    // wire                          has_int          ;
+
+    //from csr
+    // wire                          csr_pg            ;
+    // wire                          csr_da            ;
+    // wire  [31:0]                  csr_dmw0          ;
+    // wire  [31:0]                  csr_dmw1          ;
+    // wire  [ 1:0]                  csr_plv           ;
+    // wire  [ 1:0]                  csr_datf          ;
+    // wire                          disable_cache     ;
+
+assign {
+    excp_flush       ,
+    ertn_flush       ,
+    refetch_flush    ,
+    // icacop_flush     ,
+    wb_pc            , //wb来的pc状态(wb_csr_era) 用来刷新流水线后接着之前的pc
+    csr_eentry       , //csr来的例外后的pc（例外入口） 32
+    csr_era          //, //被刷新前的if来的pc状态（刷新入口） 32
+    // excp_tlbrefill   ,
+    // csr_tlbrentry    , //32
+    // has_int          ,
+
+    // csr_pg            ,
+    // csr_da            ,
+    // csr_dmw0          , //32
+    // csr_dmw1          , //32
+    // csr_plv           , //2
+    //csr_datf          , //2
+    //disable_cache     
+
+}=csr_to_if_bus;
+
 //======================================================
 //=================== Main Code ====================
 //======================================================
@@ -171,9 +205,16 @@ end
 
 //不 写 inst_sram i.e.只是读
   //赋值instRAM接口
-  assign inst_sram_en    = preIf_to_if_valid & (if_allowin|flush_sign); //相当于instram_valid
-  assign inst_sram_we   = 4'h0;
-  assign inst_sram_addr  = nextpc;
+  // assign inst_sram_en    = preIf_to_if_valid & (if_allowin|flush_sign); //相当于instram_valid
+  // assign inst_sram_we   = 4'h0;
+  // assign inst_sram_addr  = nextpc;
+  // assign inst_sram_wdata = 32'b0;
+
+  assign inst_sram_req   = if_allowin & preIf_to_if_valid & (if_allowin|flush_sign); //仅当if_allowin为1时才能发出req是较简单但时序较差的解决方案
+  assign inst_sram_wr = 1'b0;
+  assign inst_sram_wstrb = 4'h0;
+  assign inst_sram_size = 2'b10;
+  assign inst_sram_addr = nextpc;
   assign inst_sram_wdata = 32'b0;
 
   assign if_inst         = inst_sram_rdata;

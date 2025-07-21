@@ -23,22 +23,14 @@ module id_stage (
     input wire [`MEM_TO_ID_WD] mem_to_id_bus,
     //wb-rf
     input wire [`WB_TO_ID_WD]  wb_to_rf_bus,
+    //wb-id
+    input wire                  flush_sign,
+    
+    //csr-id
+    input wire [`CSR_TO_ID_WD] csr_to_id_bus,
 
-    //exception
-  //！这一串貌似只用到一次，考虑只传递一个结果
-    input                      excp_flush    ,
-    input                      ertn_flush    ,
-    input                      refetch_flush ,
-    //interrupt
-    input                      has_int       ,//是否 有外部中断请求
-    //csr
-    output [13:0]              rd_csr_addr   ,//读csr地址
-    input  [31:0]              rd_csr_data   ,//读csr数据
-    input  [ 1:0]              csr_plv       ,//确保特权指令（如 CSR 操作）仅在合法特权级别下执行，防止低特权级代码越权访问系统资源
-    //timer 64
-    input  [63:0]              timer_64      ,
-    input  [31:0]              csr_tid       
-
+    //id-csr
+    output wire [`ID_TO_CSR_WD] id_to_csr_bus
 
 );
 
@@ -286,7 +278,7 @@ wire        excp_ine; //是否 为非法指令异常
 wire        excp_ipe; //是否 为特权级错误异常
 wire [31:0] csr_data;
 // wire        refetch; //是否 重新取指
-wire        flush_sign; //是否 刷新指令流水线
+// wire        flush_sign; //是否 刷新指令流水线
 
 // wire        if_excp; //是否 if有异常(没用上)
 
@@ -296,6 +288,40 @@ wire [31:0] rdcnt_result; //当前硬件计数器的值
 wire        rdcnt_en; //硬件计数器读使能
 
 // wire        tlb_inst_stall;
+
+
+
+//exception
+//csr-id
+  //！这一串貌似只用到一次，考虑只传递一个结果
+    wire                      excp_flush    ;
+    wire                      ertn_flush    ;
+    wire                      refetch_flush ;
+    //interrupt
+    wire                      has_int       ;//是否 有外部中断请求
+    //csr
+    wire  [31:0]              rd_csr_data   ;//读csr数据
+    wire  [ 1:0]              csr_plv       ;//确保特权指令（如 CSR 操作）仅在合法特权级别下执行，防止低特权级代码越权访问系统资源
+    //timer 64
+    wire  [63:0]              timer_64      ;
+    wire  [31:0]              csr_tid       ;
+
+//id-csr
+    wire  [13:0]              rd_csr_addr   ;//读csr地址
+
+assign {
+    timer_64, //64
+    csr_tid, //32
+
+    rd_csr_data, //32
+    csr_plv, //2
+    has_int //8
+
+} = csr_to_id_bus;
+
+assign {
+    rd_csr_addr
+} = id_to_csr_bus;
 
 //======================================================
 //=================== Main Code ====================
