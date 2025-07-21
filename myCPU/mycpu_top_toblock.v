@@ -570,8 +570,8 @@ assign {
 
   //axi
   axi_bridge u_axi_bridge (
-      .clk              (clk_1),
-      .aresetn          (resetn_1),
+      .clk              (aclk),
+      .aresetn          (aresetn),
       .arid             (arid),
       .araddr           (araddr),
       .arlen            (arlen),
