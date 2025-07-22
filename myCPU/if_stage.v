@@ -107,6 +107,10 @@ assign {br_taken_r,br_target_r} = br_bus_r;
   //组合传递给id_reg的数据
   wire [`InstBus] if_inst;
   reg  [`InstAddrBus] if_pc;
+
+reg  [31:0] if_inst_r;  //IF阶段指令寄存器
+reg         if_inst_valid;
+
 assign if_to_id_bus = {
                        excp,            //68:68
                        excp_num,        //67:64
@@ -243,7 +247,26 @@ end
   assign inst_sram_addr = nextpc;
   assign inst_sram_wdata = 32'b0;
 
-  assign if_inst         = inst_sram_rdata;
+  // assign if_inst         = inst_sram_rdata;
+
+//指令缓存应对 if_ready_go=1，id allowin=0
+always @(posedge clk) begin
+    if (~resetn) begin
+        if_inst_r <= 32'h0;
+        if_inst_valid <= 1'b0;
+    end
+    else if (inst_sram_data_ok) begin
+        if_inst_r <= inst_sram_rdata;
+        if_inst_valid <= 1'b1;
+    end
+    else if (id_allowin) begin
+        if_inst_valid <= 1'b0;
+    end
+end    
+
+assign if_inst        = inst_sram_data_ok ? inst_sram_rdata : 
+                        if_inst_valid     ? if_inst_r       : 
+                        32'b0 ;
 
 //exception
 assign preif_excp_adef = (nextpc[0] || nextpc[1]); //word align 4 字节对齐时末两位都应该是0
