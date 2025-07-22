@@ -214,7 +214,7 @@ wire [`InstAddrBus] br_target;
   // reg         branch_slot_cancel;
 wire br_really_taken;
 wire        br_inst;
-reg         br_jirl;
+// reg         br_jirl;
 wire        br_need_reg_data; //是分支指令且此分支指令需要寄存器中的数据
 
 wire        inst_need_rj;
@@ -346,6 +346,8 @@ assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
   always @(posedge clk) begin
     if (~resetn) begin
         id_data <= `ID_DATA_Reset;
+//西工大的写法是只有 id_allowin，居然不用保证有东西吗...?
+//还是觉得该保证valid...虽然这样得损失握手的周期，但是握手的周期本来就是要浪费的吧
     end else if (id_allowin & if_to_id_valid) begin
         id_data <= if_to_id_bus;
     end
@@ -874,7 +876,7 @@ assign rd_csr_addr = csr_idx;
 
 // assign tlb_inst_stall = es_tlb_inst_stall || ms_tlb_inst_stall || ws_tlb_inst_stall;
 
-assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
+// assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
 
 // assign if_excp = if_to_id_bus[68]; //if阶段异常的判断信号不能用id_data,因为id_data本身可能会因为异常无法获得数据（但此处没有需求在id知道if有没有异常
 

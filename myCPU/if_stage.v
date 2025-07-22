@@ -93,6 +93,16 @@ wire  [31:0] inst_flush_pc;
   // assign {br_taken, br_target, br_taken_cancel} = id_to_if_bus;
   assign {br_really_taken, br_target} = id_to_if_bus;
 
+//跳转总线寄存器(防止因branch指令离开id阶段而导致br_bus数据丢失)
+reg  [33:0]  br_bus_r;  
+reg          br_bus_r_valid;
+wire         br_taken_r;
+wire [31:0]  br_target_r;
+wire         br_stall_r;   
+
+assign {br_taken_r,br_target_r} = br_bus_r;
+
+
 //if-id
   //组合传递给id_reg的数据
   wire [`InstBus] if_inst;
@@ -152,7 +162,7 @@ assign {
 //======================================================
 // preIF
 assign preIf_to_if_valid = resetn & preif_ready_go;
-assign preif_ready_go = (inst_valid || preif_excp) && inst_addr_ok;
+assign preif_ready_go = (inst_sram_req & inst_sram_addr_ok) || preif_excp;
 assign seq_pc            = if_pc + 32'h4;
 //例外后的pc
 assign excp_entry   = /*{32{excp_tlbrefill}}  & csr_tlbrentry |*/
@@ -169,11 +179,12 @@ assign nextpc =
                 excp_flush                                                      ? excp_entry                :
                 (ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/)     ? inst_flush_pc             :
                 br_really_taken                                                 ? br_target                 :
+                br_taken_r && br_bus_r_valid   ? br_target_r     : 
                                                                                   seq_pc                    ;
 
 //if
 //当前stage控制信号
-assign if_ready_go       = `StageReadygo; //由于目前只从指令 RAM 中取回指令,因此当指令位于取指阶段的  时候,指令 RAM 一定可以返回指令码,于是取指阶段的 ready_go 信号恒为 1
+assign if_ready_go       = inst_sram_data_ok | excp;
 assign if_allowin        = ~if_valid | if_ready_go & id_allowin; //if级没有在处理指令 或 if不需要被阻塞且id允许if进入
 assign if_to_id_valid    = if_valid & if_ready_go;
 
@@ -186,7 +197,8 @@ always @(posedge clk) begin
     //id被阻塞时 即使br_taken有效，if_valid也不行
     // end else if (br_taken_cancel) begin  //if_valid & (~id_allowin | ~if_ready_go)
     // end else if(if_valid & (~id_allowin | ~if_ready_go)) begin
-    end else if(br_really_taken) begin 
+//！分支成立的情况时的条件变多
+    end else if(br_really_taken ||(br_taken_r && br_bus_r_valid)) begin 
       if_valid <= `StageInvalid;
     end
 end
@@ -203,6 +215,20 @@ always @(posedge clk) begin
     end
 end
 
+always @(posedge clk) begin
+    if (~resetn) begin
+        br_bus_r_valid <=  1'b0;
+        br_bus_r       <= 34'b0;
+    end
+    else if(preif_ready_go && if_allowin) begin
+        br_bus_r_valid <= 1'b0;
+    end
+    else if (br_really_taken) begin
+        br_bus_r_valid <= 1'b1;
+        br_bus_r <= id_to_if_bus;
+    end
+end
+
 //不 写 inst_sram i.e.只是读
   //赋值instRAM接口
   // assign inst_sram_en    = preIf_to_if_valid & (if_allowin|flush_sign); //相当于instram_valid
@@ -210,7 +236,7 @@ end
   // assign inst_sram_addr  = nextpc;
   // assign inst_sram_wdata = 32'b0;
 
-  assign inst_sram_req   = if_allowin & preIf_to_if_valid & (if_allowin|flush_sign); //仅当if_allowin为1时才能发出req是较简单但时序较差的解决方案
+  assign inst_sram_req   = /*& preIf_to_if_valid & */(if_allowin && !preif_excp )|| flush_sign; //仅当if_allowin为1时才能发出req是较简单但时序较差的解决方案
   assign inst_sram_wr = 1'b0;
   assign inst_sram_wstrb = 4'h0;
   assign inst_sram_size = 2'b10;
@@ -271,7 +297,7 @@ assign flush_sign = ertn_flush || excp_flush || refetch_flush /*|| icacop_flush 
 // end
 
 //when flush_sign meet icache_busy 1, flush_sign's inst valid should not set immediately
-assign inst_valid = (if_allowin && !preif_excp /*&& !tlb_excp_lock_pc*/ || flush_sign /*|| btb_pre_error_flush*/)/* && !(idle_flush || idle_lock)*/;
+// assign inst_valid = (if_allowin && !preif_excp /*&& !tlb_excp_lock_pc*/ || flush_sign /*|| btb_pre_error_flush*/)/* && !(idle_flush || idle_lock)*/;
 // assign inst_op     = 1'b0;
 // assign inst_wstrb  = 4'h0;
 // assign inst_addr   = nextpc; //nextpc
