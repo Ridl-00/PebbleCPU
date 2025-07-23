@@ -188,7 +188,7 @@ assign nextpc =
 
 //if
 //当前stage控制信号
-assign if_ready_go       = inst_sram_data_ok | excp;
+assign if_ready_go       = inst_sram_data_ok | if_inst_valid | excp; //握手当拍或者有存下来的inst_r
 assign if_allowin        = ~if_valid | if_ready_go & id_allowin; //if级没有在处理指令 或 if不需要被阻塞且id允许if进入
 assign if_to_id_valid    = if_valid & if_ready_go & !(br_really_taken ||(br_taken_r && br_bus_r_valid));
 
@@ -204,6 +204,7 @@ always @(posedge clk) begin
     //id被阻塞时 即使br_taken有效，if_valid也不行
     // end else if (br_taken_cancel) begin  //if_valid & (~id_allowin | ~if_ready_go)
     // end else if(if_valid & (~id_allowin | ~if_ready_go)) begin
+    //     if_valid<=`StageInvalid;
     end
 end
 
@@ -247,26 +248,27 @@ end
   assign inst_sram_addr = nextpc;
   assign inst_sram_wdata = 32'b0;
 
-  assign if_inst         = inst_sram_rdata;
+//   assign if_inst         = inst_sram_rdata;
 
-//指令缓存应对 if_ready_go=1，id allowin=0
-// always @(posedge clk) begin
-//     if (~resetn) begin
-//         if_inst_r <= 32'h0;
-//         if_inst_valid <= 1'b0;
-//     end
-//     else if (inst_sram_data_ok) begin
-//         if_inst_r <= inst_sram_rdata;
-//         if_inst_valid <= 1'b1;
-//     end
-//     else if (if_allowin) begin
-//         if_inst_valid <= 1'b0;
-//     end
-// end    
+// 指令缓存应对 if_ready_go=1，id allowin=0（遇到乘除法时）（如果不是乘除，不用寄存器也是来得及 具体原因不详
+always @(posedge clk) begin
+    if (~resetn) begin
+        if_inst_r <= 32'h0;
+        if_inst_valid <= 1'b0;
+    end
+    else if (preIf_to_if_valid & (if_allowin|flush_sign)) begin
+        if_inst_valid <= 1'b0;
+    end
+    else if (inst_sram_data_ok) begin
+        if_inst_r <= inst_sram_rdata;
+        if_inst_valid <= 1'b1;
+    end
 
-// assign if_inst        = inst_sram_data_ok ? inst_sram_rdata : 
-//                         if_inst_valid     ? if_inst_r       : 
-//                         32'b0 ;
+end    
+
+assign if_inst        = inst_sram_data_ok ? inst_sram_rdata : 
+                        if_inst_valid     ? if_inst_r       : 
+                        32'b0 ;
 
 //exception
 assign preif_excp_adef = (nextpc[0] || nextpc[1]); //word align 4 字节对齐时末两位都应该是0
