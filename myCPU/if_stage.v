@@ -190,20 +190,20 @@ assign nextpc =
 //当前stage控制信号
 assign if_ready_go       = inst_sram_data_ok | excp;
 assign if_allowin        = ~if_valid | if_ready_go & id_allowin; //if级没有在处理指令 或 if不需要被阻塞且id允许if进入
-assign if_to_id_valid    = if_valid & if_ready_go;
+assign if_to_id_valid    = if_valid & if_ready_go & !(br_really_taken ||(br_taken_r && br_bus_r_valid));
 
 always @(posedge clk) begin
 //！把括号内的改为判断式会不会增加逻辑层次 路径变长？
     if (resetn==`RstEnable) begin //if不需要被冲刷，因为本身就是第一级，直接取被刷后的pc正常用就行
       if_valid <= `StageInvalid;
+//！分支成立的情况时的条件变多
+    // end else if(br_really_taken ||(br_taken_r && br_bus_r_valid)) begin 
+    //   if_valid <= `StageInvalid;
     end else if (if_allowin) begin
       if_valid <= preIf_to_if_valid;
     //id被阻塞时 即使br_taken有效，if_valid也不行
     // end else if (br_taken_cancel) begin  //if_valid & (~id_allowin | ~if_ready_go)
     // end else if(if_valid & (~id_allowin | ~if_ready_go)) begin
-//！分支成立的情况时的条件变多
-    end else if(br_really_taken ||(br_taken_r && br_bus_r_valid)) begin 
-      if_valid <= `StageInvalid;
     end
 end
 
@@ -247,26 +247,26 @@ end
   assign inst_sram_addr = nextpc;
   assign inst_sram_wdata = 32'b0;
 
-  // assign if_inst         = inst_sram_rdata;
+  assign if_inst         = inst_sram_rdata;
 
 //指令缓存应对 if_ready_go=1，id allowin=0
-always @(posedge clk) begin
-    if (~resetn) begin
-        if_inst_r <= 32'h0;
-        if_inst_valid <= 1'b0;
-    end
-    else if (inst_sram_data_ok) begin
-        if_inst_r <= inst_sram_rdata;
-        if_inst_valid <= 1'b1;
-    end
-    else if (id_allowin) begin
-        if_inst_valid <= 1'b0;
-    end
-end    
+// always @(posedge clk) begin
+//     if (~resetn) begin
+//         if_inst_r <= 32'h0;
+//         if_inst_valid <= 1'b0;
+//     end
+//     else if (inst_sram_data_ok) begin
+//         if_inst_r <= inst_sram_rdata;
+//         if_inst_valid <= 1'b1;
+//     end
+//     else if (if_allowin) begin
+//         if_inst_valid <= 1'b0;
+//     end
+// end    
 
-assign if_inst        = inst_sram_data_ok ? inst_sram_rdata : 
-                        if_inst_valid     ? if_inst_r       : 
-                        32'b0 ;
+// assign if_inst        = inst_sram_data_ok ? inst_sram_rdata : 
+//                         if_inst_valid     ? if_inst_r       : 
+//                         32'b0 ;
 
 //exception
 assign preif_excp_adef = (nextpc[0] || nextpc[1]); //word align 4 字节对齐时末两位都应该是0
