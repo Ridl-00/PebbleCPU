@@ -319,9 +319,9 @@ assign {
 
 } = csr_to_id_bus;
 
-assign {
+assign id_to_csr_bus = {
     rd_csr_addr
-} = id_to_csr_bus;
+};
 
 //======================================================
 //=================== Main Code ====================

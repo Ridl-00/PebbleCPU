@@ -139,6 +139,20 @@ assign if_to_id_bus = {
     // wire  [ 1:0]                  csr_datf          ;
     // wire                          disable_cache     ;
 
+    reg                          excp_flush_r       ;
+    reg                          ertn_flush_r       ;
+    reg                          refetch_flush_r    ;
+
+
+reg  [33:0]  br_bus_r;  
+reg          br_bus_r_valid;
+wire         br_taken_r;
+wire [31:0]  br_target_r;
+wire         br_stall_r;   
+
+assign {br_taken_r,br_target_r} = br_bus_r;
+
+
 assign {
     excp_flush       ,
     ertn_flush       ,
@@ -180,17 +194,17 @@ assign inst_flush_pc = {32{ertn_flush}}                                  & csr_e
 
 assign nextpc = 
                 // (flush_inst_req_state == flush_inst_req_full)                   ? flush_inst_req_buffer     :
-                excp_flush                                                      ? excp_entry                :
+                excp_flush  || excp_flush_r                                                     ? excp_entry                :
                 (ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/)     ? inst_flush_pc             :
-                br_really_taken                                                 ? br_target                 :
-                br_taken_r && br_bus_r_valid   ? br_target_r     : 
+                br_really_taken                                                 ? br_target       :
+                br_taken_r && br_bus_r_valid                                    ? br_target_r     : 
                                                                                   seq_pc                    ;
 
 //if
 //当前stage控制信号
 assign if_ready_go       = inst_sram_data_ok | if_inst_valid | excp; //握手当拍或者有存下来的inst_r
 assign if_allowin        = ~if_valid | if_ready_go & id_allowin; //if级没有在处理指令 或 if不需要被阻塞且id允许if进入
-assign if_to_id_valid    = if_valid & if_ready_go & !(br_really_taken ||(br_taken_r && br_bus_r_valid));
+assign if_to_id_valid    = if_valid & if_ready_go & !(br_really_taken ||(br_taken_r && br_bus_r_valid)||flush_sign);
 
 always @(posedge clk) begin
 //！把括号内的改为判断式会不会增加逻辑层次 路径变长？
@@ -220,6 +234,7 @@ always @(posedge clk) begin
     end
 end
 
+//br从id来，当拍可能就要，所以用 逻辑和时序两个共同判分支
 always @(posedge clk) begin
     if (~resetn) begin
         br_bus_r_valid <=  1'b0;
@@ -234,6 +249,44 @@ always @(posedge clk) begin
     end
 end
 
+//例外和中断从wb来 不对当前指令生效，只影响下一拍pc，所以只用时序判
+//excp_flush_r信号生成
+always @(posedge clk) begin
+    if (~resetn) begin
+        excp_flush_r <= 1'b0;
+    end
+    else if (excp_flush && !if_allowin) begin   //当excp_flush为1且这个excp不是本条指令最后一拍（即刚好能用逻辑excp_flush）的情况下不需要用_r存下来（因为会存到下一CPU周期去，导致进入两次excp），其余情况需要
+        excp_flush_r <= 1'b1;
+    end
+    else if (preif_ready_go && if_allowin) begin
+        excp_flush_r <= 1'b0;
+    end
+end  
+//ertn_flush_r信号生成
+always @(posedge clk) begin
+    if (~resetn) begin
+        ertn_flush_r <= 1'b0;
+    end
+    else if (ertn_flush) begin
+        ertn_flush_r <= 1'b1;
+    end
+    else if (preif_ready_go && if_allowin) begin
+        ertn_flush_r <= 1'b0;
+    end
+end  
+
+//refetch_flush_r信号生成
+always @(posedge clk) begin
+    if (~resetn) begin
+        refetch_flush_r <= 1'b0;
+    end
+    else if (refetch_flush) begin
+        refetch_flush_r <= 1'b1;
+    end
+    else if (preif_ready_go && if_allowin) begin
+        refetch_flush_r <= 1'b0;
+    end
+end 
 //不 写 inst_sram i.e.只是读
   //赋值instRAM接口
   // assign inst_sram_en    = preIf_to_if_valid & (if_allowin|flush_sign); //相当于instram_valid
@@ -241,7 +294,7 @@ end
   // assign inst_sram_addr  = nextpc;
   // assign inst_sram_wdata = 32'b0;
 
-  assign inst_sram_req   = /*& preIf_to_if_valid & */(if_allowin && !preif_excp )|| flush_sign; //仅当if_allowin为1时才能发出req是较简单但时序较差的解决方案
+  assign inst_sram_req   = /*& preIf_to_if_valid & */(if_allowin && !preif_excp )/*|| flush_sign*/; //仅当if_allowin为1时才能发出req是较简单但时序较差的解决方案
   assign inst_sram_wr = 1'b0;
   assign inst_sram_wstrb = 4'h0;
   assign inst_sram_size = 2'b10;
@@ -294,7 +347,7 @@ assign inst_addr_ok = 1'b1;
 
 
 //csr
-assign flush_sign = ertn_flush || excp_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
+assign flush_sign = ertn_flush || excp_flush || excp_flush_r || refetch_flush /*|| icacop_flush || idle_flush*/;
 
 // assign flush_inst_delay = flush_sign && !inst_addr_ok/* || idle_flush*/;
 

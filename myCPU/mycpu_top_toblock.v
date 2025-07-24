@@ -344,7 +344,7 @@ wire [ 1:0]                   csr_plv_out      ;
         .wr_addr            (csr_wr_addr      ),
         .wr_data            (csr_wr_data      ),
         
-        .interrupt          (interrupt    ),
+        .interrupt          (   8'b0 /*interrupt*/    ),
         .has_int            (csr_has_int      ),
         
         .excp_flush         (excp_flush       ),
@@ -448,9 +448,9 @@ assign csr_to_id_bus = {
     csr_has_int
 };
 
-assign id_to_csr_bus = {
+assign {
     csr_rd_addr
-};
+} = id_to_csr_bus;
 
 
   id_stage u_id_stage(
