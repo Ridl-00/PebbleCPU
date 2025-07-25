@@ -142,7 +142,7 @@ wire        forward_enable;
 //不需要访存，或要访存且访存完成，或有异常（此级及之前的 级有异常，那么这条指令无效，自然没必要等访存）
   assign mem_ready_go = /*(data_data_ok || data_buff_enable) || */ (!access_mem) || (access_mem & data_sram_data_ok)|| excp/*|| sc_cancel_req*/;
   assign mem_allowin = ~mem_valid | mem_ready_go & wb_allowin;
-  assign mem_to_wb_valid = mem_ready_go & mem_valid;
+  assign mem_to_wb_valid = mem_ready_go & mem_valid & !(flush_sign);
 
 assign mem_to_id_valid = mem_valid;
 

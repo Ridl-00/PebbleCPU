@@ -189,13 +189,13 @@ assign excp_entry   = /*{32{excp_tlbrefill}}  & csr_tlbrentry |*/
 
 
 //刷新后的pc
-assign inst_flush_pc = {32{ertn_flush}}                                  & csr_era         |
-                       {32{refetch_flush /*|| icacop_flush || idle_flush*/}} & (wb_pc + 32'h4) ;
+assign inst_flush_pc = {32{ertn_flush || ertn_flush_r}}                                  & csr_era         |
+                       {32{refetch_flush || refetch_flush_r /*|| icacop_flush || idle_flush*/}} & (wb_pc + 32'h4) ;
 
 assign nextpc = 
                 // (flush_inst_req_state == flush_inst_req_full)                   ? flush_inst_req_buffer     :
                 excp_flush  || excp_flush_r                                                     ? excp_entry                :
-                (ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/)     ? inst_flush_pc             :
+                (ertn_flush || ertn_flush_r || refetch_flush || refetch_flush_r /*|| icacop_flush || idle_flush*/)     ? inst_flush_pc             :
                 br_really_taken                                                 ? br_target       :
                 br_taken_r && br_bus_r_valid                                    ? br_target_r     : 
                                                                                   seq_pc                    ;
@@ -267,7 +267,7 @@ always @(posedge clk) begin
     if (~resetn) begin
         ertn_flush_r <= 1'b0;
     end
-    else if (ertn_flush) begin
+    else if (ertn_flush && !if_allowin) begin
         ertn_flush_r <= 1'b1;
     end
     else if (preif_ready_go && if_allowin) begin
@@ -280,7 +280,7 @@ always @(posedge clk) begin
     if (~resetn) begin
         refetch_flush_r <= 1'b0;
     end
-    else if (refetch_flush) begin
+    else if (refetch_flush && !if_allowin) begin
         refetch_flush_r <= 1'b1;
     end
     else if (preif_ready_go && if_allowin) begin
@@ -347,7 +347,7 @@ assign inst_addr_ok = 1'b1;
 
 
 //csr
-assign flush_sign = ertn_flush || excp_flush || excp_flush_r || refetch_flush /*|| icacop_flush || idle_flush*/;
+assign flush_sign = ertn_flush || ertn_flush_r || excp_flush || excp_flush_r || refetch_flush || refetch_flush_r /*|| icacop_flush || idle_flush*/;
 
 // assign flush_inst_delay = flush_sign && !inst_addr_ok/* || idle_flush*/;
 

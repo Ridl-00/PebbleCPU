@@ -328,7 +328,7 @@ assign id_to_csr_bus = {
 //======================================================
 //当前stage控制信号
   assign id_allowin = ~id_valid | id_ready_go & exe_allowin;
-  assign id_to_exe_valid = id_valid & id_ready_go;
+  assign id_to_exe_valid = id_valid & id_ready_go & !(flush_sign);
 // assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall/*|| idle_stall || tlb_inst_stall || ibar_stall || dbar_stall*/) || excp;
 assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
 

@@ -154,7 +154,7 @@ wire div_complete;
 //=================== Main Code ====================
 //======================================================
   assign exe_allowin = ~exe_valid | exe_ready_go & mem_allowin;
-  assign exe_to_mem_valid = exe_valid & exe_ready_go;
+  assign exe_to_mem_valid = exe_valid & exe_ready_go & !(exe_flush_sign);
 // assign exe_ready_go    = (!div_stall & (/*(dcache_req_or_inst_en && data_addr_ok) ||*/ !(access_mem /*|| dcacop_inst || preld_inst*/)) /*&& !tlbsrch_stall && !icacop_inst_stall*/)/* || excp*/;
 //没在暂停且握手成功
 assign exe_ready_go = (!div_stall && (~(access_mem)||(data_sram_req & data_sram_addr_ok)))|| excp; //有异常时需要立即处理异常（忽略所有原有流水逻辑）
