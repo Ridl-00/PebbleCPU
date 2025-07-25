@@ -1,0 +1,88 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"1.12982",
+   "Default View_TopLeft":"948,636",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.5.8 2022-09-21 7111 VDI=41 GEI=38 GUI=JA:10.0
+#  -string -flagsOSRD
+preplace port port-id_data_sram_en -pg 1 -lvl 5 -x 2650 -y 230 -defaultsOSRD
+preplace port port-id_inst_sram_en -pg 1 -lvl 5 -x 2650 -y 510 -defaultsOSRD
+preplace port port-id_clk -pg 1 -lvl 0 -x -70 -y 320 -defaultsOSRD
+preplace port port-id_resetn -pg 1 -lvl 0 -x -70 -y 340 -defaultsOSRD
+preplace portBus data_sram_rdata -pg 1 -lvl 0 -x -70 -y 490 -defaultsOSRD
+preplace portBus inst_sram_addr -pg 1 -lvl 5 -x 2650 -y 550 -defaultsOSRD
+preplace portBus inst_sram_wdata -pg 1 -lvl 5 -x 2650 -y 570 -defaultsOSRD
+preplace portBus inst_sram_rdata -pg 1 -lvl 0 -x -70 -y 1040 -defaultsOSRD
+preplace portBus data_sram_addr -pg 1 -lvl 5 -x 2650 -y 270 -defaultsOSRD
+preplace portBus data_sram_wdata -pg 1 -lvl 5 -x 2650 -y 290 -defaultsOSRD
+preplace portBus debug_wb_pc -pg 1 -lvl 5 -x 2650 -y 700 -defaultsOSRD
+preplace portBus debug_wb_rf_we -pg 1 -lvl 5 -x 2650 -y 660 -defaultsOSRD
+preplace portBus debug_wb_rf_wnum -pg 1 -lvl 5 -x 2650 -y 680 -defaultsOSRD
+preplace portBus debug_wb_rf_wdata -pg 1 -lvl 5 -x 2650 -y 720 -defaultsOSRD
+preplace portBus inst_sram_we -pg 1 -lvl 5 -x 2650 -y 530 -defaultsOSRD
+preplace portBus data_sram_we -pg 1 -lvl 5 -x 2650 -y 250 -defaultsOSRD
+preplace inst if_stage_0 -pg 1 -lvl 1 -x 590 -y 820 -defaultsOSRD
+preplace inst id_stage_0 -pg 1 -lvl 3 -x 1770 -y 400 -defaultsOSRD
+preplace inst exe_stage_0 -pg 1 -lvl 4 -x 2340 -y 330 -defaultsOSRD
+preplace inst mem_stage_0 -pg 1 -lvl 4 -x 2340 -y -110 -defaultsOSRD
+preplace inst wb_stage_0 -pg 1 -lvl 1 -x 590 -y 440 -defaultsOSRD
+preplace inst csr_0 -pg 1 -lvl 2 -x 1180 -y 920 -defaultsOSRD
+preplace netloc Net 1 0 4 380 1000 910 400 1550 130 2080
+preplace netloc Net1 1 0 4 360 1010 900 410 1530 150 2090
+preplace netloc clk_1 1 0 4 300 210 1000 210 1560 160 2060
+preplace netloc csr_0_eentry_out 1 0 3 350 160 N 160 1350
+preplace netloc csr_0_era_out 1 0 3 330 140 N 140 1360
+preplace netloc csr_0_has_int 1 0 3 370 200 N 200 1370
+preplace netloc csr_0_plv_out 1 0 3 340 150 N 150 1380
+preplace netloc csr_0_rd_data 1 2 1 1390 490n
+preplace netloc csr_0_tid_out 1 2 1 1440 550n
+preplace netloc csr_0_timer_64_out 1 2 1 1400 530n
+preplace netloc data_sram_rdata_1 1 0 4 -50J 110 790 40 N 40 1950
+preplace netloc exe_stage_0_data_sram_addr 1 4 1 2620J 270n
+preplace netloc exe_stage_0_data_sram_en 1 4 1 2580J 230n
+preplace netloc exe_stage_0_data_sram_wdata 1 4 1 2630J 290n
+preplace netloc exe_stage_0_data_sram_we 1 4 1 2600J 250n
+preplace netloc exe_stage_0_exe_allowin 1 2 3 1580 120 NJ 120 2550
+preplace netloc exe_stage_0_exe_to_id_bus 1 2 3 1590 140 NJ 140 2560
+preplace netloc exe_stage_0_exe_to_mem_bus 1 3 2 2110J 150 2540
+preplace netloc exe_stage_0_exe_to_mem_valid 1 3 2 2140J 90 2570
+preplace netloc id_stage_0_id_allowin 1 0 4 380 170 N 170 N 170 1970
+preplace netloc id_stage_0_id_to_exe_bus 1 3 1 2120 310n
+preplace netloc id_stage_0_id_to_exe_valid 1 3 1 1980 290n
+preplace netloc id_stage_0_id_to_if_bus 1 0 4 360 190 N 190 N 190 1950
+preplace netloc id_stage_0_rd_csr_addr 1 1 3 1010 180 NJ 180 1960
+preplace netloc if_stage_0_if_to_id_bus 1 1 2 880 560 1430
+preplace netloc if_stage_0_if_to_id_valid 1 1 2 840 550 1410
+preplace netloc if_stage_0_inst_sram_addr 1 1 4 820 1270 1460 610 1950 550 NJ
+preplace netloc if_stage_0_inst_sram_en 1 1 4 820 60 N 60 N 60 2610J
+preplace netloc if_stage_0_inst_sram_wdata 1 1 4 790 1280 1480 620 2030 570 NJ
+preplace netloc if_stage_0_inst_sram_we 1 1 4 830 70 N 70 N 70 2590J
+preplace netloc inst_sram_rdata_1 1 0 1 -50J 780n
+preplace netloc mem_stage_0_mem_allowin 1 3 2 2140 130 2580
+preplace netloc mem_stage_0_mem_flush 1 3 2 2130 50 2540
+preplace netloc mem_stage_0_mem_to_id_bus 1 2 3 1570 110 N 110 2560
+preplace netloc mem_stage_0_mem_to_wb_bus 1 0 5 320 130 N 130 1350 80 N 80 2550
+preplace netloc mem_stage_0_mem_to_wb_valid 1 0 5 310 120 810 50 N 50 1960 40 2570
+preplace netloc resetn_1 1 0 4 290 180 990 220 1540 90 2070
+preplace netloc wb_stage_0_bad_va 1 1 1 850 520n
+preplace netloc wb_stage_0_csr_ecode 1 1 1 930 420n
+preplace netloc wb_stage_0_csr_era 1 0 2 320 1020 890
+preplace netloc wb_stage_0_csr_esubcode 1 1 1 860 400n
+preplace netloc wb_stage_0_csr_wr_en 1 1 1 960 440n
+preplace netloc wb_stage_0_debug_wb_pc 1 1 4 NJ 540 1420J 700 NJ 700 NJ
+preplace netloc wb_stage_0_debug_wb_rf_wdata 1 1 4 800J 1290 1500J 720 NJ 720 NJ
+preplace netloc wb_stage_0_debug_wb_rf_we 1 1 4 810J 1300 1490J 660 NJ 660 NJ
+preplace netloc wb_stage_0_debug_wb_rf_wnum 1 1 4 950J 570 1410J 680 NJ 680 NJ
+preplace netloc wb_stage_0_refetch_flush 1 0 4 390 220 790J 240 1520 100 2100
+preplace netloc wb_stage_0_va_error 1 1 1 870 500n
+preplace netloc wb_stage_0_wb_allowin 1 1 3 800 -110 N -110 N
+preplace netloc wb_stage_0_wb_to_id_bus 1 1 2 960 390 NJ
+preplace netloc wb_stage_0_wr_csr_addr 1 1 1 940 460n
+preplace netloc wb_stage_0_wr_csr_data 1 1 1 920 480n
+levelinfo -pg 1 -70 590 1180 1770 2340 2650
+pagesize -pg 1 -db -bbox -sgen -270 -250 2870 1320
+"
+}
+{
+   "da_clkrst_cnt":"12"
+}

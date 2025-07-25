@@ -1,0 +1,355 @@
+#-----------------------------------------------------------
+# Vivado v2023.2 (64-bit)
+# SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
+# IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+# SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+# Start of session at: Thu Jul 24 20:16:52 2025
+# Process ID: 19508
+# Current directory: D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent33612 D:\Code\loongteam\mycpu_env_try\soc_verify\soc_axi\run_vivado\project\loongson.xpr
+# Log file: D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/vivado.log
+# Journal file: D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project\vivado.jou
+# Running On: DESKTOP-HHJ88ET, OS: Windows, CPU Frequency: 2096 MHz, CPU Physical cores: 12, Host memory: 14887 MB
+#-----------------------------------------------------------
+start_gui
+open_project D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.xpr
+update_compile_order -fileset sources_1
+add_files -norecurse {D:/Code/loongteam/mycpu_env_try/myCPU/icache/icache.v D:/Code/loongteam/mycpu_env_try/myCPU/dcache/dcache.v}
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+add_files {D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank3/inst_way0_bank3.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank1/data_way0_bank1.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank0/inst_way1_bank0.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank2/data_way1_bank2.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_tagv_way1/inst_tagv_way1.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/tagv_way1/tagv_way1.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank1/inst_way1_bank1.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank0/inst_way0_bank0.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank0/data_way0_bank0.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank1/data_way1_bank1.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank0/data_way1_bank0.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank3/inst_way1_bank3.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank3/data_way0_bank3.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/tagv_way0/tagv_way0.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank2/inst_way1_bank2.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank1/inst_way0_bank1.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_tagv_way0/inst_tagv_way0.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank2/inst_way0_bank2.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank3/data_way1_bank3.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank2/data_way0_bank2.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_ban0/data_way1_ban0.xci}
+export_ip_user_files -of_objects  [get_files  {D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank3/inst_way0_bank3.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank1/data_way0_bank1.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank0/inst_way1_bank0.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank2/data_way1_bank2.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_tagv_way1/inst_tagv_way1.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/tagv_way1/tagv_way1.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank1/inst_way1_bank1.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank0/inst_way0_bank0.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank0/data_way0_bank0.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank1/data_way1_bank1.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank0/data_way1_bank0.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank3/inst_way1_bank3.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank3/data_way0_bank3.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/tagv_way0/tagv_way0.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank2/inst_way1_bank2.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank1/inst_way0_bank1.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_tagv_way0/inst_tagv_way0.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank2/inst_way0_bank2.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank3/data_way1_bank3.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank2/data_way0_bank2.xci D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_ban0/data_way1_ban0.xci}] -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -force -quiet
+update_compile_order -fileset sources_1
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/tagv_way1/tagv_way1.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/tagv_way1/tagv_way1.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/tagv_way1/tagv_way1.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset tagv_way1
+set_property top tagv_way1 [get_fileset tagv_way1]
+move_files -fileset [get_fileset tagv_way1] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/tagv_way1/tagv_way1.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/tagv_way0/tagv_way0.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/tagv_way0/tagv_way0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/tagv_way0/tagv_way0.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset tagv_way0
+set_property top tagv_way0 [get_fileset tagv_way0]
+move_files -fileset [get_fileset tagv_way0] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/tagv_way0/tagv_way0.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank3/data_way1_bank3.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank3/data_way1_bank3.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank3/data_way1_bank3.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset data_way1_bank3
+set_property top data_way1_bank3 [get_fileset data_way1_bank3]
+move_files -fileset [get_fileset data_way1_bank3] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank3/data_way1_bank3.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank2/data_way1_bank2.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank2/data_way1_bank2.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank2/data_way1_bank2.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset data_way1_bank2
+set_property top data_way1_bank2 [get_fileset data_way1_bank2]
+move_files -fileset [get_fileset data_way1_bank2] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank2/data_way1_bank2.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank1/data_way1_bank1.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank1/data_way1_bank1.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank1/data_way1_bank1.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset data_way1_bank1
+set_property top data_way1_bank1 [get_fileset data_way1_bank1]
+move_files -fileset [get_fileset data_way1_bank1] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank1/data_way1_bank1.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank0/data_way1_bank0.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank0/data_way1_bank0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank0/data_way1_bank0.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset data_way1_bank0
+set_property top data_way1_bank0 [get_fileset data_way1_bank0]
+move_files -fileset [get_fileset data_way1_bank0] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way1_bank0/data_way1_bank0.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank3/data_way0_bank3.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank3/data_way0_bank3.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank3/data_way0_bank3.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset data_way0_bank3
+set_property top data_way0_bank3 [get_fileset data_way0_bank3]
+move_files -fileset [get_fileset data_way0_bank3] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank3/data_way0_bank3.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank2/data_way0_bank2.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank2/data_way0_bank2.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank2/data_way0_bank2.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset data_way0_bank2
+set_property top data_way0_bank2 [get_fileset data_way0_bank2]
+move_files -fileset [get_fileset data_way0_bank2] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank2/data_way0_bank2.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank1/data_way0_bank1.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank1/data_way0_bank1.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank1/data_way0_bank1.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset data_way0_bank1
+set_property top data_way0_bank1 [get_fileset data_way0_bank1]
+move_files -fileset [get_fileset data_way0_bank1] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank1/data_way0_bank1.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank0/data_way0_bank0.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank0/data_way0_bank0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank0/data_way0_bank0.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset data_way0_bank0
+set_property top data_way0_bank0 [get_fileset data_way0_bank0]
+move_files -fileset [get_fileset data_way0_bank0] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/data_way0_bank0/data_way0_bank0.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_tagv_way1/inst_tagv_way1.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_tagv_way1/inst_tagv_way1.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_tagv_way1/inst_tagv_way1.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset inst_tagv_way1
+set_property top inst_tagv_way1 [get_fileset inst_tagv_way1]
+move_files -fileset [get_fileset inst_tagv_way1] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_tagv_way1/inst_tagv_way1.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_tagv_way0/inst_tagv_way0.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_tagv_way0/inst_tagv_way0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_tagv_way0/inst_tagv_way0.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset inst_tagv_way0
+set_property top inst_tagv_way0 [get_fileset inst_tagv_way0]
+move_files -fileset [get_fileset inst_tagv_way0] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_tagv_way0/inst_tagv_way0.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank3/inst_way1_bank3.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank3/inst_way1_bank3.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank3/inst_way1_bank3.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset inst_way1_bank3
+set_property top inst_way1_bank3 [get_fileset inst_way1_bank3]
+move_files -fileset [get_fileset inst_way1_bank3] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank3/inst_way1_bank3.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank2/inst_way1_bank2.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank2/inst_way1_bank2.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank2/inst_way1_bank2.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset inst_way1_bank2
+set_property top inst_way1_bank2 [get_fileset inst_way1_bank2]
+move_files -fileset [get_fileset inst_way1_bank2] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank2/inst_way1_bank2.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank1/inst_way1_bank1.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank1/inst_way1_bank1.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank1/inst_way1_bank1.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset inst_way1_bank1
+set_property top inst_way1_bank1 [get_fileset inst_way1_bank1]
+move_files -fileset [get_fileset inst_way1_bank1] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank1/inst_way1_bank1.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank0/inst_way1_bank0.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank0/inst_way1_bank0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank0/inst_way1_bank0.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset inst_way1_bank0
+set_property top inst_way1_bank0 [get_fileset inst_way1_bank0]
+move_files -fileset [get_fileset inst_way1_bank0] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way1_bank0/inst_way1_bank0.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank2/inst_way0_bank2.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank2/inst_way0_bank2.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank2/inst_way0_bank2.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset inst_way0_bank2
+set_property top inst_way0_bank2 [get_fileset inst_way0_bank2]
+move_files -fileset [get_fileset inst_way0_bank2] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank2/inst_way0_bank2.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank1/inst_way0_bank1.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank1/inst_way0_bank1.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank1/inst_way0_bank1.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset inst_way0_bank1
+set_property top inst_way0_bank1 [get_fileset inst_way0_bank1]
+move_files -fileset [get_fileset inst_way0_bank1] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank1/inst_way0_bank1.xci]
+generate_target all [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank0/inst_way0_bank0.xci]
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank0/inst_way0_bank0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank0/inst_way0_bank0.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+create_fileset -blockset inst_way0_bank0
+set_property top inst_way0_bank0 [get_fileset inst_way0_bank0]
+move_files -fileset [get_fileset inst_way0_bank0] [get_files -of_objects [get_fileset sources_1] D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/bank/inst_way0_bank0/inst_way0_bank0.xci]
+launch_run {tagv_way1_synth_1 tagv_way0_synth_1 data_way1_bank3_synth_1 data_way1_bank2_synth_1 data_way1_bank1_synth_1 data_way1_bank0_synth_1 data_way0_bank3_synth_1 data_way0_bank2_synth_1 data_way0_bank1_synth_1 data_way0_bank0_synth_1 inst_tagv_way1_synth_1 inst_tagv_way0_synth_1 inst_way1_bank3_synth_1 inst_way1_bank2_synth_1 inst_way1_bank1_synth_1 inst_way1_bank0_synth_1 inst_way0_bank2_synth_1 inst_way0_bank1_synth_1 inst_way0_bank0_synth_1}
+wait_on_run tagv_way1_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+wait_on_run data_way0_bank2_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+wait_on_run data_way0_bank2_synth_1
+wait_on_run data_way0_bank1_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+wait_on_run data_way0_bank2_synth_1
+wait_on_run data_way0_bank1_synth_1
+wait_on_run data_way0_bank0_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+wait_on_run data_way0_bank2_synth_1
+wait_on_run data_way0_bank1_synth_1
+wait_on_run data_way0_bank0_synth_1
+wait_on_run inst_tagv_way1_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+wait_on_run data_way0_bank2_synth_1
+wait_on_run data_way0_bank1_synth_1
+wait_on_run data_way0_bank0_synth_1
+wait_on_run inst_tagv_way1_synth_1
+wait_on_run inst_tagv_way0_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+wait_on_run data_way0_bank2_synth_1
+wait_on_run data_way0_bank1_synth_1
+wait_on_run data_way0_bank0_synth_1
+wait_on_run inst_tagv_way1_synth_1
+wait_on_run inst_tagv_way0_synth_1
+wait_on_run inst_way1_bank3_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+wait_on_run data_way0_bank2_synth_1
+wait_on_run data_way0_bank1_synth_1
+wait_on_run data_way0_bank0_synth_1
+wait_on_run inst_tagv_way1_synth_1
+wait_on_run inst_tagv_way0_synth_1
+wait_on_run inst_way1_bank3_synth_1
+wait_on_run inst_way1_bank2_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+wait_on_run data_way0_bank2_synth_1
+wait_on_run data_way0_bank1_synth_1
+wait_on_run data_way0_bank0_synth_1
+wait_on_run inst_tagv_way1_synth_1
+wait_on_run inst_tagv_way0_synth_1
+wait_on_run inst_way1_bank3_synth_1
+wait_on_run inst_way1_bank2_synth_1
+wait_on_run inst_way1_bank1_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+wait_on_run data_way0_bank2_synth_1
+wait_on_run data_way0_bank1_synth_1
+wait_on_run data_way0_bank0_synth_1
+wait_on_run inst_tagv_way1_synth_1
+wait_on_run inst_tagv_way0_synth_1
+wait_on_run inst_way1_bank3_synth_1
+wait_on_run inst_way1_bank2_synth_1
+wait_on_run inst_way1_bank1_synth_1
+wait_on_run inst_way1_bank0_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+wait_on_run data_way0_bank2_synth_1
+wait_on_run data_way0_bank1_synth_1
+wait_on_run data_way0_bank0_synth_1
+wait_on_run inst_tagv_way1_synth_1
+wait_on_run inst_tagv_way0_synth_1
+wait_on_run inst_way1_bank3_synth_1
+wait_on_run inst_way1_bank2_synth_1
+wait_on_run inst_way1_bank1_synth_1
+wait_on_run inst_way1_bank0_synth_1
+wait_on_run inst_way0_bank2_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+wait_on_run data_way0_bank2_synth_1
+wait_on_run data_way0_bank1_synth_1
+wait_on_run data_way0_bank0_synth_1
+wait_on_run inst_tagv_way1_synth_1
+wait_on_run inst_tagv_way0_synth_1
+wait_on_run inst_way1_bank3_synth_1
+wait_on_run inst_way1_bank2_synth_1
+wait_on_run inst_way1_bank1_synth_1
+wait_on_run inst_way1_bank0_synth_1
+wait_on_run inst_way0_bank2_synth_1
+wait_on_run inst_way0_bank1_synth_1
+
+wait_on_run tagv_way1_synth_1
+wait_on_run tagv_way0_synth_1
+wait_on_run data_way1_bank3_synth_1
+wait_on_run data_way1_bank2_synth_1
+wait_on_run data_way1_bank1_synth_1
+wait_on_run data_way1_bank0_synth_1
+wait_on_run data_way0_bank3_synth_1
+wait_on_run data_way0_bank2_synth_1
+wait_on_run data_way0_bank1_synth_1
+wait_on_run data_way0_bank0_synth_1
+wait_on_run inst_tagv_way1_synth_1
+wait_on_run inst_tagv_way0_synth_1
+wait_on_run inst_way1_bank3_synth_1
+wait_on_run inst_way1_bank2_synth_1
+wait_on_run inst_way1_bank1_synth_1
+wait_on_run inst_way1_bank0_synth_1
+wait_on_run inst_way0_bank2_synth_1
+wait_on_run inst_way0_bank1_synth_1
+wait_on_run inst_way0_bank0_synth_1
+
+launch_simulation
+generate_target all [get_files  D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/rtl/xilinx_ip/axi_ram/axi_ram.xci]
+catch { config_ip_cache -export [get_ips -all axi_ram] }
+export_ip_user_files -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/rtl/xilinx_ip/axi_ram/axi_ram.xci] -no_script -sync -force -quiet
+launch_runs axi_ram_synth_1 -jobs 12
+wait_on_run axi_ram_synth_1
+export_simulation -of_objects [get_files D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/rtl/xilinx_ip/axi_ram/axi_ram.xci] -directory D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/sim_scripts -ip_user_files_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files -ipstatic_source_dir D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/modelsim} {questa=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/questa} {riviera=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/riviera} {activehdl=D:/Code/loongteam/mycpu_env_try/soc_verify/soc_axi/run_vivado/project/loongson.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+launch_simulation
+launch_simulation

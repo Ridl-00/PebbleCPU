@@ -3,6 +3,7 @@ module decoder_2_4(
     output wire [ 3:0] out
 );
 
+//generate 在编译时 动态 生成多个实例或逻辑块（assign 语句）
 genvar i;
 generate for (i=0; i<4; i=i+1) begin : gen_for_dec_2_4
     assign out[i] = (in == i);

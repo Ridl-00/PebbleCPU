@@ -1,9 +1,12 @@
+`include "defines.v"
+
 module alu(
-  input  wire [11:0] alu_op,
+  input  wire [`AluOpBus] alu_op,
   input  wire [31:0] alu_src1,
   input  wire [31:0] alu_src2,
   output wire [31:0] alu_result
 );
+//src1一般为rj src2为rkd或imm
 
 wire op_add;   //add operation
 wire op_sub;   //sub operation
@@ -54,7 +57,8 @@ wire        adder_cout;
 
 assign adder_a   = alu_src1;
 assign adder_b   = (op_sub | op_slt | op_sltu) ? ~alu_src2 : alu_src2;  //src1 - src2 rj-rk
-assign adder_cin = (op_sub | op_slt | op_sltu) ? 1'b1      : 1'b0;
+assign adder_cin = (op_sub | op_slt | op_sltu) ? 1'b1      : 1'b0; //上面变反，此处为补码的+1
+//adder_cout 为进位，cin为前一位的进位
 assign {adder_cout, adder_result} = adder_a + adder_b + adder_cin;
 
 // ADD, SUB result
@@ -71,18 +75,18 @@ assign sltu_result[0]    = ~adder_cout;
 
 // bitwise operation
 assign and_result = alu_src1 & alu_src2;
-assign or_result  = alu_src1 | alu_src2 | alu_result;
+assign or_result  = alu_src1 | alu_src2;
 assign nor_result = ~or_result;
 assign xor_result = alu_src1 ^ alu_src2;
 assign lui_result = alu_src2;
 
 // SLL result
-assign sll_result = alu_src2 << alu_src1[4:0];   //rj << i5
+assign sll_result = alu_src1 << alu_src2[4:0];   //rj << i5
 
 // SRL, SRA result
-assign sr64_result = {{32{op_sra & alu_src2[31]}}, alu_src2[31:0]} >> alu_src1[4:0]; //rj >> i5
+assign sr64_result = {{32{op_sra & alu_src1[31]}}, alu_src1[31:0]} >> alu_src2[4:0]; //rj >> i5 //@
 
-assign sr_result   = sr64_result[30:0];
+assign sr_result   = sr64_result[31:0]; //@
 
 // final result mux
 assign alu_result = ({32{op_add|op_sub}} & add_sub_result)

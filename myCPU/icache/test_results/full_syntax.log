@@ -1,0 +1,25 @@
+../mycpu_top_toblock.v:165: warning: macro IF_TO_ID_WD undefined (and assumed null) at this point.
+../mycpu_top_toblock.v:166: warning: macro ID_TO_IF_WD undefined (and assumed null) at this point.
+../mycpu_top_toblock.v:167: warning: macro ID_TO_EXE_WD undefined (and assumed null) at this point.
+../mycpu_top_toblock.v:168: warning: macro EXE_TO_MEM_WD undefined (and assumed null) at this point.
+../mycpu_top_toblock.v:169: warning: macro MEM_TO_WB_WD undefined (and assumed null) at this point.
+../mycpu_top_toblock.v:170: warning: macro WB_TO_ID_WD undefined (and assumed null) at this point.
+../mycpu_top_toblock.v:171: warning: macro EXE_TO_ID_WD undefined (and assumed null) at this point.
+../mycpu_top_toblock.v:172: warning: macro MEM_TO_ID_WD undefined (and assumed null) at this point.
+../mycpu_top_toblock.v:175: warning: macro CSR_TO_IF_WD undefined (and assumed null) at this point.
+../mycpu_top_toblock.v:176: warning: macro CSR_TO_ID_WD undefined (and assumed null) at this point.
+../mycpu_top_toblock.v:178: warning: macro ID_TO_CSR_WD undefined (and assumed null) at this point.
+../mycpu_top_toblock.v:180: warning: macro WB_TO_CSR_WD undefined (and assumed null) at this point.
+../mycpu_top_toblock.v:165: error: Dynamic array declaration requires SystemVerilog.
+../mycpu_top_toblock.v:166: error: Dynamic array declaration requires SystemVerilog.
+../mycpu_top_toblock.v:167: error: Dynamic array declaration requires SystemVerilog.
+../mycpu_top_toblock.v:168: error: Dynamic array declaration requires SystemVerilog.
+../mycpu_top_toblock.v:169: error: Dynamic array declaration requires SystemVerilog.
+../mycpu_top_toblock.v:170: error: Dynamic array declaration requires SystemVerilog.
+../if_stage.v:3: Include file defines.v not found
+../mycpu_top_toblock.v:171: error: Dynamic array declaration requires SystemVerilog.
+../mycpu_top_toblock.v:172: error: Dynamic array declaration requires SystemVerilog.
+../mycpu_top_toblock.v:175: error: Dynamic array declaration requires SystemVerilog.
+../mycpu_top_toblock.v:176: error: Dynamic array declaration requires SystemVerilog.
+../mycpu_top_toblock.v:178: error: Dynamic array declaration requires SystemVerilog.
+../mycpu_top_toblock.v:180: error: Dynamic array declaration requires SystemVerilog.

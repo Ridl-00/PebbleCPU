@@ -1,0 +1,58 @@
+259:  // icache与IF阶段之间的信号
+260:  wire                      icache_cpu_req;
+261:  wire                      icache_cpu_wr;
+262:  wire [               3:0] icache_cpu_wstrb;
+263:  wire [               1:0] icache_cpu_size;
+264:  wire [              31:0] icache_cpu_addr;
+265:  wire [              31:0] icache_cpu_wdata;
+266:  wire                      icache_cpu_addr_ok;
+267:  wire                      icache_cpu_data_ok;
+268:  wire [              31:0] icache_cpu_rdata;
+270:  // icache与内存系统之间的信号
+271:  wire                      icache_axi_req;
+272:  wire                      icache_axi_wr;
+273:  wire [               3:0] icache_axi_wstrb;
+274:  wire [               1:0] icache_axi_size;
+275:  wire [              31:0] icache_axi_addr;
+276:  wire [              31:0] icache_axi_wdata;
+277:  wire                      icache_axi_addr_ok;
+278:  wire                      icache_axi_data_ok;
+279:  wire [              31:0] icache_axi_rdata;
+442:      .inst_sram_req    (icache_cpu_req),
+443:      .inst_sram_wr     (icache_cpu_wr),
+444:      .inst_sram_wstrb  (icache_cpu_wstrb),
+445:      .inst_sram_size   (icache_cpu_size),
+446:      .inst_sram_addr   (icache_cpu_addr),
+447:      .inst_sram_wdata  (icache_cpu_wdata),
+448:      .inst_sram_rdata  (icache_cpu_rdata),
+449:      .inst_sram_addr_ok(icache_cpu_addr_ok),
+450:      .inst_sram_data_ok(icache_cpu_data_ok)
+584:  //icache
+585:  icache u_icache (
+590:      .cpu_req          (icache_cpu_req),
+591:      .cpu_wr           (icache_cpu_wr),
+592:      .cpu_wstrb        (icache_cpu_wstrb),
+593:      .cpu_size         (icache_cpu_size),
+594:      .cpu_addr         (icache_cpu_addr),
+595:      .cpu_wdata        (icache_cpu_wdata),
+596:      .cpu_addr_ok      (icache_cpu_addr_ok),
+597:      .cpu_data_ok      (icache_cpu_data_ok),
+598:      .cpu_rdata        (icache_cpu_rdata),
+601:      .axi_req          (icache_axi_req),
+602:      .axi_wr           (icache_axi_wr),
+603:      .axi_wstrb        (icache_axi_wstrb),
+604:      .axi_size         (icache_axi_size),
+605:      .axi_addr         (icache_axi_addr),
+606:      .axi_wdata        (icache_axi_wdata),
+607:      .axi_addr_ok      (icache_axi_addr_ok),
+608:      .axi_data_ok      (icache_axi_data_ok),
+609:      .axi_rdata        (icache_axi_rdata)
+654:      .inst_sram_req    (icache_axi_req),
+655:      .inst_sram_wr     (icache_axi_wr),
+656:      .inst_sram_size   (icache_axi_size),
+657:      .inst_sram_wstrb  (icache_axi_wstrb),
+658:      .inst_sram_addr   (icache_axi_addr),
+659:      .inst_sram_wdata  (icache_axi_wdata),
+660:      .inst_sram_addr_ok(icache_axi_addr_ok),
+661:      .inst_sram_data_ok(icache_axi_data_ok),
+662:      .inst_sram_rdata  (icache_axi_rdata),

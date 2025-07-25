@@ -1,0 +1,16 @@
+../if_stage.v:147: error: 'br_bus_r' has already been declared in this scope.
+../if_stage.v:97:      : It was declared here as a variable.
+../if_stage.v:148: error: 'br_bus_r_valid' has already been declared in this scope.
+../if_stage.v:98:      : It was declared here as a variable.
+../if_stage.v:149: error: 'br_taken_r' has already been declared in this scope.
+../if_stage.v:99:      : It was declared here as a net.
+../if_stage.v:150: error: 'br_target_r' has already been declared in this scope.
+../if_stage.v:100:      : It was declared here as a net.
+../if_stage.v:151: error: 'br_stall_r' has already been declared in this scope.
+../if_stage.v:101:      : It was declared here as a net.
+icache.v:1: error: Variable declaration in unnamed block requires SystemVerilog.
+tb_if_icache_integration.v:1: error: Variable declaration in unnamed block requires SystemVerilog.
+tb_if_icache_integration.v:246: syntax error
+tb_if_icache_integration.v:246: error: Invalid module instantiation
+tb_if_icache_integration.v:253: syntax error
+I give up.
