@@ -107,7 +107,7 @@ assign wb_to_csr_bus = {
 
 
   always @(posedge clk) begin
-    if (~resetn) begin //wb本身或许不应该被flush掉
+    if (~resetn | flush_sign) begin //wb本身或许不应该被flush掉
                         //（因为已经运行完了（且就是这条刚刚运行完的指令置起的flush信号）需要保留的reftech入口恰巧就是这条指令
       wb_valid <= 1'b0;
     end else if (wb_allowin) begin

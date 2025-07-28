@@ -1,5 +1,7 @@
 ## 信号
 
+总则：flush_sign优先级很高，因此在出现问题时，不应修改flush信号，而是修改其他信号适配flush的逻辑
+
 ### 有关excp和ready go
 
 （7.26：
@@ -94,7 +96,7 @@ flush后，该指令确实不需要了，即整条流水线重新取值。故flu
 
 （7.26
 
-本质为标志当前在这级的指令在进入下一级时还是不是一条有效的指令
+本质为标志当前级是否准备好向下一级传递正确的数据。为0不会导致不发，而是直接发0
 
 即，可以用于标记当前指令是否有效
 
@@ -120,7 +122,17 @@ id能够阻塞id，但不一定能够阻塞if（因为此时if级可能还没有
 
 
 
-### 有关req
+### 有关if_inst_cancel
+
+![image-20250727163252499](C:\Users\21905\AppData\Roaming\Typora\typora-user-images\image-20250727163252499.png)
+
+如果在同一拍，同时因为 正常req而req，和因为flush req，那么不需要cancel
+
+
+
+![image-20250728191411195](C:\Users\21905\AppData\Roaming\Typora\typora-user-images\image-20250728191411195.png)
+
+![image-20250728191501551](C:\Users\21905\AppData\Roaming\Typora\typora-user-images\image-20250728191501551.png)
 
 
 

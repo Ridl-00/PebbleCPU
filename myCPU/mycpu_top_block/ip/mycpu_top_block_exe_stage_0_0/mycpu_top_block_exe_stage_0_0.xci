@@ -45,14 +45,16 @@
         "exe_to_mem_valid": [ { "direction": "out" } ],
         "exe_to_mem_bus": [ { "direction": "out", "size_left": "169", "size_right": "0" } ],
         "exe_to_id_bus": [ { "direction": "out", "size_left": "38", "size_right": "0" } ],
-        "data_sram_en": [ { "direction": "out" } ],
-        "data_sram_we": [ { "direction": "out", "size_left": "3", "size_right": "0" } ],
+        "flush_from_mem": [ { "direction": "in" } ],
+        "exe_flush_sign": [ { "direction": "in" } ],
+        "flush_from_exe": [ { "direction": "out" } ],
+        "data_sram_req": [ { "direction": "out" } ],
+        "data_sram_wr": [ { "direction": "out" } ],
+        "data_sram_wstrb": [ { "direction": "out", "size_left": "3", "size_right": "0" } ],
+        "data_sram_size": [ { "direction": "out", "size_left": "1", "size_right": "0" } ],
         "data_sram_addr": [ { "direction": "out", "size_left": "31", "size_right": "0" } ],
         "data_sram_wdata": [ { "direction": "out", "size_left": "31", "size_right": "0" } ],
-        "flush_from_mem": [ { "direction": "in" } ],
-        "excp_flush": [ { "direction": "in" } ],
-        "ertn_flush": [ { "direction": "in" } ],
-        "refetch_flush": [ { "direction": "in" } ]
+        "data_sram_addr_ok": [ { "direction": "in" } ]
       },
       "interfaces": {
         "resetn": {

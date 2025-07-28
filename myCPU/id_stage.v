@@ -17,7 +17,9 @@ module id_stage (
 
 
     //从后向前的数据传输（均是组合逻辑）
+    //id-if
     output wire [`ID_TO_IF_WD] id_to_if_bus,
+    output wire                flush_from_id,
 
     input wire [`EXE_TO_ID_WD] exe_to_id_bus,
     input wire [`MEM_TO_ID_WD] mem_to_id_bus,
@@ -214,6 +216,9 @@ wire [`InstAddrBus] br_target;
   // reg         branch_slot_cancel;
 wire br_really_taken;
 wire        br_inst;
+
+wire br_stall ; // 在load-branch时阻塞preif的取指
+
 // reg         br_jirl;
 wire        br_need_reg_data; //是分支指令且此分支指令需要寄存器中的数据
 
@@ -336,8 +341,9 @@ assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
     if (~resetn | flush_sign) begin
       id_valid <= 1'b0;
     // end else if (branch_slot_cancel) begin  //如果采取分支，那么取消当前IF阶段的指令
-    end else if (br_really_taken) begin
-      id_valid <= 1'b0;
+//分支生效后由if通过if to id valid 取消，当前在id的分支指令作为有效正常向后运行
+    // end else if (br_really_taken) begin
+    //   id_valid <= 1'b0;
     end else if (id_allowin) begin
       id_valid <= if_to_id_valid;
     end
@@ -363,11 +369,11 @@ assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
                                                                                                                                       // {1'b0, rf_rdata2, rf_rdata2};
 
 assign {rf1_forward_stall, rj_value} = ((rf_raddr1 == exe_forward_reg) && exe_forward_enable && inst_need_rj) ? {exe_dep_need_stall, exe_forward_data} :
-                                                             ((rf_raddr1 == mem_forward_reg) && mem_forward_enable && inst_need_rj) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data} :
+                                                             ((rf_raddr1 == mem_forward_reg) && mem_forward_enable && inst_need_rj) ? {mem_dep_need_stall, mem_forward_data} :
                                                                                                                                   {1'b0, rf_rdata1}; 
 
 assign {rf2_forward_stall, rkd_value} = ((rf_raddr2 == exe_forward_reg) && exe_forward_enable && inst_need_rkd) ? {exe_dep_need_stall, exe_forward_data} :
-                                                               ((rf_raddr2 == mem_forward_reg) && mem_forward_enable && inst_need_rkd) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data} :
+                                                               ((rf_raddr2 == mem_forward_reg) && mem_forward_enable && inst_need_rkd) ? {mem_dep_need_stall, mem_forward_data} :
                                                                                                                                       {1'b0, rf_rdata2};
 
 //译码
@@ -869,6 +875,8 @@ assign inst_valid = inst_add_w      |
 assign excp     = excp_ipe | inst_syscall | inst_break | id_excp | excp_ine | has_int;
 assign excp_num = {excp_ipe, excp_ine, inst_break, inst_syscall, id_excp_num, has_int};
 
+assign flush_from_id = (excp | inst_ertn | (csr_we /*| (mem_ll_w | mem_sc_w) & !excp*/) /*| mem_refetch | mem_idle*/) & id_valid;
+
 assign rd_csr_addr = csr_idx;
 
 //when cache operate icache, will refetch inst after this inst.
@@ -913,10 +921,11 @@ assign excp_ipe = kernel_inst && (csr_plv == 2'b11);
 //         branch_slot_cancel <= 1'b0;
 //     end
 // end
-//！向前，应该要用allowin来判断而不是ready_go吧
-assign br_really_taken = flush_sign ? 1'b0 : br_taken & id_allowin;
+assign br_really_taken = flush_sign ? 1'b0 : br_taken & id_ready_go;
+//存在br 且 计算未完成
+assign br_stall = br_need_reg_data && !id_ready_go && id_valid ;
   // assign id_to_if_bus = {br_taken, br_target/*, br_taken_cancel*/};
-assign id_to_if_bus = {br_really_taken, br_target/*, br_taken_cancel*/};
+assign id_to_if_bus = {br_really_taken, br_target, br_stall};
 
 assign id_to_exe_bus = {
                       // inst_csr_rstat_en,  // 349:349 for difftest

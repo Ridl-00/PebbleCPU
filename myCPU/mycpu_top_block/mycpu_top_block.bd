@@ -139,12 +139,20 @@
             "left": "33",
             "right": "0"
           },
-          "inst_sram_en": {
+          "inst_sram_req": {
             "direction": "O"
           },
-          "inst_sram_we": {
+          "inst_sram_wr": {
+            "direction": "O"
+          },
+          "inst_sram_wstrb": {
             "direction": "O",
             "left": "3",
+            "right": "0"
+          },
+          "inst_sram_size": {
+            "direction": "O",
+            "left": "1",
             "right": "0"
           },
           "inst_sram_addr": {
@@ -162,37 +170,25 @@
             "left": "31",
             "right": "0"
           },
-          "excp_flush": {
+          "inst_sram_addr_ok": {
             "direction": "I"
           },
-          "ertn_flush": {
+          "inst_sram_data_ok": {
             "direction": "I"
           },
-          "refetch_flush": {
+          "csr_to_if_bus": {
+            "direction": "I",
+            "left": "98",
+            "right": "0"
+          },
+          "flush_from_id": {
             "direction": "I"
           },
-          "wb_pc": {
-            "direction": "I",
-            "left": "31",
-            "right": "0"
-          },
-          "csr_eentry": {
-            "direction": "I",
-            "left": "31",
-            "right": "0"
-          },
-          "csr_era": {
-            "direction": "I",
-            "left": "31",
-            "right": "0"
-          },
-          "has_int": {
+          "flush_from_exe": {
             "direction": "I"
           },
-          "csr_plv": {
-            "direction": "I",
-            "left": "1",
-            "right": "0"
+          "flush_from_mem": {
+            "direction": "I"
           }
         }
       },
@@ -255,6 +251,9 @@
             "left": "33",
             "right": "0"
           },
+          "flush_from_id": {
+            "direction": "O"
+          },
           "exe_to_id_bus": {
             "direction": "I",
             "left": "38",
@@ -270,41 +269,17 @@
             "left": "64",
             "right": "0"
           },
-          "excp_flush": {
+          "flush_sign": {
             "direction": "I"
           },
-          "ertn_flush": {
-            "direction": "I"
+          "csr_to_id_bus": {
+            "direction": "I",
+            "left": "137",
+            "right": "0"
           },
-          "refetch_flush": {
-            "direction": "I"
-          },
-          "has_int": {
-            "direction": "I"
-          },
-          "rd_csr_addr": {
+          "id_to_csr_bus": {
             "direction": "O",
             "left": "13",
-            "right": "0"
-          },
-          "rd_csr_data": {
-            "direction": "I",
-            "left": "31",
-            "right": "0"
-          },
-          "csr_plv": {
-            "direction": "I",
-            "left": "1",
-            "right": "0"
-          },
-          "timer_64": {
-            "direction": "I",
-            "left": "63",
-            "right": "0"
-          },
-          "csr_tid": {
-            "direction": "I",
-            "left": "31",
             "right": "0"
           }
         }
@@ -368,12 +343,29 @@
             "left": "38",
             "right": "0"
           },
-          "data_sram_en": {
+          "flush_from_mem": {
+            "direction": "I"
+          },
+          "exe_flush_sign": {
+            "direction": "I"
+          },
+          "flush_from_exe": {
             "direction": "O"
           },
-          "data_sram_we": {
+          "data_sram_req": {
+            "direction": "O"
+          },
+          "data_sram_wr": {
+            "direction": "O"
+          },
+          "data_sram_wstrb": {
             "direction": "O",
             "left": "3",
+            "right": "0"
+          },
+          "data_sram_size": {
+            "direction": "O",
+            "left": "1",
             "right": "0"
           },
           "data_sram_addr": {
@@ -386,16 +378,7 @@
             "left": "31",
             "right": "0"
           },
-          "flush_from_mem": {
-            "direction": "I"
-          },
-          "excp_flush": {
-            "direction": "I"
-          },
-          "ertn_flush": {
-            "direction": "I"
-          },
-          "refetch_flush": {
+          "data_sram_addr_ok": {
             "direction": "I"
           }
         }
@@ -464,16 +447,13 @@
             "left": "31",
             "right": "0"
           },
-          "excp_flush": {
+          "data_sram_data_ok": {
             "direction": "I"
           },
-          "ertn_flush": {
+          "flush_sign": {
             "direction": "I"
           },
-          "refetch_flush": {
-            "direction": "I"
-          },
-          "mem_flush": {
+          "flush_from_mem": {
             "direction": "O"
           }
         }
@@ -535,40 +515,9 @@
           "refetch_flush": {
             "direction": "O"
           },
-          "csr_era": {
+          "wb_to_csr_bus": {
             "direction": "O",
-            "left": "31",
-            "right": "0"
-          },
-          "csr_esubcode": {
-            "direction": "O",
-            "left": "8",
-            "right": "0"
-          },
-          "csr_ecode": {
-            "direction": "O",
-            "left": "5",
-            "right": "0"
-          },
-          "csr_wr_en": {
-            "direction": "O"
-          },
-          "wr_csr_addr": {
-            "direction": "O",
-            "left": "13",
-            "right": "0"
-          },
-          "wr_csr_data": {
-            "direction": "O",
-            "left": "31",
-            "right": "0"
-          },
-          "va_error": {
-            "direction": "O"
-          },
-          "bad_va": {
-            "direction": "O",
-            "left": "31",
+            "left": "126",
             "right": "0"
           },
           "debug_wb_pc": {
@@ -870,76 +819,59 @@
       "Net": {
         "ports": [
           "wb_stage_0/excp_flush",
-          "mem_stage_0/excp_flush",
-          "exe_stage_0/excp_flush",
-          "id_stage_0/excp_flush",
-          "if_stage_0/excp_flush",
           "csr_0/excp_flush"
         ]
       },
       "Net1": {
         "ports": [
           "wb_stage_0/ertn_flush",
-          "mem_stage_0/ertn_flush",
-          "exe_stage_0/ertn_flush",
-          "id_stage_0/ertn_flush",
-          "if_stage_0/ertn_flush",
           "csr_0/ertn_flush"
         ]
       },
       "clk_1": {
         "ports": [
           "clk",
-          "mem_stage_0/clk",
-          "exe_stage_0/clk",
-          "id_stage_0/clk",
+          "csr_0/clk",
           "if_stage_0/clk",
-          "wb_stage_0/clk",
-          "csr_0/clk"
+          "id_stage_0/clk",
+          "exe_stage_0/clk",
+          "mem_stage_0/clk",
+          "wb_stage_0/clk"
         ]
       },
       "csr_0_eentry_out": {
         "ports": [
-          "csr_0/eentry_out",
-          "if_stage_0/csr_eentry"
+          "csr_0/eentry_out"
         ]
       },
       "csr_0_era_out": {
         "ports": [
-          "csr_0/era_out",
-          "if_stage_0/csr_era"
+          "csr_0/era_out"
         ]
       },
       "csr_0_has_int": {
         "ports": [
-          "csr_0/has_int",
-          "id_stage_0/has_int",
-          "if_stage_0/has_int"
+          "csr_0/has_int"
         ]
       },
       "csr_0_plv_out": {
         "ports": [
-          "csr_0/plv_out",
-          "id_stage_0/csr_plv",
-          "if_stage_0/csr_plv"
+          "csr_0/plv_out"
         ]
       },
       "csr_0_rd_data": {
         "ports": [
-          "csr_0/rd_data",
-          "id_stage_0/rd_csr_data"
+          "csr_0/rd_data"
         ]
       },
       "csr_0_tid_out": {
         "ports": [
-          "csr_0/tid_out",
-          "id_stage_0/csr_tid"
+          "csr_0/tid_out"
         ]
       },
       "csr_0_timer_64_out": {
         "ports": [
-          "csr_0/timer_64_out",
-          "id_stage_0/timer_64"
+          "csr_0/timer_64_out"
         ]
       },
       "data_sram_rdata_1": {
@@ -956,7 +888,6 @@
       },
       "exe_stage_0_data_sram_en": {
         "ports": [
-          "exe_stage_0/data_sram_en",
           "data_sram_en"
         ]
       },
@@ -968,7 +899,6 @@
       },
       "exe_stage_0_data_sram_we": {
         "ports": [
-          "exe_stage_0/data_sram_we",
           "data_sram_we"
         ]
       },
@@ -1022,7 +952,6 @@
       },
       "id_stage_0_rd_csr_addr": {
         "ports": [
-          "id_stage_0/rd_csr_addr",
           "csr_0/rd_addr"
         ]
       },
@@ -1046,7 +975,6 @@
       },
       "if_stage_0_inst_sram_en": {
         "ports": [
-          "if_stage_0/inst_sram_en",
           "inst_sram_en"
         ]
       },
@@ -1058,7 +986,6 @@
       },
       "if_stage_0_inst_sram_we": {
         "ports": [
-          "if_stage_0/inst_sram_we",
           "inst_sram_we"
         ]
       },
@@ -1076,7 +1003,6 @@
       },
       "mem_stage_0_mem_flush": {
         "ports": [
-          "mem_stage_0/mem_flush",
           "exe_stage_0/flush_from_mem"
         ]
       },
@@ -1101,42 +1027,36 @@
       "resetn_1": {
         "ports": [
           "resetn",
-          "mem_stage_0/resetn",
-          "exe_stage_0/resetn",
-          "id_stage_0/resetn",
+          "csr_0/resetn",
           "if_stage_0/resetn",
-          "wb_stage_0/resetn",
-          "csr_0/resetn"
+          "id_stage_0/resetn",
+          "exe_stage_0/resetn",
+          "mem_stage_0/resetn",
+          "wb_stage_0/resetn"
         ]
       },
       "wb_stage_0_bad_va": {
         "ports": [
-          "wb_stage_0/bad_va",
           "csr_0/bad_va_in"
         ]
       },
       "wb_stage_0_csr_ecode": {
         "ports": [
-          "wb_stage_0/csr_ecode",
           "csr_0/ecode_in"
         ]
       },
       "wb_stage_0_csr_era": {
         "ports": [
-          "wb_stage_0/csr_era",
-          "if_stage_0/wb_pc",
           "csr_0/era_in"
         ]
       },
       "wb_stage_0_csr_esubcode": {
         "ports": [
-          "wb_stage_0/csr_esubcode",
           "csr_0/esubcode_in"
         ]
       },
       "wb_stage_0_csr_wr_en": {
         "ports": [
-          "wb_stage_0/csr_wr_en",
           "csr_0/csr_wr_en"
         ]
       },
@@ -1166,16 +1086,11 @@
       },
       "wb_stage_0_refetch_flush": {
         "ports": [
-          "wb_stage_0/refetch_flush",
-          "mem_stage_0/refetch_flush",
-          "exe_stage_0/refetch_flush",
-          "id_stage_0/refetch_flush",
-          "if_stage_0/refetch_flush"
+          "wb_stage_0/refetch_flush"
         ]
       },
       "wb_stage_0_va_error": {
         "ports": [
-          "wb_stage_0/va_error",
           "csr_0/va_error_in"
         ]
       },
@@ -1193,13 +1108,11 @@
       },
       "wb_stage_0_wr_csr_addr": {
         "ports": [
-          "wb_stage_0/wr_csr_addr",
           "csr_0/wr_addr"
         ]
       },
       "wb_stage_0_wr_csr_data": {
         "ports": [
-          "wb_stage_0/wr_csr_data",
           "csr_0/wr_data"
         ]
       }

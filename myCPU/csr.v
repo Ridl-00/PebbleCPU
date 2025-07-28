@@ -486,7 +486,7 @@ end
 //eentry
 always @(posedge clk) begin
     if (reset) begin
-        csr_eentry[5:0] <= 6'b0;
+        csr_eentry <= 32'b0;
     end
     else if (eentry_wen) begin
         csr_eentry[31:6] <= wr_data[31:6];

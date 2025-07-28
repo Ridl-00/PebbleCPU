@@ -23,6 +23,8 @@ module exe_stage (
     input         flush_from_mem  ,
 //wb-exe
     input         exe_flush_sign  ,
+//exe-if
+    output         flush_from_exe  ,
 
   //访dataRAM端口
     // output wire        data_sram_en,
@@ -190,6 +192,7 @@ assign access_mem = exe_load_op | exe_store_op;
   //访存接口
 assign sram_addr_low2bit = {exe_alu_result[1], exe_alu_result[0]};
                                                                 //前向后有例外不行&有csr来的例外不行&有mem来的例外不行
+                                                                //需要保证当前在wb和mem的指令都不造成flush，否则会错误的req
   // assign data_sram_en = exe_valid & access_mem & ~excp & ~exe_flush_sign & ~flush_from_mem;
   assign data_sram_req = exe_valid & access_mem & ~excp & ~exe_flush_sign & ~flush_from_mem & mem_allowin; //追究allowin，参考inst_req
   
@@ -367,9 +370,9 @@ assign exe_result = exe_res_from_csr  ? exe_csr_data :
 
 //前递和阻塞
 assign dest_zero            = (exe_dest == 5'b0); 
-assign forward_enable       = exe_gr_we & ~dest_zero & exe_valid & exe_ready_go;
+assign forward_enable       = exe_gr_we & ~dest_zero & exe_valid;
 // assign dep_need_stall       = exe_load_op | exe_div_enable | exe_mul_enable;
-assign dep_need_stall       = exe_load_op | div_stall ;
+assign dep_need_stall       = exe_load_op | div_stall ; //如果是load，需要等load在exe的操作，接着等load在mem的操作
 
 //exception
 assign excp_ale        = access_mem & ((exe_mem_size[0] &  1'b0)                                  | 
@@ -378,6 +381,8 @@ assign excp_ale        = access_mem & ((exe_mem_size[0] &  1'b0)                
                                 
 assign excp            = exe_excp || excp_ale;
 assign excp_num        = {excp_ale, exe_excp_num};
+
+assign flush_from_exe = (excp | exe_ertn | (exe_csr_we /*| (mem_ll_w | mem_sc_w) & !excp*/) /*| mem_refetch | mem_idle*/) & exe_valid;
 
 assign error_va = exe_alu_result; //把alu结果（地址）存一下，如果出错了它就是出错的地址
 
