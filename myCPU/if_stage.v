@@ -79,6 +79,7 @@ wire         preif_excp;
 wire         preif_excp_num;
 
 wire         flush_sign;
+wire         flush_sign_wire_o;
 
 reg  [31:0]  inst_rd_buff;
 reg          inst_buff_enable;
@@ -242,16 +243,31 @@ assign nextpc =
 //     end
 // end
 
+/* 一些if阶段的状态指示
+if_valid && if_ready_go 当拍刚好完成了数据握手（一般不保持
+if_valid && !if_ready_go 正在等待if pc的data ok（可保持
+if_valid && if_inst_cancel 当前已经完成了两次地址握手，且下一个收到的data ok是需要被取消的
+    此时的if pc应当为需要被cancel的那一条（前者），因为即使要被取消，等的还是它
+    在收到一次data ok之后，if inst cancel置0的同时跳转pc
+if_valid [&& !if_inst_cancel] 正常等待一个dataok（使用时应该无需 显式的写出 !if_inst_cancel
 
+
+*/
 
 //if
 //flush在if级会导致：标记是否有一个需要被丢弃的dataok
 //当前stage控制信号
 //不readygo表示需在等dataok，即不需要等（还没发 req || （正好接到dataok || 已经接到dataok ）|| 有其余更高优先级的事件 ）时
-assign if_ready_go       = (inst_sram_data_ok | if_inst_valid ) && !if_inst_cancel || excp; //握手当拍或者有存下来的inst_r 且在等待data ok时（即使是需要被取消的）不应继续下去
+//被取消的dataok也应当能置起readygo，否则在遇到 一个握手成功，一个被取消时。直接就卡住了。
+assign if_ready_go       = (inst_sram_data_ok | if_inst_valid ) /*&& !if_inst_cancel*/ || excp; //握手当拍或者有存下来的inst_r 且在等待data ok时（即使是需要被取消的）不应继续下去
 assign if_allowin        = ~if_valid | if_ready_go & id_allowin; //if级没有在处理指令 或 if不需要被阻塞且id允许if进入
-assign if_to_id_valid    = if_valid & if_ready_go & !(br_really_taken ||(br_taken_r && br_bus_r_valid)||flush_sign);
+assign if_to_id_valid    = if_valid & if_ready_go & !(br_really_taken ||(br_taken_r && br_bus_r_valid)||flush_sign) & !if_inst_cancel;
 //if ready go = 1 但id allowin = 0 时
+
+
+//if valid和if inst cancel共同表示if阶段的状态
+//if valid && ！cancel 正常等dataok。等到可以跳pc
+//if valid && cancel 表示 已经地址握手成功两次，且第一个收到的dataok是不要的。不跳pc
 
 always @(posedge clk) begin
 //！把括号内的改为判断式会不会增加逻辑层次 路径变长？
@@ -262,12 +278,12 @@ always @(posedge clk) begin
         //边flush边把flush得到的pc发了req，if有指令 可以开始等dataok
         if(preif_to_if_valid) begin
             if_valid <= preif_to_if_valid;
-        end
-        //flush时不能发req，if无指令
-        else begin
+        //刚好dataok了 && 当拍不能地址握手成功->if无指令
+        end else if(if_ready_go && if_valid) begin
             if_valid <= `StageInvalid;
         end
-    end else if (if_allowin) begin
+
+    end else if (if_allowin && !if_inst_cancel) begin
       if_valid <= preif_to_if_valid;
     //id被阻塞时 即使br_taken有效，if_valid也不行
     // end else if (br_taken_cancel) begin  //if_valid & (~id_allowin | ~if_ready_go)
@@ -283,7 +299,21 @@ always @(posedge clk) begin
         if_excp_num  <= 4'b0;
     //正常allowin或者由于刷新取指，都是在 已经发了req||有例外 的情况下
         //补充以上：req了不代表握手成功，故flush了不代表pc可以直接更新
-    end else if (preif_to_if_valid & (if_allowin/*|flush_sign*/)) begin
+            //if allowin 时可能是if没在等，也可能是在等且要取消，也可能是在等且不取消
+//if pc表示当前在等data ok的pc
+//在等需要cancel（if valid && if inst cancel）的：pc要跳（即使还没等到）,跳到被cancel之后的那条
+//在收到需要被取消的dataok的同时 取消后第一条有效的地址握手成功->if pc要跳
+    //只有在当前有inst cancel且if pc已经是有效的那一条时不需要再跳
+    //问题在于：无法通过已有信号分辨 当前在等的if pc是要被cancel的还是不需要被cancel的，因为if inst cancel与if状态和data ok有关
+        //推翻以上：在inst cancel的情况下，即使前一个data ok还没等到（if valid为1但 if readygo 和if allowin为0（要被取消的在等没等到））。也应该跳pc
+        //即，if直接进入下一条指令的处理（等下一个pc）（同样if valid为1但 if readygo 和if allowin为0（要被取消的在等没等到。
+        //即，类似于直接跳过要被取消的那个的等待 因为这条要被跳过的dataok会被inst calcel解决
+            //但对于以上，如果 带有inst cancel的if pc等来了要被cancel的data ok的同时，被下一个pc地址握手成功了，cancel后的第一条指令会被错误的跳过
+                //尝试：对于带有inst cancel的if valid，先不允许发req
+
+//
+
+    end else if (preif_to_if_valid && (if_allowin || if_valid && !if_ready_go && !if_allowin)) begin
         if_pc <= nextpc;
         if_excp      <= preif_excp;
         if_excp_num  <= preif_excp_num;
@@ -324,8 +354,10 @@ always @(posedge clk) begin
 end
 
 //flush_sign应该留到 flush到的这条真正 地址握手成功
+    //推翻以上：flush sign应该留到flush到的这条 数据握手成功。否侧pc会出错。详见DEBUG NO.072901
 //以下逻辑只能应对有一条需要取消的指令
 //增加只有在后面的流水级都没有flush时才能发req逻辑，即req取到的指令保证有效
+
 //excp_flush_r信号生成
 always @(posedge clk) begin
     if (~resetn) begin
@@ -334,7 +366,7 @@ always @(posedge clk) begin
     else if (excp_flush && !preif_ready_go) begin //尚未真正握手成功
         excp_flush_r <= 1'b1;
     end
-    else if (preif_ready_go && if_allowin) begin
+    else if (preif_ready_go /*&& if_allowin*/) begin //刚好地址握手成功就不起了;置起后地址握手成功了就置0
         excp_flush_r <= 1'b0;
     end
 end  
@@ -346,7 +378,7 @@ always @(posedge clk) begin
     else if (ertn_flush && !preif_ready_go) begin
         ertn_flush_r <= 1'b1;
     end
-    else if (preif_ready_go && if_allowin) begin
+    else if (preif_ready_go /*&& if_allowin*/) begin
         ertn_flush_r <= 1'b0;
     end
 end  
@@ -358,7 +390,7 @@ always @(posedge clk) begin
     else if (refetch_flush && !preif_ready_go) begin
         refetch_flush_r <= 1'b1;
     end
-    else if (preif_ready_go && if_allowin) begin
+    else if (preif_ready_go /*&& if_allowin*/) begin
         refetch_flush_r <= 1'b0;
     end
 end 
@@ -376,7 +408,11 @@ end
 //preif发起req，当if能进入 && preif valid && 不需要stall（id来的load-br）
 //if发req时要保证现在在流水线上的没有带着要刷新的信号的指令，与dram req类同（推翻，使用cancel逻辑）
 //flush时立即用新的pc发req（推翻，因为flush时不一定有addr ok）
-  assign inst_sram_req   = (if_allowin && !preif_excp && !br_stall/* && !have_flush_forward *//* || flush_sign*/); //仅当if_allowin为1时才能发出req是较简单但时序较差的解决方案
+    //推翻以上：flush时需要保持req为1等待addr ok，详见debug NO.72901
+
+    //如果有inst cancel，为了避免cancel后的第一条指令被略过（因为cancel指令的data ok有可能被误判为cancel后第一条指令的dataok）
+    //以上可以保证 if allowin必然不是cancel的指令置起的data ok->if allowin
+  assign inst_sram_req   = (if_allowin && !preif_excp && !br_stall && !if_inst_cancel/* && !have_flush_forward */|| flush_sign); //仅当if_allowin为1时才能发出req是较简单但时序较差的解决方案
   assign inst_sram_wr = 1'b0;
   assign inst_sram_wstrb = 4'h0;
   assign inst_sram_size = 2'b10;
@@ -415,6 +451,7 @@ assign inst_addr_ok = 1'b1;
 
 //csr
 assign flush_sign = ertn_flush || ertn_flush_r || excp_flush || excp_flush_r || refetch_flush || refetch_flush_r /*|| icacop_flush || idle_flush*/;
+assign flush_sign_wire_o = ertn_flush || excp_flush || refetch_flush;
 
 // assign flush_inst_delay = flush_sign && !inst_addr_ok/* || idle_flush*/;
 
@@ -457,8 +494,9 @@ always @ (posedge clk) begin
     else if(if_inst_cancel && inst_sram_data_ok) begin
         if_inst_cancel <= 1'b0;
     end
+//flush信号支在来的那一拍会影响cpu状态（指valid和inst cancel）（？）
     //需要取消当前级指令
-    else if(flush_sign) begin
+    else if(flush_sign_wire_o) begin
         //且刚好发了req || 已经发完req了，if正在等data ok
             //推翻以上：刚好发req的时候其实addr和req都是对的，那么不用cancel直接用就行。（因为flush导致的req也是当拍）
             //即，if有指令 && 在等。此处不用if allowin是因为，if allowin包含if没指令的情况（没指令就代表preif没握手成功就不用取消
