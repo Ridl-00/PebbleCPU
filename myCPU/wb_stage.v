@@ -1,6 +1,5 @@
 // `timescale 1ns / 1ps
 `include "defines.v"
-`include "define_csr.v"
 
 module wb_stage (
     input wire clk,

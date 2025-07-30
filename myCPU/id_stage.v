@@ -189,6 +189,7 @@ wire inst_csrrd;
 wire inst_csrwr;
 wire inst_csrxchg;
 wire inst_ertn;
+wire inst_cpucfg;
 
 wire inst_rdcntid_w;
 wire inst_rdcntvl_w;
@@ -477,6 +478,8 @@ assign inst_ertn       = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0]
 // assign inst_tlbrd      = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0] & op_19_15_d[5'h10] & rk_d[5'h0b] & rj_d[5'h00] & rd_d[5'h00];
 // assign inst_tlbwr      = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0] & op_19_15_d[5'h10] & rk_d[5'h0c] & rj_d[5'h00] & rd_d[5'h00];
 // assign inst_tlbfill    = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0] & op_19_15_d[5'h10] & rk_d[5'h0d] & rj_d[5'h00] & rd_d[5'h00];
+assign inst_cpucfg     = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h0] & op_19_15_d[5'h00] & rk_d[5'h1b];
+
 
 // assign inst_valid_cacop = inst_cacop&&(dest[2:0]==3'b0||dest[2:0]==3'b1)&&(dest[4:3]==2'd0||dest[4:3]==2'd1||dest[4:3]==2'd2);
 // assign inst_nop = inst_cacop&&((dest[2:0]!=3'b0&&dest[2:0]!=3'b1)||(dest[4:3]==2'd3));
@@ -609,7 +612,7 @@ assign {rdcnt_en, rdcnt_result} = ({33{inst_rdcntvl_w}} & {1'b1, timer_64[31: 0]
 assign csr_data      = rdcnt_en  ? rdcnt_result      : 
                        /*inst_sc_w ? {31'b0, ds_llbit} :*/ rd_csr_data;                      
                                                                         
-assign res_from_csr  = inst_csrrd | inst_csrwr | inst_csrxchg | inst_rdcntid_w | inst_rdcntvh_w | inst_rdcntvl_w/* | inst_sc_w*/;
+assign res_from_csr  = inst_csrrd | inst_csrwr | inst_csrxchg | inst_rdcntid_w | inst_rdcntvh_w | inst_rdcntvl_w/* | inst_sc_w*/ | inst_cpucfg;
 assign csr_we        = inst_csrwr | inst_csrxchg;
 assign csr_mask      = inst_csrxchg;
 
@@ -851,7 +854,7 @@ assign inst_valid = inst_add_w      |
                     inst_rdcntid_w  |
                     inst_rdcntvh_w  |
                     inst_rdcntvl_w  |
-                    inst_ertn       ;//|
+                    inst_ertn       |
                     // inst_valid_cacop|
                     // inst_preld      |
                     // inst_dbar       |
@@ -860,6 +863,7 @@ assign inst_valid = inst_add_w      |
                     // inst_tlbrd      |
                     // inst_tlbwr      |
                     // inst_tlbfill    |
+                    inst_cpucfg     ;//|
 					// inst_nop        |
                     // (inst_invtlb && (rd == 5'd0 || 
                     //                  rd == 5'd1 || 
@@ -877,7 +881,7 @@ assign excp_num = {excp_ipe, excp_ine, inst_break, inst_syscall, id_excp_num, ha
 
 assign flush_from_id = (excp | inst_ertn | (csr_we /*| (mem_ll_w | mem_sc_w) & !excp*/) /*| mem_refetch | mem_idle*/) & id_valid;
 
-assign rd_csr_addr = csr_idx;
+assign rd_csr_addr = inst_cpucfg ? (rj_value[13:0]+14'h00b0) : csr_idx;
 
 //when cache operate icache, will refetch inst after this inst.
 // assign refetch = (inst_tlbwr || inst_tlbfill || inst_tlbrd || inst_invtlb || inst_ibar) && ds_valid;  //this inst will change addr trans 
