@@ -111,6 +111,7 @@ wire [31:0] alu_src2   ;
 wire [31:0] alu_result ;
 
 wire [31:0] mem_result;
+wire [31:0] final_result;
 
 assign seq_pc       = pc + 3'h4;
 assign nextpc       = br_taken ? br_target : seq_pc;
@@ -214,10 +215,11 @@ assign src2_is_imm   = inst_slli_w |
                        inst_bl     ;
 
 assign res_from_mem  = inst_ld_w;
-assign dst_is_r1     = inst_bl;
-assign gr_we         = ~inst_st_w & ~inst_beq & ~inst_bne & ~inst_b & ~inst_bl;
+assign dst_is_r1     = inst_bl; //bl写进r1
+assign gr_we         = ~inst_st_w & ~inst_beq & ~inst_bne & ~inst_b;//不是不写的其他都是写的
 assign mem_we        = inst_st_w;
-assign dest          = dst_is_r1 ? 5'd1 : rd;
+assign dest          = dst_is_r1 ? 5'd1 : rd; //写寄存器的目的地
+//？只有bl写进r1的话：直接判inst_b而不是dst_is_r1或许更快
 
 assign rf_raddr1 = rj;
 assign rf_raddr2 = src_reg_is_rd ? rd :rk;
@@ -250,7 +252,7 @@ assign alu_src2 = src2_is_imm ? imm : rkd_value;
 
 alu u_alu(
     .alu_op     (alu_op    ),
-    .alu_src1   (alu_src2  ),
+    .alu_src1   (alu_src1  ),
     .alu_src2   (alu_src2  ),
     .alu_result (alu_result)
     );
@@ -268,7 +270,7 @@ assign rf_wdata = final_result;
 
 // debug info generate
 assign debug_wb_pc       = pc;
-assign debug_wb_rf_wen   = {4{rf_we}};
+assign debug_wb_rf_we   = {4{rf_we}};
 assign debug_wb_rf_wnum  = dest;
 assign debug_wb_rf_wdata = final_result;
 
