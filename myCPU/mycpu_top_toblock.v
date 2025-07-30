@@ -9,171 +9,95 @@
 //Purpose     : IP block netlist
 //--------------------------------------------------------------------------------
 
-module mycpu_top(
-//     clk,
-//     data_sram_addr,
-//     data_sram_en,
-//     data_sram_rdata,
-//     data_sram_wdata,
-//     data_sram_we,
-//     debug_wb_pc,
-//     debug_wb_rf_wdata,
-//     debug_wb_rf_we,
-//     debug_wb_rf_wnum,
-//     inst_sram_addr,
-//     inst_sram_en,
-//     inst_sram_rdata,
-//     inst_sram_wdata,
-//     inst_sram_we,
-//     resetn);
+module core_top(
+    input      [7:0] intrpt,
 
     input wire aclk,
     input wire aresetn,
 
 //soc_axi
-    // //ar
-    // output wire [3:0] arid,
-    // output wire [31:0] araddr,
-    // output wire [7:0] arlen,
-    // output wire [2:0] arsize,
-    // output wire [1:0] arburst,
-    // output wire [1:0] arlock,
-    // output wire [3:0] arcache,
-    // output wire [2:0] arprot,
-    // output wire arvalid,
-    // input wire arready,
+    //ar
+    output wire [3:0] arid,
+    output wire [31:0] araddr,
+    output wire [7:0] arlen,
+    output wire [2:0] arsize,
+    output wire [1:0] arburst,
+    output wire [1:0] arlock,
+    output wire [3:0] arcache,
+    output wire [2:0] arprot,
+    output wire arvalid,
+    input wire arready,
 
-    // //r
-    // input wire [3:0] rid,
-    // input wire [31:0] rdata,
-    // input wire [1:0] rresp,
-    // input wire rlast,
-    // input wire rvalid,
-    // output wire rready,
+    //r
+    input wire [3:0] rid,
+    input wire [31:0] rdata,
+    input wire [1:0] rresp,
+    input wire rlast,
+    input wire rvalid,
+    output wire rready,
 
-    // //aw
-    // output wire [3:0] awid,
-    // output wire [31:0] awaddr,
-    // output wire [7:0] awlen,
-    // output wire [2:0] awsize,
-    // output wire [1:0] awburst,
-    // output wire [1:0] awlock,
-    // output wire [3:0] awcache,
-    // output wire [2:0] awprot,
-    // output wire awvalid,
-    // input wire awready,
+    //aw
+    output wire [3:0] awid,
+    output wire [31:0] awaddr,
+    output wire [7:0] awlen,
+    output wire [2:0] awsize,
+    output wire [1:0] awburst,
+    output wire [1:0] awlock,
+    output wire [3:0] awcache,
+    output wire [2:0] awprot,
+    output wire awvalid,
+    input wire awready,
 
-    // //w
-    // output wire [3:0] wid,
-    // output wire [31:0] wdata,
-    // output wire [3:0] wstrb,
-    // output wire wlast,
-    // output wire wvalid,
-    // input wire wready,
+    //w
+    output wire [3:0] wid,
+    output wire [31:0] wdata,
+    output wire [3:0] wstrb,
+    output wire wlast,
+    output wire wvalid,
+    input wire wready,
 
-    // //b
-    // input wire [3:0] bid,
-    // input wire [1:0] bresp,
-    // input wire bvalid,
-    // output wire bready,
+    //b
+    input wire [3:0] bid,
+    input wire [1:0] bresp,
+    input wire bvalid,
+    output wire bready,
 
-//soc_hs_bram
-  //类SRAM
-  output                      inst_sram_req,
-  output                      inst_sram_wr,
-  output [               3:0] inst_sram_wstrb,
-  output [               1:0] inst_sram_size,
-  output [              31:0] inst_sram_addr,
-  output [              31:0] inst_sram_wdata,
-  input [              31:0] inst_sram_rdata,
-  input                      inst_sram_addr_ok,
-  input                      inst_sram_data_ok,
+// //soc_hs_bram
+//   //类SRAM
+//   output                      inst_sram_req,
+//   output                      inst_sram_wr,
+//   output [               3:0] inst_sram_wstrb,
+//   output [               1:0] inst_sram_size,
+//   output [              31:0] inst_sram_addr,
+//   output [              31:0] inst_sram_wdata,
+//   input [              31:0] inst_sram_rdata,
+//   input                      inst_sram_addr_ok,
+//   input                      inst_sram_data_ok,
 
-  output                      data_sram_req,
-  output                      data_sram_wr,
-  output [               3:0] data_sram_wstrb,
-  output [               1:0] data_sram_size,
-  output [              31:0] data_sram_addr,
-  output [              31:0] data_sram_wdata,
-  input [              31:0] data_sram_rdata,
-  input                      data_sram_addr_ok,
-  input                      data_sram_data_ok,
-    //debug
-    output wire [31:0] debug_wb_pc,
-    output wire [ 3:0] debug_wb_rf_we,
-    output wire [ 4:0] debug_wb_rf_wnum,
-    output wire [31:0] debug_wb_rf_wdata
+//   output                      data_sram_req,
+//   output                      data_sram_wr,
+//   output [               3:0] data_sram_wstrb,
+//   output [               1:0] data_sram_size,
+//   output [              31:0] data_sram_addr,
+//   output [              31:0] data_sram_wdata,
+//   input [              31:0] data_sram_rdata,
+//   input                      data_sram_addr_ok,
+//   input                      data_sram_data_ok,
+
+//debug interface
+    input  wire         break_point     ,        
+    input  wire         infor_flag      ,        
+    input  wire [4:0]   reg_num         ,        
+    input  wire         ws_valid        ,        
+    input  wire         rf_rdata        ,        
+
+    //debug0
+    output wire [31:0] debug0_wb_pc,
+    output wire [ 3:0] debug0_wb_rf_wen,
+    output wire [ 4:0] debug0_wb_rf_wnum,
+    output wire [31:0] debug0_wb_rf_wdata
 );
 
-//   input clk;
-//   output [31:0]data_sram_addr;
-//   output data_sram_en;
-//   input [31:0]data_sram_rdata;
-//   output [31:0]data_sram_wdata;
-//   output [3:0]data_sram_we;
-//   output [31:0]debug_wb_pc;
-//   output [31:0]debug_wb_rf_wdata;
-//   output [3:0]debug_wb_rf_we;
-//   output [4:0]debug_wb_rf_wnum;
-//   output [31:0]inst_sram_addr;
-//   output inst_sram_en;
-//   input [31:0]inst_sram_rdata;
-//   output [31:0]inst_sram_wdata;
-//   output [3:0]inst_sram_we;
-//   input resetn;
-
-//   wire Net;
-//   wire Net1;
-//   wire clk_1;
-//   wire [31:0]csr_0_eentry_out;
-//   wire [31:0]csr_0_era_out;
-//   wire csr_0_has_int;
-//   wire [1:0]csr_0_plv_out;
-//   wire [31:0]csr_0_rd_data;
-//   wire [31:0]csr_0_tid_out;
-//   wire [63:0]csr_0_timer_64_out;
-//   wire [31:0]data_sram_rdata_1;
-//   wire [31:0]exe_stage_0_data_sram_addr;
-//   wire exe_stage_0_data_sram_en;
-//   wire [31:0]exe_stage_0_data_sram_wdata;
-//   wire [3:0]exe_stage_0_data_sram_we;
-//   wire exe_stage_0_exe_allowin;
-//   wire [38:0]exe_stage_0_exe_to_id_bus;
-//   wire [169:0]exe_stage_0_exe_to_mem_bus;
-//   wire exe_stage_0_exe_to_mem_valid;
-//   wire id_stage_0_id_allowin;
-//   wire [220:0]id_stage_0_id_to_exe_bus;
-//   wire id_stage_0_id_to_exe_valid;
-//   wire [33:0]id_stage_0_id_to_if_bus;
-//   wire [13:0]id_stage_0_rd_csr_addr;
-//   wire [68:0]if_stage_0_if_to_id_bus;
-//   wire if_stage_0_if_to_id_valid;
-//   wire [31:0]if_stage_0_inst_sram_addr;
-//   wire if_stage_0_inst_sram_en;
-//   wire [31:0]if_stage_0_inst_sram_wdata;
-//   wire [3:0]if_stage_0_inst_sram_we;
-//   wire [31:0]inst_sram_rdata_1;
-//   wire mem_stage_0_mem_allowin;
-//   wire mem_stage_0_mem_flush;
-//   wire [38:0]mem_stage_0_mem_to_id_bus;
-//   wire [167:0]mem_stage_0_mem_to_wb_bus;
-//   wire mem_stage_0_mem_to_wb_valid;
-//   wire resetn_1;
-//   wire [31:0]wb_stage_0_bad_va;
-//   wire [5:0]wb_stage_0_csr_ecode;
-//   wire [31:0]wb_stage_0_csr_era;
-//   wire [8:0]wb_stage_0_csr_esubcode;
-//   wire wb_stage_0_csr_wr_en;
-//   wire [31:0]wb_stage_0_debug_wb_pc;
-//   wire [31:0]wb_stage_0_debug_wb_rf_wdata;
-//   wire [3:0]wb_stage_0_debug_wb_rf_we;
-//   wire [4:0]wb_stage_0_debug_wb_rf_wnum;
-//   wire wb_stage_0_refetch_flush;
-//   wire wb_stage_0_va_error;
-//   wire wb_stage_0_wb_allowin;
-//   wire [64:0]wb_stage_0_wb_to_id_bus;
-//   wire [13:0]wb_stage_0_wr_csr_addr;
-//   wire [31:0]wb_stage_0_wr_csr_data;
 
   wire                      id_allowin;
   wire                      exe_allowin;
@@ -279,83 +203,28 @@ wire  [ 9:0]                   csr_asid_in     ;
 wire [ 1:0]                   csr_plv_out      ;
 
 
-  // //类SRAM
-  // wire                      inst_sram_req;
-  // wire                      inst_sram_wr;
-  // wire [               3:0] inst_sram_wstrb;
-  // wire [               1:0] inst_sram_size;
-  // wire [              31:0] inst_sram_addr;
-  // wire [              31:0] inst_sram_wdata;
-  // wire [              31:0] inst_sram_rdata;
-  // wire                      inst_sram_addr_ok;
-  // wire                      inst_sram_data_ok;
-  // wire                      data_sram_req;
-  // wire                      data_sram_wr;
-  // wire [               3:0] data_sram_wstrb;
-  // wire [               1:0] data_sram_size;
-  // wire [              31:0] data_sram_addr;
-  // wire [              31:0] data_sram_wdata;
-  // wire [              31:0] data_sram_rdata;
-  // wire                      data_sram_addr_ok;
-  // wire                      data_sram_data_ok;
-
-
-//   assign clk_1 = clk;
-//   assign data_sram_addr[31:0] = exe_stage_0_data_sram_addr;
-//   assign data_sram_en = exe_stage_0_data_sram_en;
-//   assign data_sram_rdata_1 = data_sram_rdata[31:0];
-//   assign data_sram_wdata[31:0] = exe_stage_0_data_sram_wdata;
-//   assign data_sram_we[3:0] = exe_stage_0_data_sram_we;
-//   assign debug_wb_pc[31:0] = wb_stage_0_debug_wb_pc;
-//   assign debug_wb_rf_wdata[31:0] = wb_stage_0_debug_wb_rf_wdata;
-//   assign debug_wb_rf_we[3:0] = wb_stage_0_debug_wb_rf_we;
-//   assign debug_wb_rf_wnum[4:0] = wb_stage_0_debug_wb_rf_wnum;
-//   assign inst_sram_addr[31:0] = if_stage_0_inst_sram_addr;
-//   assign inst_sram_en = if_stage_0_inst_sram_en;
-//   assign inst_sram_rdata_1 = inst_sram_rdata[31:0];
-//   assign inst_sram_wdata[31:0] = if_stage_0_inst_sram_wdata;
-//   assign inst_sram_we[3:0] = if_stage_0_inst_sram_we;
-//   assign resetn_1 = resetn;
+  //类SRAM
+  wire                      inst_sram_req;
+  wire                      inst_sram_wr;
+  wire [               3:0] inst_sram_wstrb;
+  wire [               1:0] inst_sram_size;
+  wire [              31:0] inst_sram_addr;
+  wire [              31:0] inst_sram_wdata;
+  wire [              31:0] inst_sram_rdata;
+  wire                      inst_sram_addr_ok;
+  wire                      inst_sram_data_ok;
+  wire                      data_sram_req;
+  wire                      data_sram_wr;
+  wire [               3:0] data_sram_wstrb;
+  wire [               1:0] data_sram_size;
+  wire [              31:0] data_sram_addr;
+  wire [              31:0] data_sram_wdata;
+  wire [              31:0] data_sram_rdata;
+  wire                      data_sram_addr_ok;
+  wire                      data_sram_data_ok;
 
 
   csr u_csr(
-        // .asid_in({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
-        // .bad_va_in(wb_stage_0_bad_va),
-        // .clk(clk_1),
-        // .csr_wr_en(wb_stage_0_csr_wr_en),
-        // .ecode_in(wb_stage_0_csr_ecode),
-        // .eentry_out(csr_0_eentry_out),
-        // .era_in(wb_stage_0_csr_era),
-        // .era_out(csr_0_era_out),
-        // .ertn_flush(Net1),
-        // .esubcode_in(wb_stage_0_csr_esubcode),
-        // .excp_flush(Net),
-        // .excp_tlb(1'b0),
-        // .excp_tlb_vppn({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
-        // .excp_tlbrefill(1'b0),
-        // .has_int(csr_0_has_int),
-        // .interrupt({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
-        // .lladdr_in({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
-        // .lladdr_set_in(1'b0),
-        // .llbit_in(1'b0),
-        // .llbit_set_in(1'b0),
-        // .plv_out(csr_0_plv_out),
-        // .rd_addr(id_stage_0_rd_csr_addr),
-        // .rd_data(csr_0_rd_data),
-        // .resetn(resetn_1),
-        // .tid_out(csr_0_tid_out),
-        // .timer_64_out(csr_0_timer_64_out),
-        // .tlbehi_in({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
-        // .tlbelo0_in({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
-        // .tlbelo1_in({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
-        // .tlbidx_in({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
-        // .tlbrd_en(1'b0),
-        // .tlbsrch_en(1'b0),
-        // .tlbsrch_found(1'b0),
-        // .tlbsrch_index({1'b0,1'b0,1'b0,1'b0,1'b0}),
-        // .va_error_in(wb_stage_0_va_error),
-        // .wr_addr(wb_stage_0_wr_csr_addr),
-        // .wr_data(wb_stage_0_wr_csr_data)
         .clk                (aclk),
         .resetn             (aresetn),
 
@@ -592,75 +461,75 @@ assign {
 
       .wb_to_csr_bus(wb_to_csr_bus),
 
-      .debug_wb_pc      (debug_wb_pc),
-      .debug_wb_rf_we  (debug_wb_rf_we),
-      .debug_wb_rf_wnum (debug_wb_rf_wnum),
-      .debug_wb_rf_wdata(debug_wb_rf_wdata)
+      .debug_wb_pc      (debug0_wb_pc),
+      .debug_wb_rf_we  (debug0_wb_rf_wen),
+      .debug_wb_rf_wnum (debug0_wb_rf_wnum),
+      .debug_wb_rf_wdata(debug0_wb_rf_wdata)
 
 );
 
   //axi
-  // axi_bridge u_axi_bridge (
-  //     .clk              (aclk),
-  //     .aresetn          (aresetn),
-  //     .arid             (arid),
-  //     .araddr           (araddr),
-  //     .arlen            (arlen),
-  //     .arsize           (arsize),
-  //     .arburst          (arburst),
-  //     .arlock           (arlock),
-  //     .arcache          (arcache),
-  //     .arprot           (arprot),
-  //     .arvalid          (arvalid),
-  //     .arready          (arready),
-  //     .rid              (rid),
-  //     .rdata            (rdata),
-  //     .rresp            (rresp),
-  //     .rlast            (rlast),
-  //     .rvalid           (rvalid),
-  //     .rready           (rready),
-  //     .awid             (awid),
-  //     .awaddr           (awaddr),
-  //     .awlen            (awlen),
-  //     .awsize           (awsize),
-  //     .awburst          (awburst),
-  //     .awlock           (awlock),
-  //     .awcache          (awcache),
-  //     .awprot           (awprot),
-  //     .awvalid          (awvalid),
-  //     .awready          (awready),
-  //     .wid              (wid),
-  //     .wdata            (wdata),
-  //     .wstrb            (wstrb),
-  //     .wlast            (wlast),
-  //     .wvalid           (wvalid),
-  //     .wready           (wready),
-  //     .bid              (bid),
-  //     .bresp            (bresp),
-  //     .bvalid           (bvalid),
-  //     .bready           (bready),
+  axi_bridge u_axi_bridge (
+      .clk              (aclk),
+      .aresetn          (aresetn),
+      .arid             (arid),
+      .araddr           (araddr),
+      .arlen            (arlen),
+      .arsize           (arsize),
+      .arburst          (arburst),
+      .arlock           (arlock),
+      .arcache          (arcache),
+      .arprot           (arprot),
+      .arvalid          (arvalid),
+      .arready          (arready),
+      .rid              (rid),
+      .rdata            (rdata),
+      .rresp            (rresp),
+      .rlast            (rlast),
+      .rvalid           (rvalid),
+      .rready           (rready),
+      .awid             (awid),
+      .awaddr           (awaddr),
+      .awlen            (awlen),
+      .awsize           (awsize),
+      .awburst          (awburst),
+      .awlock           (awlock),
+      .awcache          (awcache),
+      .awprot           (awprot),
+      .awvalid          (awvalid),
+      .awready          (awready),
+      .wid              (wid),
+      .wdata            (wdata),
+      .wstrb            (wstrb),
+      .wlast            (wlast),
+      .wvalid           (wvalid),
+      .wready           (wready),
+      .bid              (bid),
+      .bresp            (bresp),
+      .bvalid           (bvalid),
+      .bready           (bready),
 
 
-  //     .inst_sram_req    (inst_sram_req),
-  //     .inst_sram_wr     (inst_sram_wr),
-  //     .inst_sram_size   (inst_sram_size),
-  //     .inst_sram_wstrb  (inst_sram_wstrb),
-  //     .inst_sram_addr   (inst_sram_addr),
-  //     .inst_sram_wdata  (inst_sram_wdata),
-  //     .inst_sram_addr_ok(inst_sram_addr_ok),
-  //     .inst_sram_data_ok(inst_sram_data_ok),
-  //     .inst_sram_rdata  (inst_sram_rdata),
+      .inst_sram_req    (inst_sram_req),
+      .inst_sram_wr     (inst_sram_wr),
+      .inst_sram_size   (inst_sram_size),
+      .inst_sram_wstrb  (inst_sram_wstrb),
+      .inst_sram_addr   (inst_sram_addr),
+      .inst_sram_wdata  (inst_sram_wdata),
+      .inst_sram_addr_ok(inst_sram_addr_ok),
+      .inst_sram_data_ok(inst_sram_data_ok),
+      .inst_sram_rdata  (inst_sram_rdata),
     
-  //     .data_sram_req    (data_sram_req),
-  //     .data_sram_wr     (data_sram_wr),
-  //     .data_sram_size   (data_sram_size),
-  //     .data_sram_wstrb   (data_sram_wstrb),
-  //     .data_sram_addr   (data_sram_addr),
-  //     .data_sram_wdata  (data_sram_wdata),
-  //     .data_sram_addr_ok(data_sram_addr_ok),
-  //     .data_sram_data_ok(data_sram_data_ok),
-  //     .data_sram_rdata  (data_sram_rdata)
-  // );
+      .data_sram_req    (data_sram_req),
+      .data_sram_wr     (data_sram_wr),
+      .data_sram_size   (data_sram_size),
+      .data_sram_wstrb   (data_sram_wstrb),
+      .data_sram_addr   (data_sram_addr),
+      .data_sram_wdata  (data_sram_wdata),
+      .data_sram_addr_ok(data_sram_addr_ok),
+      .data_sram_data_ok(data_sram_data_ok),
+      .data_sram_rdata  (data_sram_rdata)
+  );
 
 
 endmodule
