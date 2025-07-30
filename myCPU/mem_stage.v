@@ -20,7 +20,15 @@ module mem_stage(
     output wire [`MEM_TO_ID_WD] mem_to_id_bus,
 
     //dataRAM读数据
-    input [31:0] data_sram_rdata
+    input [31:0] data_sram_rdata,
+    input        data_sram_data_ok,
+
+    //wb-mem
+    input    wire         flush_sign,
+
+    //mem-exe
+    output   wire         flush_from_mem
+
 );
 //======================================================
 //======== Parameter and Internal signals ==========
@@ -42,12 +50,12 @@ wire        mem_gr_we;
 wire [`RegAddrBus] mem_dest;
 wire [`RegBus] mem_exe_result;
 wire [`InstAddrBus] mem_pc;
-// wire        mem_excp;
-// wire [ 9:0] mem_excp_num;
-// wire        mem_ertn;
-// wire [31:0] mem_csr_result;
-// wire [13:0] mem_csr_idx;
-// wire        mem_csr_we;
+wire        mem_excp;
+wire [ 9:0] mem_excp_num;
+wire        mem_ertn;
+wire [31:0] mem_csr_result;
+wire [13:0] mem_csr_idx;
+wire        mem_csr_we;
 // wire        mem_ll_w;
 // wire        mem_sc_w;
 wire        mem_store_op;
@@ -68,7 +76,7 @@ wire        mem_mem_sign_exted;
 // wire        mem_preld_inst;
 // wire        mem_cacop;
 // wire        mem_idle;
-// wire [31:0] mem_error_va;
+wire [31:0] mem_error_va;
 
 // // difftest
 // wire        mem_cnt_inst     ;
@@ -100,8 +108,8 @@ wire        dest_zero;
 
 // wire [31:0] paddr;
 
-// wire [15:0] excp_num;
-// wire        excp;
+wire [15:0] excp_num;
+wire        excp;
 
 // wire        excp_tlbr;
 // wire        excp_pil ;
@@ -114,6 +122,13 @@ wire        dest_zero;
 
 // wire        sc_addr_eq;
 
+
+// //exception(目前被合并到一个flush_sign了)
+// input             excp_flush    ,
+// input             ertn_flush    ,
+// input             refetch_flush ,
+// // input             icacop_flush  ,
+
 //前递和阻塞
 //mem-id
 wire        forward_enable;
@@ -124,16 +139,17 @@ wire        forward_enable;
 //=================== Main Code ====================
 //======================================================
 //当前stage控制信号
-  assign mem_ready_go = 1'b1; //目前只从数据 RAM 中取回数据,因此当 load 类指令位于  MEM 阶段的时候,数据 RAM 一定可以返回数据
+//不需要访存，或要访存且访存完成，或有异常（此级及之前的 级有异常，那么这条指令无效，自然没必要等访存）
+  assign mem_ready_go = /*(data_data_ok || data_buff_enable) || */ (!access_mem) || (access_mem & data_sram_data_ok)|| excp /*|| sc_cancel_req*/;
   assign mem_allowin = ~mem_valid | mem_ready_go & wb_allowin;
-  assign mem_to_wb_valid = mem_ready_go & mem_valid;
+  assign mem_to_wb_valid = mem_ready_go & mem_valid & !(flush_sign);
 
 assign mem_to_id_valid = mem_valid;
 
 //exe-mem
   always @(posedge clk) begin
-    if (~resetn) begin
-      mem_valid <= 1'b1;
+    if (~resetn | flush_sign) begin
+      mem_valid <= 1'b0;
     end else if (mem_allowin) begin
       mem_valid <= exe_to_mem_valid;
     end
@@ -150,7 +166,7 @@ end
 
 assign access_mem = mem_store_op || mem_load_op;
 
-// assign flush_sign = excp_flush || ertn_flush || refetch_flush || icacop_flush || idle_flush;
+// assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
 
 // assign mem_rdata = data_buff_enable ? data_rd_buff : data_rdata;
 assign mem_rdata = data_sram_rdata;
@@ -175,9 +191,20 @@ assign mem_result = ({32{mem_mem_size[0] &&  mem_mem_sign_exted}} & {{24{mem_byt
 assign mem_final_result = ({32{mem_load_op      }} & mem_result       )  |
                           ({32{!mem_load_op}} & mem_exe_result);
 
+//forward仅表示是否当级是否有需要写寄存器的指令（不标识当前写的数据是否正确。
+  //即，即使当前级并未生成有效数据，也需要为其提供一个前递的位置
+//dep_need_stall用于阻塞流水线，等待当级生成有效数据
 assign dest_zero            = (mem_dest == 5'b0);
 assign forward_enable       = mem_gr_we & ~dest_zero & mem_valid;
-assign dep_need_stall       = mem_load_op & !mem_to_wb_valid;
+assign dep_need_stall       = mem_load_op & !data_sram_data_ok;
+
+//exception
+assign excp = /*excp_tlbr || excp_pil || excp_pis || excp_ppi || excp_pme || */mem_excp;
+// assign excp_num = {excp_pil, excp_pis, excp_ppi, excp_pme, excp_tlbr, 1'b0, mem_excp_num};
+assign excp_num = {1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, mem_excp_num};
+
+assign flush_from_mem = (excp | mem_ertn | (mem_csr_we /*| (mem_ll_w | mem_sc_w) & !excp*/) /*| mem_refetch | mem_idle*/) & mem_valid;
+
 
 //exe-mem
 assign {
@@ -190,7 +217,7 @@ assign {
         // mem_cnt_inst      ,  //311:311  for difftest
         // mem_timer_64      ,  //310:247  for difftest
         // mem_inst          ,  //246:215  for difftest
-        // mem_error_va      ,  //214:183
+        mem_error_va      ,  //214:183
         // mem_idle          ,  //182:182
         // mem_cacop         ,  //181:181
         // mem_preld_inst    ,  //180:180
@@ -211,12 +238,12 @@ assign {
         mem_store_op      ,  //138:138
         // mem_sc_w          ,  //137:137
         // mem_ll_w          ,  //136:136
-        // mem_excp_num      ,  //135:126
-        // mem_csr_we        ,  //125:125
-        // mem_csr_idx       ,  //124:111
-        // mem_csr_result    ,  //110:79
-        // mem_ertn          ,  //78:78
-        // mem_excp          ,  //77:77
+        mem_excp_num      ,  //135:126
+        mem_csr_we        ,  //125:125
+        mem_csr_idx       ,  //124:111
+        mem_csr_result    ,  //110:79
+        mem_ertn          ,  //78:78
+        mem_excp          ,  //77:77
         mem_mem_size      ,  //76:75
         mem_mul_div_op    ,  //74:71
         mem_load_op       ,  //70:70
@@ -258,15 +285,15 @@ assign mem_to_wb_bus = {
                     //    data_tlb_index ,  //175:171
                     //    data_tlb_found ,  //170:170
                     //    mem_tlbsrch     ,  //169:169
-                    //    mem_error_va    ,  //168:137
+                       mem_error_va    ,  //168:137
                     //    mem_sc_w        ,  //136:136
                     //    mem_ll_w        ,  //135:135
-                    //    eemcp_num       ,  //134:119
-                    //    mem_csr_we      ,  //118:118
-                    //    mem_csr_idx     ,  //117:104
-                    //    mem_csr_result  ,  //103:72
-                    //    mem_ertn        ,  //71:71
-                    //    excp           ,  //70:70
+                       excp_num       ,  //134:119
+                       mem_csr_we      ,  //118:118
+                       mem_csr_idx     ,  //117:104
+                       mem_csr_result  ,  //103:72
+                       mem_ertn        ,  //71:71
+                       excp           ,  //70:70
                        mem_gr_we       ,  //69:69
                        mem_dest        ,  //68:64
                        mem_final_result,  //63:32
