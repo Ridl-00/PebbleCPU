@@ -371,7 +371,7 @@ always @(posedge clk) begin
     if (~resetn) begin
         excp_flush_r <= 1'b0;
     end
-    else if (excp_flush && !preif_ready_go) begin //尚未真正握手成功
+    else if (excp_flush && (!preif_ready_go || !if_allowin && preif_ready_go)) begin //尚未真正握手成功。或者上一指令在preif握手成功了，但还不能进去if
         excp_flush_r <= 1'b1;
     end
     else if (preif_ready_go /*&& if_allowin*/) begin //刚好地址握手成功就不起了;置起后地址握手成功了就置0
@@ -383,7 +383,7 @@ always @(posedge clk) begin
     if (~resetn) begin
         ertn_flush_r <= 1'b0;
     end
-    else if (ertn_flush && !preif_ready_go) begin
+    else if (ertn_flush && (!preif_ready_go || !if_allowin && preif_ready_go)) begin
         ertn_flush_r <= 1'b1;
     end
     else if (preif_ready_go /*&& if_allowin*/) begin
@@ -395,7 +395,7 @@ always @(posedge clk) begin
     if (~resetn) begin
         refetch_flush_r <= 1'b0;
     end
-    else if (refetch_flush && !preif_ready_go) begin
+    else if (refetch_flush && (!preif_ready_go || !if_allowin && preif_ready_go)) begin
         refetch_flush_r <= 1'b1;
     end
     else if (preif_ready_go /*&& if_allowin*/) begin
@@ -420,7 +420,8 @@ end
 
     //如果有inst cancel，为了避免cancel后的第一条指令被略过（因为cancel指令的data ok有可能被误判为cancel后第一条指令的dataok）
     //以上可以保证 if allowin必然不是cancel的指令置起的data ok->if allowin
-  assign inst_sram_req   = (if_allowin && !preif_excp && !br_stall && !if_inst_cancel/* && !have_flush_forward */|| flush_sign); //仅当if_allowin为1时才能发出req是较简单但时序较差的解决方案
+    //有例外不发：即使是flush了，有例外的也是flush后新的pc
+  assign inst_sram_req   = if_allowin && !preif_excp && (!br_stall && !if_inst_cancel || flush_sign); //仅当if_allowin为1时才能发出req是较简单但时序较差的解决方案
   assign inst_sram_wr = 1'b0;
   assign inst_sram_wstrb = 4'h0;
   assign inst_sram_size = 2'b10;
