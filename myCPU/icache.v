@@ -40,6 +40,20 @@ module icache
         end 
     end
     assign data_ok = addr_ok_r;
+
+    reg [31:0] cache_raddr;
+    always@(posedge clk) begin
+        if(rst)begin
+            cache_raddr<=32'b0;
+        end
+        else if(miss&&cache_raddr==32'b0) begin
+            cache_raddr<=sram_addr;
+        end
+        else if(refresh) begin
+            cache_raddr<=32'b0;
+        end
+    end
+
     cache_tag u_cache_tag(
     	.clk        (clk             ),
         .rst        (rst             ),
@@ -48,7 +62,7 @@ module icache
         .cached     (cached          ),
         .sram_en    (sram_en         ),
         .sram_wen   (sram_wen        ),
-        .sram_addr  (sram_addr       ),
+        .sram_addr  (|cache_raddr?cache_raddr:sram_addr),
         .refresh    (refresh         ),
         .miss       (miss            ),
         .axi_raddr  (raddr           ),
@@ -67,7 +81,7 @@ module icache
         .cached        (cached       ),
         .sram_en       (sram_en      ),
         .sram_wen      (sram_wen     ),
-        .sram_addr     (sram_addr    ),
+        .sram_addr     (|cache_raddr?cache_raddr:sram_addr    ),
         .sram_wdata    (sram_wdata   ),
         .sram_rdata    (sram_rdata   ),
         .refresh       (refresh      ),

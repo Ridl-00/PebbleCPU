@@ -26,6 +26,7 @@ module cache_data(
     wire [`TAG_WIDTH-2:0] tag;
     wire [5:0] index;
     wire [5:0] offset;
+    //寄存器信号一律用作读数据
     reg [`HIT_WIDTH-1:0] hit_r;
     reg lru_r;
     reg cached_r;

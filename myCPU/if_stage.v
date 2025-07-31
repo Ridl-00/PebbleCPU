@@ -96,7 +96,7 @@ wire         flush_inst_go_dirt;
 wire  [31:0] excp_entry;
 wire  [31:0] inst_flush_pc;
 
-wire have_flush_forward;
+wire have_flush_forward;//这个没用吧
 
 assign have_flush_forward = excp || flush_from_id || flush_from_exe || flush_from_mem ;
 
@@ -284,19 +284,20 @@ always @(posedge clk) begin
                                                     //推翻以上：flush时可能无法立即能够取指（addr ok可能不为1），此时需要req保持在高（通过if valid低，此时没有发req，则if不需要等，即流水级无指令）
       if_valid <= `StageInvalid;
     end else if(flush_sign) begin
-        //边flush边把flush得到的pc发了req，if有指令 可以开始等dataok
+        // 边flush边把flush得到的pc发了req，if有指令 可以开始等dataok
         if(preif_to_if_valid) begin
             if_valid <= preif_to_if_valid;
         //刚好dataok了 && 当拍不能地址握手成功->if无指令
         end else if(if_ready_go && if_valid) begin
             if_valid <= `StageInvalid;
         end
-
+    // flush时，如果if有指令，会在inst cancel取消这条指令。那么是否还要继续等dataok->要等 等的时候应该维持if valid为高
+        //即，flush的时候如果if allowin = 0（在等dataok），if valid不应改变
+    //如果if没有指令 if valid=0->if allowin = 1->正常preif给if
     end else if (if_allowin && !if_inst_cancel) begin
       if_valid <= preif_to_if_valid;
-    //id被阻塞时 即使br_taken有效，if_valid也不行
-    // end else if (br_taken_cancel) begin  //if_valid & (~id_allowin | ~if_ready_go)
-    // end else if(if_valid & (~id_allowin | ~if_ready_go)) begin
+    //如果当前if pc已经等到了dataok，但id allowin = 0。if还是完成了取指，if不再有指令。已经完成的取指去了 if inst valid
+    // end else if (!id_allowin && inst_sram_data_ok) begin
     //     if_valid<=`StageInvalid;
     end
 end
@@ -320,9 +321,17 @@ always @(posedge clk) begin
             //但对于以上，如果 带有inst cancel的if pc等来了要被cancel的data ok的同时，被下一个pc地址握手成功了，cancel后的第一条指令会被错误的跳过
                 //尝试：对于带有inst cancel的if valid，先不允许发req
 
-//
+    end else if(flush_sign) begin
+        // 边flush边把flush得到的pc发了req，if有指令 可以开始等dataok
+        if(preif_to_if_valid) begin
+            if_pc <= nextpc;
+            if_excp      <= preif_excp;
+            if_excp_num  <= preif_excp_num;
+        //刚好dataok了 && 当拍不能地址握手成功->if无指令
 
-    end else if (preif_to_if_valid && (if_allowin /*|| if_valid && !if_ready_go && !if_allowin*/)) begin
+        end
+
+    end else if (preif_to_if_valid && if_allowin && !if_inst_cancel) begin
         if_pc <= nextpc;
         if_excp      <= preif_excp;
         if_excp_num  <= preif_excp_num;
