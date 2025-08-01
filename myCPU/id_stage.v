@@ -202,7 +202,7 @@ wire inst_rdcntvh_w;
 // wire inst_tlbfill;
 // wire inst_invtlb;
 
-// wire inst_cacop;
+wire inst_cacop;
 // wire inst_valid_cacop;
 // wire inst_preld;
 // wire inst_dbar;
@@ -451,7 +451,7 @@ assign inst_st_h       = op_31_26_d[6'h0a] & op_25_22_d[4'h5];
 assign inst_st_w       = op_31_26_d[6'h0a] & op_25_22_d[4'h6];
 assign inst_ld_bu      = op_31_26_d[6'h0a] & op_25_22_d[4'h8];
 assign inst_ld_hu      = op_31_26_d[6'h0a] & op_25_22_d[4'h9];
-// assign inst_cacop      = op_31_26_d[6'h01] & op_25_22_d[4'h8];
+assign inst_cacop      = op_31_26_d[6'h01] & op_25_22_d[4'h8];
 // assign inst_preld      = op_31_26_d[6'h0a] & op_25_22_d[4'hb];
 assign inst_jirl       = op_31_26_d[6'h13];
 assign inst_b          = op_31_26_d[6'h14];
@@ -663,6 +663,7 @@ assign inst_need_rj = inst_add_w      |
                       // inst_preld      |
                       // inst_ll_w       |
                       // inst_sc_w       |
+                      inst_cpucfg     |
                       inst_csrxchg    ;
                       // inst_valid_cacop|
                       // inst_invtlb     
@@ -863,6 +864,7 @@ assign inst_valid = inst_add_w      |
                     // inst_tlbrd      |
                     // inst_tlbwr      |
                     // inst_tlbfill    |
+                    inst_cacop |
                     inst_cpucfg     ;//|
 					// inst_nop        |
                     // (inst_invtlb && (rd == 5'd0 || 
