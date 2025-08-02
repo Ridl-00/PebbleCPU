@@ -315,13 +315,14 @@ assign id_to_csr_bus = {
 //=================== Main Code ====================
 //======================================================
 //当前stage控制信号
-  assign id_allowin = ~id_valid | id_ready_go & exe_allowin;
-  assign id_to_exe_valid = id_valid & id_ready_go & !flush_sign;
 // assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall/*|| idle_stall || tlb_inst_stall || ibar_stall || dbar_stall*/) || excp;
-assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
+  assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
+  assign id_allowin = ~id_valid | id_ready_go & exe_allowin;
+  assign id_to_exe_valid = id_valid && id_ready_go && !flush_sign;
+
 
   always @(posedge clk) begin
-    if (~resetn | flush_sign) begin
+    if (~resetn || flush_sign) begin
       id_valid <= 1'b0;
     end else if (id_allowin) begin
       id_valid <= if_to_id_valid;
@@ -331,7 +332,7 @@ assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
   always @(posedge clk) begin
     if (~resetn) begin
         id_data <= `ID_DATA_Reset;
-    end else if (id_allowin & if_to_id_valid) begin
+    end else if (id_allowin && if_to_id_valid) begin
         id_data <= if_to_id_bus;
     end
   end
@@ -761,9 +762,9 @@ assign br_taken  = (  inst_beq  &  rj_eq_rd
                     | inst_bl
                     | inst_b
                     );
-assign br_target = ({32{inst_beq || inst_bne || inst_bl || inst_b || 
-                    inst_blt || inst_bge || inst_bltu || inst_bgeu}} & (id_pc + id_imm   ))            |
-                   ({32{inst_jirl}}                                  & (/*rj_value_forward_exe*/rj_value + id_imm)) ;
+assign br_target = ({32{inst_beq | inst_bne | inst_bl | inst_b |
+                    inst_blt | inst_bge | inst_bltu | inst_bgeu}} & (id_pc + id_imm   ))            |
+                   ({32{inst_jirl}}                               & (/*rj_value_forward_exe*/rj_value + id_imm)) ;
 
 assign br_inst = br_need_reg_data || inst_bl || inst_b;
 assign br_need_reg_data = inst_beq   ||

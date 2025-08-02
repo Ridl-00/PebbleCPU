@@ -148,14 +148,14 @@ wire div_complete;
 //======================================================
 //=================== Main Code ====================
 //======================================================
-  assign exe_allowin = ~exe_valid | exe_ready_go & mem_allowin;
-  assign exe_to_mem_valid = exe_valid & exe_ready_go & !flush_sign;
 // assign exe_ready_go    = (!div_stall & (/*(dcache_req_or_inst_en && data_addr_ok) ||*/ !(access_mem /*|| dcacop_inst || preld_inst*/)) /*&& !tlbsrch_stall && !icacop_inst_stall*/)/* || excp*/;
-assign exe_ready_go = (!div_stall && (~(access_mem)||(data_sram_req & data_sram_addr_ok)))|| excp;
+  assign exe_ready_go = (!div_stall && (!(access_mem)||(data_sram_req && data_sram_addr_ok)))|| excp;
+  assign exe_allowin = ~exe_valid | exe_ready_go & mem_allowin;
+  assign exe_to_mem_valid = exe_valid && exe_ready_go && !flush_sign;
 
 // assign exe_to_ds_valid = exe_valid;
 
-assign access_mem = exe_load_op | exe_store_op;
+assign access_mem = exe_load_op || exe_store_op;
 
 assign flush_sign  = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
 
@@ -163,7 +163,7 @@ assign flush_sign  = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush
  
   
   always @(posedge clk) begin
-    if (~resetn | flush_sign) begin
+    if (~resetn || flush_sign) begin
       exe_valid <= 1'b0;
     end else if (exe_allowin) begin
       exe_valid <= id_to_exe_valid;
@@ -171,7 +171,7 @@ assign flush_sign  = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush
   end
 
   always @(posedge clk) begin
-    if (exe_allowin & id_to_exe_valid) begin
+    if (exe_allowin && id_to_exe_valid) begin
       exe_data <= id_to_exe_bus;
     end
   end
@@ -221,8 +221,8 @@ assign exe_div_enable = (exe_mul_div_op[2] | exe_mul_div_op[3]) & exe_valid;
 assign exe_mul_enable = (exe_mul_div_op[0] | exe_mul_div_op[1]) & exe_valid;
 
 //高有效（要暂停）
-// assign div_stall     = exe_div_enable & ~div_complete;
-assign div_stall     = exe_div_enable ? ~div_complete : 1'b0;
+assign div_stall     = exe_div_enable & ~div_complete;
+// assign div_stall     = exe_div_enable ? ~div_complete : 1'b0;
 
 alu u_alu(
     .alu_op     (exe_alu_op    ),
@@ -351,7 +351,7 @@ assign exe_result = exe_res_from_csr  ? exe_csr_data :
 assign dest_zero            = (exe_dest == 5'b0); 
 assign forward_enable       = exe_gr_we & ~dest_zero & exe_valid;
 // assign dep_need_stall       = exe_load_op | exe_div_enable | exe_mul_enable;
-assign dep_need_stall       = exe_load_op | div_stall ; //如果是load，需要等load在exe的操作，接着等load在mem的操作
+assign dep_need_stall       = exe_load_op || div_stall ; //如果是load，需要等load在exe的操作，接着等load在mem的操作
 
 //exception
 assign excp_ale        = access_mem & ((exe_mem_size[0] &  1'b0)                                  | 

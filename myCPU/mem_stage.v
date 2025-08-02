@@ -132,13 +132,13 @@ wire        forward_enable;
 //不需要访存，或要访存且访存完成，或有异常（此级及之前的 级有异常，那么这条指令无效，自然没必要等访存）
   assign mem_ready_go = /*(data_data_ok || data_buff_enable) || */ (!access_mem) || (access_mem & data_sram_data_ok)|| excp /*|| sc_cancel_req*/;
   assign mem_allowin = ~mem_valid | mem_ready_go & wb_allowin;
-  assign mem_to_wb_valid = mem_ready_go & mem_valid & !flush_sign;
+  assign mem_to_wb_valid = mem_ready_go && mem_valid && !flush_sign;
 
 assign mem_to_id_valid = mem_valid;
 
 //exe-mem
   always @(posedge clk) begin
-    if (~resetn | flush_sign) begin
+    if (~resetn || flush_sign) begin
       mem_valid <= 1'b0;
     end else if (mem_allowin) begin
       mem_valid <= exe_to_mem_valid;
@@ -146,7 +146,7 @@ assign mem_to_id_valid = mem_valid;
   end
 
 always @(posedge clk) begin
-  if (mem_allowin & exe_to_mem_valid) begin
+  if (mem_allowin && exe_to_mem_valid) begin
     mem_data <= exe_to_mem_bus;
   end
   // else begin
@@ -185,8 +185,8 @@ assign mem_final_result = ({32{mem_load_op      }} & mem_result       )  |
   //即，即使当前级并未生成有效数据，也需要为其提供一个前递的位置
 //dep_need_stall用于阻塞流水线，等待当级生成有效数据
 assign dest_zero            = (mem_dest == 5'b0);
-assign forward_enable       = mem_gr_we & ~dest_zero & mem_valid;
-assign dep_need_stall       = mem_load_op & !data_sram_data_ok;
+assign forward_enable       = mem_gr_we && !dest_zero && mem_valid;
+assign dep_need_stall       = mem_load_op && !data_sram_data_ok;
 
 //exception
 assign excp = /*excp_tlbr || excp_pil || excp_pis || excp_ppi || excp_pme || */mem_excp;

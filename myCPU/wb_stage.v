@@ -100,12 +100,12 @@ assign wb_to_csr_bus = {
 //=================== Main Code ====================
 //======================================================
 //当前stage控制信号
-  assign wb_allowin  = ~wb_valid | wb_ready_go;
+  assign wb_allowin  = ~wb_valid || wb_ready_go;
   assign wb_ready_go = 1'b1;  //写回寄存器堆在一拍之内一定可以完成
 
 
   always @(posedge clk) begin
-    if (~resetn | flush_sign) begin
+    if (~resetn || flush_sign) begin
       wb_valid <= 1'b0;
     end else if (wb_allowin) begin
       wb_valid <= mem_to_wb_valid;
@@ -120,8 +120,8 @@ end
 
 assign flush_sign = excp_flush || ertn_flush || refetch_flush/* || icacop_flush || idle_flush*/;
 
-assign excp_flush   = wb_excp & wb_valid;
-assign ertn_flush   = wb_ertn & real_valid;
+assign excp_flush   = wb_excp && wb_valid;
+assign ertn_flush   = wb_ertn && real_valid;
 assign refetch_flush = (wb_csr_we /*|| ((wb_ll_w || wb_sc_w) && !wb_excp) || wb_refetch*/) && wb_valid;
 
 assign csr_era      = wb_pc;
@@ -203,9 +203,9 @@ assign {
     } = wb_data;
 
 
-assign real_valid = wb_valid & ~wb_excp;  //ws valid and no exception
+assign real_valid = wb_valid && !wb_excp;  //ws valid and no exception
 
-assign rf_we    = wb_gr_we & real_valid;
+assign rf_we    = wb_gr_we && real_valid;
 assign rf_waddr = wb_dest;
 assign rf_wdata = wb_final_result;
 
