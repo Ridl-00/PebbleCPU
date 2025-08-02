@@ -37,7 +37,7 @@ exe级：不允许发读写dcache请求
 
 #### 把excp_flush信号提前到exe阶段发->failed
 
-因为赛方设计的功能测试程序第47条将关闭定时器中断使能的csrwr指令设在刚好定时器中断不被触发的最后一拍（wb发excp时），如果把excp提前到exe发，会导致csrwr指令始终不被执行，陷入死循环
+这样是错误的，因为excp伴随着写csr，如果只是把excp提前，而不把原本在wb的写csr逻辑提前的话，excp和这条excp对应的pc、code等信息就不是对应的了。
 
 
 
