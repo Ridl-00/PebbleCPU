@@ -57,8 +57,6 @@ module mycpu_core(
 
   wire [ `WB_TO_CSR_WD] wb_to_csr_bus;
 
-// wire flush_from_id ;
-// wire flush_from_exe;
 wire flush_from_mem;
 
   wire flush_sign3_from_wb;
@@ -225,10 +223,6 @@ assign csr_to_if_bus = {
 
       .csr_to_if_bus    (csr_to_if_bus),
 
-      // .flush_from_id  (flush_from_id ),
-      // .flush_from_exe (flush_from_exe),
-      // .flush_from_mem (flush_from_mem),
-
       .inst_sram_req    (inst_sram_req),
       .inst_sram_wr     (inst_sram_wr),
       .inst_sram_wstrb  (inst_sram_wstrb),
@@ -267,7 +261,6 @@ assign {
       .id_to_exe_valid          (id_to_exe_valid),
       .id_to_exe_bus            (id_to_exe_bus),
       .id_to_if_bus             (id_to_if_bus),
-      // .flush_from_id            (flush_from_id ),
       .exe_to_id_bus            (exe_to_id_bus),
       .mem_to_id_bus            (mem_to_id_bus),
       .wb_to_rf_bus             (wb_to_id_bus),
@@ -295,8 +288,6 @@ assign {
 
       .flush_from_mem            (flush_from_mem),
       .exe_flush_sign            (flush_sign3_from_wb),
-
-      // .flush_from_exe             (flush_from_exe),
 
       .data_sram_req             (data_sram_req),
       .data_sram_wr              (data_sram_wr),
