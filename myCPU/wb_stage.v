@@ -101,13 +101,11 @@ assign wb_to_csr_bus = {
 //======================================================
 //当前stage控制信号
   assign wb_allowin  = ~wb_valid | wb_ready_go;
-
   assign wb_ready_go = 1'b1;  //写回寄存器堆在一拍之内一定可以完成
 
 
   always @(posedge clk) begin
-    if (~resetn | flush_sign) begin //wb本身或许不应该被flush掉
-                        //（因为已经运行完了（且就是这条刚刚运行完的指令置起的flush信号）需要保留的reftech入口恰巧就是这条指令
+    if (~resetn | flush_sign) begin
       wb_valid <= 1'b0;
     end else if (wb_allowin) begin
       wb_valid <= mem_to_wb_valid;
@@ -118,12 +116,9 @@ always @(posedge clk) begin
     if (wb_allowin & mem_to_wb_valid) begin
       wb_data <= mem_to_wb_bus;
     end
-  // else begin
-  //   wb_data <= 'b0;
-  // end
 end
 
-assign flush_sign = excp_flush || ertn_flush || refetch_flush/* || icacop_flush || idle_flush*/;
+// assign flush_sign = excp_flush || ertn_flush || refetch_flush/* || icacop_flush || idle_flush*/;
 
 assign excp_flush   = wb_excp & wb_valid;
 assign ertn_flush   = wb_ertn & real_valid;

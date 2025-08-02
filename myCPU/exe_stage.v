@@ -23,6 +23,8 @@ module exe_stage (
     input         flush_from_mem  ,
 //wb-exe
     input         exe_flush_sign  ,
+
+  //访dataRAM端口
     // output wire        data_sram_en,
     // output wire [ 3:0] data_sram_we,
     // output wire [31:0] data_sram_addr,
@@ -141,21 +143,20 @@ wire [31:0] exe_rj_value     ;
 wire [31:0] exe_rkd_value    ;
 wire div_complete;
 
-// //把这一坨并成一个吧 说真的
-//     //exception
-//     wire         excp_flush      ;
-//     wire         ertn_flush      ;
-//     wire         refetch_flush   ;
-//     // wire         icacop_flush ;
+
+    // //exception 目前合并为1个
+    // wire         excp_flush      ;
+    // wire         ertn_flush      ;
+    // wire         refetch_flush   ;
+    // // wire         icacop_flush ;
 
 //======================================================
 //=================== Main Code ====================
 //======================================================
   assign exe_allowin = ~exe_valid | exe_ready_go & mem_allowin;
-  assign exe_to_mem_valid = exe_valid & exe_ready_go & !(exe_flush_sign);
+  assign exe_to_mem_valid = exe_valid & exe_ready_go;
 // assign exe_ready_go    = (!div_stall & (/*(dcache_req_or_inst_en && data_addr_ok) ||*/ !(access_mem /*|| dcacop_inst || preld_inst*/)) /*&& !tlbsrch_stall && !icacop_inst_stall*/)/* || excp*/;
-//没在暂停且握手成功
-assign exe_ready_go = (!div_stall && (~(access_mem)||(data_sram_req & data_sram_addr_ok)))|| excp; //有异常时需要立即处理异常（忽略所有原有流水逻辑）
+assign exe_ready_go = (!div_stall && (~(access_mem)||(data_sram_req & data_sram_addr_ok)))|| excp;
 
 // assign exe_to_ds_valid = exe_valid;
 
@@ -254,7 +255,6 @@ alu u_alu(
   //div
   wire [`RegBus] s;
   wire [`RegBus] r;
-  // wire complete_delay;
 
 //   wire        s_axis_divisor_tvalid_signed  ;
 //   wire        s_axis_divisor_tready_signed  ;
@@ -303,18 +303,6 @@ alu u_alu(
       .r             (r),
       .complete_delay(div_complete)
   );
-  // div u_div(
-  //     .div_clk       (clk),
-  //     .reset         (~resetn),
-  //     .div           (exe_div_enable),
-  //     .div_signed    (exe_mul_div_sign),
-  //     .x             (exe_rj_value),
-  //     .y             (exe_rkd_value),
-  //     .s             (s),
-  //     .r             (r),
-  //     .complete       (div_complete)
-  //   );
-
 
   // assign s_axis_divisor_tvalid_signed = r_axis_divisor_tvalid_signed;
   // assign s_axis_dividend_tvalid_signed = r_axis_dividend_tvalid_signed;

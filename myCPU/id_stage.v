@@ -43,15 +43,15 @@ module id_stage (
   reg id_valid;
   wire id_ready_go;
 
-  reg [`IF_TO_ID_WD] id_data;  //id_reg的数据
+  reg [`IF_TO_ID_WD] id_data;
 
 
 //if-id
   //拆解if_reg传递过来的数据
   wire [`InstAddrBus] id_pc;
   wire [`InstBus    ] id_inst;
-  wire [ 3:0] id_excp_num; //写着id实际上是if传来的
-  wire        id_excp; //写着id实际上是if传来的
+  wire [ 3:0] id_excp_num;
+  wire        id_excp;
 
 assign {
         id_excp,        //68:68
@@ -121,7 +121,6 @@ wire [63:0] op_31_26_d;
 wire [15:0] op_25_22_d;
 wire [ 3:0] op_21_20_d;
 wire [31:0] op_19_15_d;
-//！la500里把rd rj rk也译码了
 wire [31:0] rd_d;
 wire [31:0] rj_d;
 wire [31:0] rk_d;
@@ -212,14 +211,11 @@ wire inst_cacop;
 //控制信号译码
 wire br_taken;
 wire [`InstAddrBus] br_target;
-  // wire br_taken_cancel;
-  // reg         branch_slot_cancel;
 wire br_really_taken;
 wire        br_inst;
 
 wire br_stall ; // 在load-branch时阻塞preif的取指
 
-// reg         br_jirl;
 wire        br_need_reg_data; //是分支指令且此分支指令需要寄存器中的数据
 
 wire        inst_need_rj;
@@ -333,17 +329,13 @@ assign id_to_csr_bus = {
 //======================================================
 //当前stage控制信号
   assign id_allowin = ~id_valid | id_ready_go & exe_allowin;
-  assign id_to_exe_valid = id_valid & id_ready_go & !(flush_sign);
+  assign id_to_exe_valid = id_valid & id_ready_go;
 // assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall/*|| idle_stall || tlb_inst_stall || ibar_stall || dbar_stall*/) || excp;
 assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
 
   always @(posedge clk) begin
     if (~resetn | flush_sign) begin
       id_valid <= 1'b0;
-    // end else if (branch_slot_cancel) begin  //如果采取分支，那么取消当前IF阶段的指令
-//分支生效后由if通过if to id valid 取消，当前在id的分支指令作为有效正常向后运行
-    // end else if (br_really_taken) begin
-    //   id_valid <= 1'b0;
     end else if (id_allowin) begin
       id_valid <= if_to_id_valid;
     end
@@ -352,8 +344,6 @@ assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
   always @(posedge clk) begin
     if (~resetn) begin
         id_data <= `ID_DATA_Reset;
-//西工大的写法是只有 id_allowin，居然不用保证有东西吗...?
-//还是觉得该保证valid...虽然这样得损失握手的周期，但是握手的周期本来就是要浪费的吧
     end else if (id_allowin & if_to_id_valid) begin
         id_data <= if_to_id_bus;
     end
@@ -783,7 +773,7 @@ assign br_taken  = (  inst_beq  &  rj_eq_rd
                     | inst_jirl
                     | inst_bl
                     | inst_b
-                    ) && id_valid && !excp;
+                    );
 assign br_target = ({32{inst_beq || inst_bne || inst_bl || inst_b || 
                     inst_blt || inst_bge || inst_bltu || inst_bgeu}} & (id_pc + id_imm   ))            |
                    ({32{inst_jirl}}                                  & (/*rj_value_forward_exe*/rj_value + id_imm)) ;
@@ -889,8 +879,6 @@ assign rd_csr_addr = inst_cpucfg ? (rj_value[13:0]+14'h00b0) : csr_idx;
 
 // assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
 
-// assign if_excp = if_to_id_bus[68]; //if阶段异常的判断信号不能用id_data,因为id_data本身可能会因为异常无法获得数据（但此处没有需求在id知道if有没有异常
-
 assign excp_ine = ~inst_valid;
 
 assign kernel_inst = inst_csrrd      |
@@ -908,26 +896,9 @@ assign kernel_inst = inst_csrrd      |
 assign excp_ipe = kernel_inst && (csr_plv == 2'b11);
 
 
-
-
-// //branch slot cancel, need wait next valid inst after branch
-// //only valid br_taken sign can generate slot_cancel.
-// always @(posedge clk) begin
-//     if (reset || flush_sign) begin
-//     //flush signal need flush this buffer
-//         branch_slot_cancel <= 1'b0;
-//     end
-//     else if (btb_pre_error_flush && exe_allowin && !if_to_id_valid) begin
-//         branch_slot_cancel <= 1'b1;
-//     end
-//     else if (branch_slot_cancel && if_to_id_valid) begin
-//         branch_slot_cancel <= 1'b0;
-//     end
-// end
-assign br_really_taken = flush_sign ? 1'b0 : br_taken & id_ready_go;
+assign br_really_taken = br_taken && id_ready_go  && id_valid && !excp && !flush_sign ;
 //存在br 且 计算未完成
 assign br_stall = br_need_reg_data && !id_ready_go && id_valid ;
-  // assign id_to_if_bus = {br_taken, br_target/*, br_taken_cancel*/};
 assign id_to_if_bus = {br_really_taken, br_target, br_stall};
 
 assign id_to_exe_bus = {
@@ -965,7 +936,7 @@ assign id_to_exe_bus = {
                        mul_div_op    ,  //157:154
                        mul_div_sign  ,  //153:153
                        alu_op        ,  //152:139
-                       load_op       ,  //138:138 bug2 load_op
+                       load_op       ,  //138:138
                        src1_is_pc    ,  //137:137
                        src2_is_imm   ,  //136:136
                        src2_is_4     ,  //135:135

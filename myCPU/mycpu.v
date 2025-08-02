@@ -146,7 +146,7 @@ wire [ 1:0]                   csr_plv_out      ;
         .wr_addr            (csr_wr_addr      ),
         .wr_data            (csr_wr_data      ),
         
-        .interrupt          (   8'b0 /*interrupt*/    ),
+        .interrupt          (int              ),
         .has_int            (csr_has_int      ),
         
         .excp_flush         (excp_flush       ),
