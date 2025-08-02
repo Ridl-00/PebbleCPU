@@ -19,7 +19,6 @@ module id_stage (
     //从后向前的数据传输（均是组合逻辑）
     //id-if
     output wire [`ID_TO_IF_WD] id_to_if_bus,
-    output wire                flush_from_id,
 
     input wire [`EXE_TO_ID_WD] exe_to_id_bus,
     input wire [`MEM_TO_ID_WD] mem_to_id_bus,
@@ -880,8 +879,6 @@ assign inst_valid = inst_add_w      |
 
 assign excp     = excp_ipe | inst_syscall | inst_break | id_excp | excp_ine | has_int;
 assign excp_num = {excp_ipe, excp_ine, inst_break, inst_syscall, id_excp_num, has_int};
-
-assign flush_from_id = (excp | inst_ertn | (csr_we /*| (mem_ll_w | mem_sc_w) & !excp*/) /*| mem_refetch | mem_idle*/) & id_valid;
 
 assign rd_csr_addr = inst_cpucfg ? (rj_value[13:0]+14'h00b0) : csr_idx;
 

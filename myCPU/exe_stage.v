@@ -23,10 +23,6 @@ module exe_stage (
     input         flush_from_mem  ,
 //wb-exe
     input         exe_flush_sign  ,
-//exe-if
-    output         flush_from_exe  ,
-
-  //访dataRAM端口
     // output wire        data_sram_en,
     // output wire [ 3:0] data_sram_we,
     // output wire [31:0] data_sram_addr,
@@ -381,8 +377,6 @@ assign excp_ale        = access_mem & ((exe_mem_size[0] &  1'b0)                
                                 
 assign excp            = exe_excp || excp_ale;
 assign excp_num        = {excp_ale, exe_excp_num};
-
-assign flush_from_exe = (excp | exe_ertn | (exe_csr_we /*| (mem_ll_w | mem_sc_w) & !excp*/) /*| mem_refetch | mem_idle*/) & exe_valid;
 
 assign error_va = exe_alu_result; //把alu结果（地址）存一下，如果出错了它就是出错的地址
 
