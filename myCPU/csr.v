@@ -1,5 +1,4 @@
 `include "defines.v"
-`include "define_csr.v"
 
 module csr 
 #(

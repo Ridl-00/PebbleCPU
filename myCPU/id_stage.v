@@ -663,8 +663,8 @@ assign inst_need_rj = inst_add_w      |
                       // inst_preld      |
                       // inst_ll_w       |
                       // inst_sc_w       |
-                      inst_cpucfg     |
-                      inst_csrxchg    ;
+                      inst_csrxchg    |
+                      inst_cpucfg   ;
                       // inst_valid_cacop|
                       // inst_invtlb     
                       // ;

@@ -1,14 +1,6 @@
-//Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
-//Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
-//--------------------------------------------------------------------------------
-//Tool Version: Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-//Date        : Wed Jul  9 02:02:43 2025
-//Host        : Super-EvilLoong running 64-bit major release  (build 9200)
-//Command     : generate_target mycpu_top_block.bd
-//Design      : mycpu_top_block
-//Purpose     : IP block netlist
-//--------------------------------------------------------------------------------
+`include "defines.v"
 
+<<<<<<< HEAD:myCPU/mycpu_top_toblock.v
 module core_top(
     input      [7:0] intrpt,
 
@@ -99,6 +91,39 @@ module core_top(
 );
 
 
+=======
+module mycpu_core(
+    input wire      aclk,
+    input wire      aresetn,
+    input wire[7:0] int,
+    //类SRAM
+    output                      inst_sram_req,
+    output                      inst_sram_wr,
+    output [               3:0] inst_sram_wstrb,
+    output [               1:0] inst_sram_size,
+    output [              31:0] inst_sram_addr,
+    output [              31:0] inst_sram_wdata,
+    input [              31:0] inst_sram_rdata,
+    input                      inst_sram_addr_ok,
+    input                      inst_sram_data_ok,
+
+    output                      data_sram_req,
+    output                      data_sram_wr,
+    output [               3:0] data_sram_wstrb,
+    output [               1:0] data_sram_size,
+    output [              31:0] data_sram_addr,
+    output [              31:0] data_sram_wdata,
+    input [              31:0] data_sram_rdata,
+    input                      data_sram_addr_ok,
+    input                      data_sram_data_ok,
+    //debug
+    output wire [31:0] debug_wb_pc,
+    output wire [ 3:0] debug_wb_rf_we,
+    output wire [ 4:0] debug_wb_rf_wnum,
+    output wire [31:0] debug_wb_rf_wdata
+);
+
+>>>>>>> Haoyue:myCPU/mycpu.v
   wire                      id_allowin;
   wire                      exe_allowin;
   wire                      mem_allowin;
@@ -202,6 +227,7 @@ wire  [ 9:0]                   csr_asid_in     ;
 //general use
 wire [ 1:0]                   csr_plv_out      ;
 
+<<<<<<< HEAD:myCPU/mycpu_top_toblock.v
 
   //类SRAM
   wire                      inst_sram_req;
@@ -224,6 +250,8 @@ wire [ 1:0]                   csr_plv_out      ;
   wire                      data_sram_data_ok;
 
 
+=======
+>>>>>>> Haoyue:myCPU/mycpu.v
   csr u_csr(
         .clk                (aclk),
         .resetn             (aresetn),
@@ -319,11 +347,6 @@ assign csr_to_if_bus = {
       .flush_from_exe (flush_from_exe),
       .flush_from_mem (flush_from_mem),
 
-        // .inst_sram_addr(if_stage_0_inst_sram_addr),
-        // .inst_sram_en(if_stage_0_inst_sram_en),
-        // .inst_sram_rdata(inst_sram_rdata_1),
-        // .inst_sram_wdata(if_stage_0_inst_sram_wdata),
-        // .inst_sram_we(if_stage_0_inst_sram_we),
       .inst_sram_req    (inst_sram_req),
       .inst_sram_wr     (inst_sram_wr),
       .inst_sram_wstrb  (inst_sram_wstrb),
@@ -392,11 +415,6 @@ assign {
       .exe_flush_sign            (flush_sign3_from_wb),
 
       .flush_from_exe             (flush_from_exe),
-
-        // .data_sram_addr(data_sram_addr),
-        // .data_sram_en(data_sram_en),
-        // .data_sram_wdata(data_sram_wdata),
-        // .data_sram_we(data_sram_we)
 
       .data_sram_req             (data_sram_req),
       .data_sram_wr              (data_sram_wr),
