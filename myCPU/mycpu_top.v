@@ -75,9 +75,55 @@ module core_top(
     wire inst_cached, data_cached;
     wire [31:0] inst_sram_addr_o,data_sram_addr_o;
 
-    
+    wire [`CSR_TO_MMU_WD] csr_to_mmu_bus;
 
-    // cache_top
+    mycpu_core u_mycpu_core(
+        .aclk                    (clk),
+        .aresetn                 (aresetn),
+        .int                     (intrpt),
+
+        .inst_sram_req          (inst_sram_en),
+        // .inst_sram_wr           (),
+        .inst_sram_wstrb        (inst_sram_we),
+        // .inst_sram_size         (),
+        .inst_sram_addr         (inst_sram_addr_o),
+        .inst_sram_wdata        (inst_sram_wdata) ,
+        .inst_sram_rdata        (inst_sram_rdata),
+        .inst_sram_addr_ok      (icache_addr_ok),
+        .inst_sram_data_ok      (icache_data_ok),
+        .data_sram_req          (data_sram_en),
+        .data_sram_wstrb        (data_sram_we  ),
+        .data_sram_addr         (data_sram_addr_o),
+        .data_sram_wdata        (data_sram_wdata),
+        .data_sram_rdata        (data_sram_rdata),
+        .data_sram_addr_ok      (dcache_addr_ok|uncache_addr_ok),
+        .data_sram_data_ok      (dcache_data_ok|uncache_data_ok),
+        .csr_to_mmu_bus         (csr_to_mmu_bus),
+
+        .debug_wb_pc            (debug0_wb_pc       ),
+        .debug_wb_rf_we         (debug0_wb_rf_wen   ),
+        .debug_wb_rf_wnum       (debug0_wb_rf_wnum  ),
+        .debug_wb_rf_wdata      (debug0_wb_rf_wdata )
+    );
+
+    mmu inst_mmu(
+        .addr_i  (inst_sram_addr_o  ),
+        .da_pg   (csr_to_mmu_bus[65:64]),
+        .dmw0    (csr_to_mmu_bus[31:0]),
+        .dmw1    (csr_to_mmu_bus[63:32]),
+        .addr_o  (inst_sram_addr    ),
+        .cache_v (inst_cached       )
+    );
+
+    mmu data_mmu(
+        .addr_i  (data_sram_addr_o  ),
+        .da_pg   (csr_to_mmu_bus[65:64]),
+        .dmw0    (csr_to_mmu_bus[31:0]),
+        .dmw1    (csr_to_mmu_bus[63:32]),
+        .addr_o  (data_sram_addr    ),
+        .cache_v (data_cached       )
+    );
+     // cache_top
     wire icache_refresh, dcache_refresh;
     wire icache_miss, dcache_miss;
     wire [31:0] icache_raddr, dcache_raddr;
@@ -100,48 +146,8 @@ module core_top(
     wire [31:0] dcache_temp_rdata;
     wire [31:0] uncache_temp_rdata;
 
-    mycpu_core u_mycpu_core(
-        .aclk                    (clk),
-        .aresetn                 (aresetn),
-        .int                     (intrpt),
+    assign data_sram_rdata = data_cached ? dcache_temp_rdata : uncache_temp_rdata;
 
-        .inst_sram_req          (inst_sram_en),
-        // .inst_sram_wr           (),
-        .inst_sram_wstrb        (inst_sram_we),
-        // .inst_sram_size         (),
-        .inst_sram_addr         (inst_sram_addr_o),
-        .inst_sram_wdata        (inst_sram_wdata) ,
-        .inst_sram_rdata        (inst_sram_rdata),
-        .inst_sram_addr_ok      (icache_addr_ok),
-        .inst_sram_data_ok      (icache_data_ok),
-        .data_sram_req          (data_sram_en),
-        // .data_sram_wr           (),
-        .data_sram_wstrb        (data_sram_we  ),
-        // .data_sram_size         (),
-        .data_sram_addr         (data_sram_addr_o),
-        .data_sram_wdata        (data_sram_wdata),
-        .data_sram_rdata        (data_sram_rdata),
-        .data_sram_addr_ok      (dcache_addr_ok|uncache_addr_ok),
-        .data_sram_data_ok      (dcache_data_ok|uncache_data_ok),
-
-        .debug_wb_pc            (debug0_wb_pc       ),
-        .debug_wb_rf_we         (debug0_wb_rf_wen    ),
-        .debug_wb_rf_wnum       (debug0_wb_rf_wnum  ),
-        .debug_wb_rf_wdata      (debug0_wb_rf_wdata )
-    );
-
-    mmu u0_mmu(
-        .addr_i  (inst_sram_addr_o  ),
-        .addr_o  (inst_sram_addr    ),
-        .cache_v (inst_cached       )
-    );
-
-    mmu u1_mmu(
-        .addr_i  (data_sram_addr_o  ),
-        .addr_o  (data_sram_addr    ),
-        .cache_v (data_cached       )
-    );
- 
     icache u_icache(
         .clk           (clk           ),
         .rst           (rst           ),
@@ -184,7 +190,6 @@ module core_top(
         .cacheline_old (dcache_cacheline_old )
     );
     
-    assign data_sram_rdata = data_cached ? dcache_temp_rdata : uncache_temp_rdata;
     
     uncache u_uncache(
         .clk        (clk                        ),
