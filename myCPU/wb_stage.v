@@ -19,7 +19,7 @@ module wb_stage (
     output wire       refetch_flush                    ,
     // output wire       icacop_flush                     ,
 
-    output wire [`WB_TO_CSR_WD]    wb_to_csr_bus,
+    output wire [`WB_TO_CSR_WD]    wb_to_csr_bus  ,
 
     //debug trace
     output wire [31:0] debug_wb_pc,
@@ -118,7 +118,7 @@ always @(posedge clk) begin
     end
 end
 
-// assign flush_sign = excp_flush || ertn_flush || refetch_flush/* || icacop_flush || idle_flush*/;
+assign flush_sign = excp_flush || ertn_flush || refetch_flush/* || icacop_flush || idle_flush*/;
 
 assign excp_flush   = wb_excp & wb_valid;
 assign ertn_flush   = wb_ertn & real_valid;

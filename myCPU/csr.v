@@ -7,27 +7,34 @@ module csr
 (
     input                           clk          ,
     input                           resetn        ,
+
+    //bus
+    output wire [ `CSR_TO_IF_WD] csr_to_if_bus   ,
+    output wire [ `CSR_TO_ID_WD] csr_to_id_bus   ,
+    
+    input  wire [ `ID_TO_CSR_WD] id_to_csr_bus  ,
+    input  wire [ `WB_TO_CSR_WD] wb_to_csr_bus  ,
     //from to id 
-    input  [13:0]                   rd_addr      ,
-    output [31:0]                   rd_data      ,
+    // input  [13:0]                   rd_addr      ,
+    // output [31:0]                   rd_data      ,
     //timer 64
-    output [63:0]                   timer_64_out ,
-    output [31:0]                   tid_out      ,
+    // output [63:0]                   timer_64_out ,
+    // output [31:0]                   tid_out      ,
     //from wb
-    input                           csr_wr_en    ,
-    input  [13:0]                   wr_addr      ,
-    input  [31:0]                   wr_data      ,
+    // input                           csr_wr_en    ,
+    // input  [13:0]                   wr_addr      ,
+    // input  [31:0]                   wr_data      ,
     //interrupt
     input  [ 7:0]                   interrupt    , // 外设硬中断源
-    output                          has_int      ,
+    // output                          has_int      ,
+    input                           excp_flush   , //exe
     //from wb
-    input                           excp_flush   ,
     input                           ertn_flush   ,  // ertn异常返回指令触发的流水线冲刷信号
-    input  [31:0]                   era_in       ,  // 异常返回地址输入
-    input  [ 8:0]                   esubcode_in  ,
-    input  [ 5:0]                   ecode_in     ,
-    input                           va_error_in  ,
-    input  [31:0]                   bad_va_in    ,
+    // input  [31:0]                   era_in       ,  // 异常返回地址输入
+    // input  [ 8:0]                   esubcode_in  ,
+    // input  [ 5:0]                   ecode_in     ,
+    // input                           va_error_in  ,
+    // input  [31:0]                   bad_va_in    ,
     input                           tlbsrch_en    ,
     input                           tlbsrch_found ,
     input  [ 4:0]                   tlbsrch_index ,
@@ -45,10 +52,10 @@ module csr
     //to mem
     output [27:0]                   lladdr_out   ,
     //to if
-    output [31:0]                   eentry_out   ,
-    output [31:0]                   era_out      ,  // 异常返回地址输出
-    output [31:0]                   tlbrentry_out,
-    output                          disable_cache_out,
+    // output [31:0]                   eentry_out   ,
+    // output [31:0]                   era_out      ,  // 异常返回地址输出
+    output [31:0]                   tlbrentry_out, //u
+    output                          disable_cache_out, //u
     //to addr trans
     output [ 9:0]                   asid_out     ,
     output [ 4:0]                   rand_index   ,
@@ -71,7 +78,8 @@ module csr
     input  [31:0]                   tlbidx_in    ,
     input  [ 9:0]                   asid_in      ,
     //general use
-    output [ 1:0]                   plv_out      //,
+    output [ 1:0]                   plv_out      //, //在csr id bus里面多传了一份
+
     // // csr regs for diff
     // output [31:0]                   csr_crmd_diff,
     // output [31:0]                   csr_prmd_diff,
@@ -246,6 +254,63 @@ wire eret_tlbrefill_excp; // ERTN指令返回时遇到的TLB重填异常
 //状态转发控制
 wire no_forward;  // 1:允许转发当前状态，0:不允许
 
+
+//out bus
+//if
+wire [31:0]                   eentry_out   ;
+wire [31:0]                   era_out      ; 
+//from to id 
+wire [13:0]                   rd_addr      ;
+wire [31:0]                   rd_data      ;
+
+//timer 64
+wire [63:0]                   timer_64_out ;
+wire [31:0]                   tid_out      ;
+
+wire                          has_int      ;
+
+wire  [31:0]                  era_in      ;
+wire  [ 8:0]                  esubcode_in ;
+wire  [ 5:0]                  ecode_in    ;
+wire                          va_error_in ;
+wire  [31:0]                  bad_va_in   ;
+
+wire                          csr_wr_en       ;
+wire  [13:0]                  wr_addr     ;
+wire  [31:0]                  wr_data     ;
+
+
+//out bus
+assign csr_to_if_bus = {
+    era_in,
+    eentry_out,
+    era_out   
+};
+
+assign csr_to_id_bus = {
+    timer_64_out,
+    tid_out,
+
+    rd_data,
+    plv_out,
+    has_int
+};
+
+//in bus
+assign {
+    rd_addr
+} = id_to_csr_bus;
+
+assign {
+  era_in     , //32
+  esubcode_in, //9
+  ecode_in   , //6
+  csr_wr_en   , //1
+  wr_addr , //14
+  wr_data , //32
+  va_error_in    , //1
+  bad_va_in        // 32
+} = wb_to_csr_bus;
 
 //======================================================
 //=================== Main Code ====================

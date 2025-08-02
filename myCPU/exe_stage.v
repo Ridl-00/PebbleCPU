@@ -19,10 +19,11 @@ module exe_stage (
     output wire [`EXE_TO_ID_WD] exe_to_id_bus,
     // output                              exe_to_id_valid      ,//旁路要不要valid？每级到id的valid在ibar和dbar中使用
 
-//mem-exe
-    input         flush_from_mem  ,
-//wb-exe
-    input         exe_flush_sign  ,
+    input wire    excp_flush      ,
+    input wire    ertn_flush      ,
+    input wire    refetch_flush   ,
+    input wire    flush_from_mem  ,
+
 
   //访dataRAM端口
     // output wire        data_sram_en,
@@ -100,7 +101,7 @@ wire        dest_zero      ;
 
 wire        excp_ale       ; //地址对齐异常
 
-// wire        exe_flush_sign  ;
+wire        flush_sign     ;
 // wire [ 3:0] wr_byte_en     ;
 
 wire        access_mem      ; //读写ram使能
@@ -144,17 +145,11 @@ wire [31:0] exe_rkd_value    ;
 wire div_complete;
 
 
-    // //exception 目前合并为1个
-    // wire         excp_flush      ;
-    // wire         ertn_flush      ;
-    // wire         refetch_flush   ;
-    // // wire         icacop_flush ;
-
 //======================================================
 //=================== Main Code ====================
 //======================================================
   assign exe_allowin = ~exe_valid | exe_ready_go & mem_allowin;
-  assign exe_to_mem_valid = exe_valid & exe_ready_go;
+  assign exe_to_mem_valid = exe_valid & exe_ready_go & !flush_sign;
 // assign exe_ready_go    = (!div_stall & (/*(dcache_req_or_inst_en && data_addr_ok) ||*/ !(access_mem /*|| dcacop_inst || preld_inst*/)) /*&& !tlbsrch_stall && !icacop_inst_stall*/)/* || excp*/;
 assign exe_ready_go = (!div_stall && (~(access_mem)||(data_sram_req & data_sram_addr_ok)))|| excp;
 
@@ -162,13 +157,13 @@ assign exe_ready_go = (!div_stall && (~(access_mem)||(data_sram_req & data_sram_
 
 assign access_mem = exe_load_op | exe_store_op;
 
-// assign exe_flush_sign  = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
+assign flush_sign  = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
 
 
  
   
   always @(posedge clk) begin
-    if (~resetn | exe_flush_sign) begin
+    if (~resetn | flush_sign) begin
       exe_valid <= 1'b0;
     end else if (exe_allowin) begin
       exe_valid <= id_to_exe_valid;
@@ -190,11 +185,11 @@ assign access_mem = exe_load_op | exe_store_op;
 assign sram_addr_low2bit = {exe_alu_result[1], exe_alu_result[0]};
                                                                 //前向后有例外不行&有csr来的例外不行&有mem来的例外不行
                                                                 //需要保证当前在wb和mem的指令都不造成flush，否则会错误的req
-  // assign data_sram_en = exe_valid & access_mem & ~excp & ~exe_flush_sign & ~flush_from_mem;
-  assign data_sram_req = exe_valid & access_mem & ~excp & ~exe_flush_sign & ~flush_from_mem & mem_allowin; //追究allowin，参考inst_req
+  // assign data_sram_en = exe_valid & access_mem & ~excp & ~flush_sign & ~flush_from_mem;
+  assign data_sram_req = exe_valid & access_mem & mem_allowin & ~excp & ~flush_sign & ~flush_from_mem; //追究allowin，参考inst_req
   
   //|we
-  assign data_sram_wr = exe_valid & exe_store_op & ~excp & ~exe_flush_sign & ~flush_from_mem ;
+  assign data_sram_wr = exe_valid & exe_store_op & ~excp & ~flush_sign & ~flush_from_mem ;
 
   assign data_sram_wstrb = {4{exe_valid}} & {4{exe_store_op}}
                       & (exe_mem_size == 2'b01 ? 

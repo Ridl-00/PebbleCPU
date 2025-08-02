@@ -16,18 +16,16 @@ module mem_stage(
     output wire [`MEM_TO_WB_WD] mem_to_wb_bus,
 
     //从后向前的数据传输（均是组合逻辑）
-    //mem-id
     output wire [`MEM_TO_ID_WD] mem_to_id_bus,
 
     //dataRAM读数据
     input [31:0] data_sram_rdata,
     input        data_sram_data_ok,
 
-    //wb-mem
-    input    wire         flush_sign,
-
-    //mem-exe
-    output   wire         flush_from_mem
+    input wire  excp_flush        ,
+    input wire  ertn_flush        ,
+    input wire  refetch_flush     ,
+    output wire  flush_from_mem
 
 );
 //======================================================
@@ -90,7 +88,7 @@ wire [31:0] mem_error_va;
 
 wire [31:0] mem_result;
 wire [31:0] mem_final_result;
-// wire        flush_sign;
+wire        flush_sign;
 
 wire [31:0] mem_rdata;
 // reg  [31:0] data_rd_buff;
@@ -121,12 +119,6 @@ wire        excp;
 // wire        sc_addr_eq;
 
 
-// //exception(目前被合并到一个flush_sign了)
-// input             excp_flush    ,
-// input             ertn_flush    ,
-// input             refetch_flush ,
-// // input             icacop_flush  ,
-
 //前递和阻塞
 //mem-id
 wire        forward_enable;
@@ -140,7 +132,7 @@ wire        forward_enable;
 //不需要访存，或要访存且访存完成，或有异常（此级及之前的 级有异常，那么这条指令无效，自然没必要等访存）
   assign mem_ready_go = /*(data_data_ok || data_buff_enable) || */ (!access_mem) || (access_mem & data_sram_data_ok)|| excp /*|| sc_cancel_req*/;
   assign mem_allowin = ~mem_valid | mem_ready_go & wb_allowin;
-  assign mem_to_wb_valid = mem_ready_go & mem_valid;
+  assign mem_to_wb_valid = mem_ready_go & mem_valid & !flush_sign;
 
 assign mem_to_id_valid = mem_valid;
 
@@ -164,7 +156,7 @@ end
 
 assign access_mem = mem_store_op || mem_load_op;
 
-// assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
+assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
 
 // assign mem_rdata = data_buff_enable ? data_rd_buff : data_rdata;
 assign mem_rdata = data_sram_rdata;

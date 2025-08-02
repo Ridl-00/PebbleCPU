@@ -9,30 +9,23 @@ module id_stage (
     output wire id_allowin,
     input wire if_to_id_valid,
     input wire [`IF_TO_ID_WD] if_to_id_bus,
-
     //id-exe
     input wire exe_allowin,
     output wire id_to_exe_valid,
     output wire [`ID_TO_EXE_WD] id_to_exe_bus,
 
 
-    //从后向前的数据传输（均是组合逻辑）
-    //id-if
     output wire [`ID_TO_IF_WD] id_to_if_bus,
-
     input wire [`EXE_TO_ID_WD] exe_to_id_bus,
     input wire [`MEM_TO_ID_WD] mem_to_id_bus,
-    //wb-rf
     input wire [`WB_TO_ID_WD]  wb_to_rf_bus,
-    //wb-id
-    input wire                  flush_sign,
-    
-    //csr-id
-    input wire [`CSR_TO_ID_WD] csr_to_id_bus,
 
-    //id-csr
+    input wire                 excp_flush   , //exe
+    input wire                 ertn_flush   , //wb
+    input wire                 refetch_flush, //wb
+
+    input wire  [`CSR_TO_ID_WD] csr_to_id_bus,
     output wire [`ID_TO_CSR_WD] id_to_csr_bus
-
 );
 
 //======================================================
@@ -279,7 +272,7 @@ wire        excp_ine; //是否 为非法指令异常
 wire        excp_ipe; //是否 为特权级错误异常
 wire [31:0] csr_data;
 // wire        refetch; //是否 重新取指
-// wire        flush_sign; //是否 刷新指令流水线
+wire        flush_sign; //是否 刷新指令流水线
 
 // wire        if_excp; //是否 if有异常(没用上)
 
@@ -291,13 +284,7 @@ wire        rdcnt_en; //硬件计数器读使能
 // wire        tlb_inst_stall;
 
 
-
 //exception
-//csr-id
-  //！这一串貌似只用到一次，考虑只传递一个结果
-    wire                      excp_flush    ;
-    wire                      ertn_flush    ;
-    wire                      refetch_flush ;
     //interrupt
     wire                      has_int       ;//是否 有外部中断请求
     //csr
@@ -329,7 +316,7 @@ assign id_to_csr_bus = {
 //======================================================
 //当前stage控制信号
   assign id_allowin = ~id_valid | id_ready_go & exe_allowin;
-  assign id_to_exe_valid = id_valid & id_ready_go;
+  assign id_to_exe_valid = id_valid & id_ready_go & !flush_sign;
 // assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall/*|| idle_stall || tlb_inst_stall || ibar_stall || dbar_stall*/) || excp;
 assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
 
@@ -877,7 +864,7 @@ assign rd_csr_addr = inst_cpucfg ? (rj_value[13:0]+14'h00b0) : csr_idx;
 
 // assign tlb_inst_stall = es_tlb_inst_stall || ms_tlb_inst_stall || ws_tlb_inst_stall;
 
-// assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
+assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
 
 assign excp_ine = ~inst_valid;
 
