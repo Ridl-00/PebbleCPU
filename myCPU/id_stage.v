@@ -783,7 +783,7 @@ assign br_taken  = (  inst_beq  &  rj_eq_rd
                     | inst_jirl
                     | inst_bl
                     | inst_b
-                    ) && id_valid /*&& !ds_excp*/; 
+                    ) && id_valid && !excp;
 assign br_target = ({32{inst_beq || inst_bne || inst_bl || inst_b || 
                     inst_blt || inst_bge || inst_bltu || inst_bgeu}} & (id_pc + id_imm   ))            |
                    ({32{inst_jirl}}                                  & (/*rj_value_forward_exe*/rj_value + id_imm)) ;
