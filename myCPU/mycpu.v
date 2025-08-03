@@ -108,6 +108,8 @@ wire  [ 9:0]                   csr_asid_in     ;
 wire [ 1:0]                   csr_plv_out      ;
 
 assign csr_to_mmu_bus={
+  csr_datf_out,
+  csr_datm_out,
   csr_da_out,
   csr_pg_out,
   csr_dmw1_out,

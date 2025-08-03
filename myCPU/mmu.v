@@ -1,7 +1,9 @@
 `include "defines.v"
 module mmu (
     input wire[31:0] addr_i,
-    input wire[1:0] da_pg,
+    input wire da,
+    input wire pg,
+    input wire[1:0] da_mat,
     input wire[31:0] dmw0,
     input wire[31:0] dmw1,
     output wire [31:0] addr_o,
@@ -17,23 +19,24 @@ module mmu (
     assign dmw1_vseg = dmw1[31:29];
     assign dmw1_pseg = dmw1[27:25];
 
-    wire dmw0_hit,dmw1_hit;
+    wire dmw0_hit,dmw1_hit,da_hit;
     assign dmw0_hit = addr_head_i == dmw0_vseg;
     assign dmw1_hit = addr_head_i == dmw1_vseg;
 
     assign addr_head_o = dmw0_hit? dmw0_pseg : (dmw1_hit? dmw1_pseg : addr_head_i);
-    assign addr_o = da_pg==2'b10 ? addr_i                     :
-                    da_pg==2'b01 ? {addr_head_o, addr_i[28:0]}:32'b0;
+    assign addr_o = da ? addr_i                     :
+                    pg ? {addr_head_o, addr_i[28:0]}:32'b0;
 
     //存储访问控制逻辑
     wire [1:0] dmw0_mat,dmw1_mat,page_mat;
     assign dmw0_mat = dmw0[5:4];
-    assign dmw1_mat = dmw1[5:4];
-    wire dmw0_uncache,dmw1_uncache,page_uncache;
+    assign dmw1_mat = dmw1[5:4]; 
+    wire dmw0_uncache, dmw1_uncache, da_uncache, page_uncache;
     assign dmw0_uncache = dmw0_mat == 2'b00;
     assign dmw1_uncache = dmw1_mat == 2'b00;
+    assign da_uncache   = da_mat   == 2'b00;
     assign page_uncache = 1'b0;//暂时不考虑页表缓存
 
-    assign cache_v = ~(dmw0_hit&dmw0_uncache | dmw1_hit&dmw1_uncache | page_uncache );
+    assign cache_v = ~(dmw0_hit&dmw0_uncache | dmw1_hit&dmw1_uncache | da & da_uncache | page_uncache );
                 
 endmodule

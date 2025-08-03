@@ -37,7 +37,7 @@
 
 `define ID_TO_CSR_WD 14-1:0
 `define WB_TO_CSR_WD 127-1:0
-`define CSR_TO_MMU_WD 66-1:0
+`define CSR_TO_MMU_WD 70-1:0
 
 `define ID_DATA_Reset 64'b0
 

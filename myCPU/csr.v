@@ -428,8 +428,8 @@ always @(posedge clk) begin
         csr_crmd[  `IE] <=  1'b0;
         csr_crmd[  `DA] <=  1'b1;
         csr_crmd[  `PG] <=  1'b0;
-        csr_crmd[`DATF] <=  2'b0;
-        csr_crmd[`DATM] <=  2'b0;
+        csr_crmd[`DATF] <=  2'b01;//默认取指可缓存
+        csr_crmd[`DATM] <=  2'b00;
         csr_crmd[31: 9] <= 23'b0;
     end
     //异常处理

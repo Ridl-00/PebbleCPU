@@ -108,7 +108,9 @@ module core_top(
 
     mmu inst_mmu(
         .addr_i  (inst_sram_addr_o  ),
-        .da_pg   (csr_to_mmu_bus[65:64]),
+        .da      (csr_to_mmu_bus[65]),
+        .pg      (csr_to_mmu_bus[64]),
+        .da_mat  (csr_to_mmu_bus[69:68]),
         .dmw0    (csr_to_mmu_bus[31:0]),
         .dmw1    (csr_to_mmu_bus[63:32]),
         .addr_o  (inst_sram_addr    ),
@@ -117,7 +119,9 @@ module core_top(
 
     mmu data_mmu(
         .addr_i  (data_sram_addr_o  ),
-        .da_pg   (csr_to_mmu_bus[65:64]),
+        .da      (csr_to_mmu_bus[65]),
+        .pg      (csr_to_mmu_bus[64]),
+        .da_mat  (csr_to_mmu_bus[67:66]),
         .dmw0    (csr_to_mmu_bus[31:0]),
         .dmw1    (csr_to_mmu_bus[63:32]),
         .addr_o  (data_sram_addr    ),
