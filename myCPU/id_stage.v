@@ -347,11 +347,11 @@ assign id_to_csr_bus = {
                                                                                                                                       // {1'b0, rf_rdata2, rf_rdata2};
 
 assign {rf1_forward_stall, rj_value} = ((rf_raddr1 == exe_forward_reg) && exe_forward_enable && inst_need_rj) ? {exe_dep_need_stall, exe_forward_data} :
-                                                             ((rf_raddr1 == mem_forward_reg) && mem_forward_enable && inst_need_rj) ? {mem_dep_need_stall, mem_forward_data} :
+                                                             ((rf_raddr1 == mem_forward_reg) && mem_forward_enable && inst_need_rj) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data} :
                                                                                                                                   {1'b0, rf_rdata1}; 
 
 assign {rf2_forward_stall, rkd_value} = ((rf_raddr2 == exe_forward_reg) && exe_forward_enable && inst_need_rkd) ? {exe_dep_need_stall, exe_forward_data} :
-                                                               ((rf_raddr2 == mem_forward_reg) && mem_forward_enable && inst_need_rkd) ? {mem_dep_need_stall, mem_forward_data} :
+                                                               ((rf_raddr2 == mem_forward_reg) && mem_forward_enable && inst_need_rkd) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data} :
                                                                                                                                       {1'b0, rf_rdata2};
 
 //译码
@@ -763,16 +763,16 @@ assign br_taken  = (  inst_beq  &  rj_eq_rd
                     | inst_b
                     );
 assign br_target = ({32{inst_beq | inst_bne | inst_bl | inst_b |
-                    inst_blt | inst_bge | inst_bltu | inst_bgeu}} & (id_pc + id_imm   ))            |
-                   ({32{inst_jirl}}                               & (/*rj_value_forward_exe*/rj_value + id_imm)) ;
+                    inst_blt | inst_bge | inst_bltu | inst_bgeu}} & (id_pc + id_imm   )) |
+                   ({32{inst_jirl}}                               & (rj_value + id_imm)) ;
 
 assign br_inst = br_need_reg_data || inst_bl || inst_b;
-assign br_need_reg_data = inst_beq   ||
-                          inst_bne   ||
-                          inst_blt   ||
-                          inst_bge   ||
-                          inst_bltu  ||
-                          inst_bgeu  ||
+assign br_need_reg_data = inst_beq   |
+                          inst_bne   |
+                          inst_blt   |
+                          inst_bge   |
+                          inst_bltu  |
+                          inst_bgeu  |
                           inst_jirl;
 
 assign inst_valid = inst_add_w      |
