@@ -106,6 +106,14 @@ wire  [31:0]                   csr_tlbidx_in   ;
 wire  [ 9:0]                   csr_asid_in     ;
 //general use
 wire [ 1:0]                   csr_plv_out      ;
+
+assign csr_to_mmu_bus={
+  csr_da_out,
+  csr_pg_out,
+  csr_dmw1_out,
+  csr_dmw0_out
+};
+
   csr u_csr(
         .clk                (aclk),
         .resetn             (aresetn),
