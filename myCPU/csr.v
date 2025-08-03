@@ -717,9 +717,7 @@ end
 //dmw0
 always @(posedge clk) begin
     if (reset) begin
-        csr_dmw0[ 2:1] <= 2'b0;
-        csr_dmw0[24:6] <= 19'b0;
-        csr_dmw0[28]   <= 1'b0;
+        csr_dmw0<=32'b0;
     end
     else if (DMW0_wen) begin
         csr_dmw0[`PLV0]    <= wr_data[`PLV0];
@@ -733,9 +731,7 @@ end
 //dmw1
 always @(posedge clk) begin
     if (reset) begin
-        csr_dmw1[ 2:1] <= 2'b0;
-        csr_dmw1[24:6] <= 19'b0;
-        csr_dmw1[28]   <= 1'b0;
+        csr_dmw1<=32'b0;
     end
     else if (DMW1_wen) begin
         csr_dmw1[`PLV0]    <= wr_data[`PLV0];
