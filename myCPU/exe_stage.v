@@ -15,6 +15,9 @@ module exe_stage (
     output wire exe_to_mem_valid,
     output wire [`EXE_TO_MEM_WD] exe_to_mem_bus,
 
+    input wire [`CSR_TO_EXE_WD] csr_to_exe_bus,
+    output wire                 cache_v,
+
     //从后向前的数据传输（均是组合逻辑）
     output wire [`EXE_TO_ID_WD] exe_to_id_bus,
     // output                              exe_to_id_valid      ,//旁路要不要valid？每级到id的valid在ibar和dbar中使用
@@ -145,6 +148,36 @@ wire [31:0] exe_rkd_value    ;
 wire div_complete;
 
 
+//addr trans(cache)
+wire  [`InstAddrBus] p_data_sram_addr;
+wire  [ 1:0]  crmd_plv ;
+wire  [ 1:0]  crmd_datm;
+wire          csr_da       ;
+wire          csr_pg       ;
+wire  [31:0]  csr_dmw1     ;
+wire  [31:0]  csr_dmw0     ;
+
+wire  dmw0_plv0;
+wire  dmw0_plv3;
+assign dmw0_plv0 = csr_dmw0[0];
+assign dmw0_plv3 = csr_dmw0[3];
+
+wire  dmw1_plv0;
+wire  dmw1_plv3;
+assign dmw1_plv0 = csr_dmw1[0];
+assign dmw1_plv3 = csr_dmw1[3];
+
+assign {
+    crmd_plv ,//2
+    crmd_datm,   //2 
+    csr_da   ,//1
+    csr_pg   ,//1
+    csr_dmw1 , //32
+    csr_dmw0  //32
+} = csr_to_exe_bus;
+
+
+
 //======================================================
 //=================== Main Code ====================
 //======================================================
@@ -205,7 +238,7 @@ assign sram_addr_low2bit = {exe_alu_result[1], exe_alu_result[0]};
   assign data_sram_size = exe_mem_size == 2'b00 ? 2'b10 : 
                           exe_mem_size == 2'b10 ? 2'b01 : 2'b00;
 
-  assign data_sram_addr = exe_alu_result;
+  assign data_sram_addr = p_data_sram_addr;
 assign data_sram_wdata = exe_mem_size==2'b01 ? {4{exe_rkd_value[7:0]}} : 
                          exe_mem_size==2'b10 ? {2{exe_rkd_value[15:0]}} :
                                                   exe_rkd_value;
@@ -367,6 +400,42 @@ assign error_va = exe_alu_result; //把alu结果（地址）存一下，如果�
 assign csr_mask_result = (exe_rj_value & exe_rkd_value) | (~exe_rj_value & exe_csr_data);
 assign exe_csr_result   = exe_csr_mask ? csr_mask_result : exe_rkd_value;
 
+//addr trans(cache)
+    wire [2:0] addr_head_i;
+    assign addr_head_i = exe_alu_result[31:29];
+
+    wire [2:0] dmw0_vseg,dmw0_pseg,dmw1_vseg,dmw1_pseg;
+    assign dmw0_vseg = csr_dmw0[31:29];
+    assign dmw0_pseg = csr_dmw0[27:25];
+    assign dmw1_vseg = csr_dmw1[31:29];
+    assign dmw1_pseg = csr_dmw1[27:25];
+
+    wire dmw0_hit,dmw1_hit;
+    assign dmw0_hit = ((crmd_plv == 2'h3 && dmw0_plv3) || (crmd_plv == 2'h0 && dmw0_plv0)) && (addr_head_i == dmw0_vseg);
+    assign dmw1_hit = ((crmd_plv == 2'h3 && dmw1_plv3) || (crmd_plv == 2'h0 && dmw1_plv0)) && (addr_head_i == dmw1_vseg);
+
+    assign p_data_sram_addr = csr_da ? exe_alu_result                     :
+                    csr_pg && dmw0_hit ? {dmw0_pseg, exe_alu_result[28:0]} :
+                    csr_pg && dmw1_hit ? {dmw1_pseg, exe_alu_result[28:0]} :
+                    32'b0;
+
+    //存储访问控制逻辑
+    wire [1:0] dmw0_mat,dmw1_mat,page_mat;
+    assign dmw0_mat = csr_dmw0[5:4];
+    assign dmw1_mat = csr_dmw1[5:4];
+    // wire dmw0_uncache,dmw1_uncache,page_uncache;
+    // assign dmw0_uncache = dmw0_mat == 2'b00;
+    // assign dmw1_uncache = dmw1_mat == 2'b00;
+    // assign page_uncache = 1'b0;//暂时不考虑页表缓存
+
+wire uncache_v ;
+assign uncache_v = csr_da ? crmd_datm == 2'b00 :
+                    csr_pg && dmw0_hit ? dmw0_mat == 2'b00 :
+                    csr_pg && dmw1_hit ? dmw1_mat == 2'b00 :
+                //    tlb_s0_found ? tlb_s0_mat == 2'b00 :
+                    1'b0;
+
+assign cache_v = ~uncache_v;
 
 
 //id-exe

@@ -60,6 +60,80 @@ module core_top(
     wire clk = aclk;
     wire rst = ~aresetn;
 
+  wire                      id_allowin;
+  wire                      exe_allowin;
+  wire                      mem_allowin;
+  wire                      wb_allowin;
+  wire                      if_to_id_valid;
+  wire                      id_to_exe_valid;
+  wire                      exe_to_mem_valid;
+  wire                      mem_to_wb_valid;
+
+  wire [  `IF_TO_ID_WD] if_to_id_bus;
+  wire [  `ID_TO_IF_WD] id_to_if_bus;
+  wire [ `ID_TO_EXE_WD] id_to_exe_bus;
+  wire [`EXE_TO_MEM_WD] exe_to_mem_bus;
+  wire [ `MEM_TO_WB_WD] mem_to_wb_bus;
+  wire [  `WB_TO_ID_WD] wb_to_id_bus;
+  wire [ `EXE_TO_ID_WD] exe_to_id_bus;
+  wire [ `MEM_TO_ID_WD] mem_to_id_bus;
+
+  wire [ `CSR_TO_IF_WD] csr_to_if_bus;
+  wire [ `CSR_TO_ID_WD] csr_to_id_bus;
+  wire [`CSR_TO_EXE_WD] csr_to_exe_bus;
+  wire [ `ID_TO_CSR_WD] id_to_csr_bus;
+  wire [ `WB_TO_CSR_WD] wb_to_csr_bus;
+
+
+wire                           excp_flush    ;
+wire                           ertn_flush    ;
+wire                           refetch_flush ;
+wire                           flush_from_mem;
+
+//csr
+wire                           csr_tlbsrch_en  ;
+wire                           csr_tlbsrch_found;
+wire  [ 4:0]                   csr_tlbsrch_index;
+wire                           csr_excp_tlbrefill;
+wire                           csr_excp_tlb    ;
+wire  [18:0]                   csr_excp_tlb_vppn;
+//from wb llbit
+wire                           csr_llbit_in    ;
+wire                           csr_llbit_set_in;
+wire  [27:0]                   csr_lladdr_in   ;
+wire                           csr_lladdr_set_in;
+//to exe
+wire                          csr_llbit_out    ;
+wire [18:0]                   csr_vppn_out     ;
+//to mem
+wire [27:0]                   csr_lladdr_out   ;
+//to if
+wire [31:0]                   csr_tlbrentry_out;
+wire                          csr_disable_cache;
+//to addr trans
+wire [ 9:0]                   csr_asid_out     ;
+wire [ 4:0]                   csr_rand_index   ;
+wire [31:0]                   csr_tlbehi_out   ;
+wire [31:0]                   csr_tlbelo0_out  ;
+wire [31:0]                   csr_tlbelo1_out  ;
+wire [31:0]                   csr_tlbidx_out   ;
+wire                          csr_pg_out       ;
+wire                          csr_da_out       ;
+wire [31:0]                   csr_dmw0_out     ;
+wire [31:0]                   csr_dmw1_out     ;
+wire [ 1:0]                   csr_datf_out     ;
+wire [ 1:0]                   csr_datm_out     ;
+wire [ 5:0]                   csr_ecode_out    ;
+//from addr trans 
+wire                           csr_tlbrd_en    ;
+wire  [31:0]                   csr_tlbehi_in   ;
+wire  [31:0]                   csr_tlbelo0_in  ;
+wire  [31:0]                   csr_tlbelo1_in  ;
+wire  [31:0]                   csr_tlbidx_in   ;
+wire  [ 9:0]                   csr_asid_in     ;
+//general use
+wire [ 1:0]                   csr_plv_out      ;
+
     wire inst_sram_en;
     wire [3:0] inst_sram_we;
     wire [31:0] inst_sram_addr;
@@ -72,61 +146,9 @@ module core_top(
     wire [31:0] data_sram_wdata;
     wire [31:0] data_sram_rdata;
 
+//cache & uncache
     wire inst_cached, data_cached;
-    wire [31:0] inst_sram_addr_o,data_sram_addr_o;
 
-    wire [`CSR_TO_MMU_WD] csr_to_mmu_bus;
-
-    mycpu_core u_mycpu_core(
-        .aclk                    (clk),
-        .aresetn                 (aresetn),
-        .int                     (intrpt),
-
-        .inst_sram_req          (inst_sram_en),
-        // .inst_sram_wr           (),
-        .inst_sram_wstrb        (inst_sram_we),
-        // .inst_sram_size         (),
-        .inst_sram_addr         (inst_sram_addr_o),
-        .inst_sram_wdata        (inst_sram_wdata) ,
-        .inst_sram_rdata        (inst_sram_rdata),
-        .inst_sram_addr_ok      (icache_addr_ok),
-        .inst_sram_data_ok      (icache_data_ok),
-        .data_sram_req          (data_sram_en),
-        .data_sram_wstrb        (data_sram_we  ),
-        .data_sram_addr         (data_sram_addr_o),
-        .data_sram_wdata        (data_sram_wdata),
-        .data_sram_rdata        (data_sram_rdata),
-        .data_sram_addr_ok      (dcache_addr_ok|uncache_addr_ok),
-        .data_sram_data_ok      (dcache_data_ok|uncache_data_ok),
-        .csr_to_mmu_bus         (csr_to_mmu_bus),
-
-        .debug_wb_pc            (debug0_wb_pc       ),
-        .debug_wb_rf_we         (debug0_wb_rf_wen   ),
-        .debug_wb_rf_wnum       (debug0_wb_rf_wnum  ),
-        .debug_wb_rf_wdata      (debug0_wb_rf_wdata )
-    );
-
-    mmu inst_mmu(
-        .addr_i  (inst_sram_addr_o  ),
-        .da      (csr_to_mmu_bus[65]),
-        .pg      (csr_to_mmu_bus[64]),
-        .da_mat  (csr_to_mmu_bus[69:68]),
-        .dmw0    (csr_to_mmu_bus[31:0]),
-        .dmw1    (csr_to_mmu_bus[63:32]),
-        .addr_o  (inst_sram_addr    ),
-        .cache_v (inst_cached       )
-    );
-
-    mmu data_mmu(
-        .addr_i  (data_sram_addr_o  ),
-        .da      (csr_to_mmu_bus[65]),
-        .pg      (csr_to_mmu_bus[64]),
-        .da_mat  (csr_to_mmu_bus[67:66]),
-        .dmw0    (csr_to_mmu_bus[31:0]),
-        .dmw1    (csr_to_mmu_bus[63:32]),
-        .addr_o  (data_sram_addr    ),
-        .cache_v (data_cached       )
-    );
      // cache_top
     wire icache_refresh, dcache_refresh;
     wire icache_miss, dcache_miss;
@@ -147,55 +169,244 @@ module core_top(
     wire [31:0] uncache_rdata;
     wire        uncache_hit;
 
-    wire [31:0] dcache_temp_rdata;
+    wire [31:0] dcache_temp_rdata ;
     wire [31:0] uncache_temp_rdata;
+//-------------------------------stage & csr---------------------------------
+  csr u_csr(
+        .clk                (aclk),
+        .resetn             (aresetn),
 
-    assign data_sram_rdata = data_cached ? dcache_temp_rdata : uncache_temp_rdata;
+        .csr_to_if_bus      (csr_to_if_bus    ),
+        .csr_to_id_bus      (csr_to_id_bus    ),
+        .csr_to_exe_bus     (csr_to_exe_bus   ),
 
-    icache u_icache(
-        .clk           (clk           ),
-        .rst           (rst           ),
-        .sram_en       (inst_sram_en       ),
-        .sram_wen      (inst_sram_we      ),
-        .sram_addr     (inst_sram_addr     ),
-        .sram_wdata    (inst_sram_wdata    ),
-        .refresh       (icache_refresh     ),
-        .cached        (1'b1               ),
-        .cacheline_new (icache_cacheline_new ),
+        .id_to_csr_bus      (id_to_csr_bus    ),
+        .wb_to_csr_bus      (wb_to_csr_bus    ),
+        
+        .interrupt          (intrpt           ),
+        .excp_flush         (excp_flush       ),
+        .ertn_flush         (ertn_flush       ),
 
-        .addr_ok       (icache_addr_ok),
-        .data_ok       (icache_data_ok),
-        .sram_rdata    (inst_sram_rdata    ),
-        .miss          (icache_miss          ),
-        .raddr         (icache_raddr         ),
-        .waddr         (icache_waddr         ),
-        .write_back    (icache_write_back    ),
-        .cacheline_old (icache_cacheline_old )
+        //tlb-mmu地址翻译信号
+        .pg_out             (csr_pg_out       ),
+        .da_out             (csr_da_out       ),
+        .dmw0_out           (csr_dmw0_out     ),
+        .dmw1_out           (csr_dmw1_out     ),
+
+        //未实现的无效信号
+          .tlbsrch_en         (0/*csr_tlbsrch_en*/   ),
+          .tlbsrch_found      (0/*csr_tlbsrch_found*/),
+          .tlbsrch_index      (0/*csr_tlbsrch_index*/),
+          .excp_tlbrefill     (0/*csr_excp_tlbrefill*/),
+          .excp_tlb           (0/*csr_excp_tlb     */),
+          .excp_tlb_vppn      (0/*csr_excp_tlb_vppn*/),
+          
+          .llbit_in           (0/*csr_llbit_in     */),
+          .llbit_set_in       (0/*csr_llbit_set_in */),
+          .lladdr_in          (0/*csr_lladdr_in    */),
+          .lladdr_set_in      (0/*csr_lladdr_set_in*/),
+          
+          .llbit_out          (csr_llbit_out    ),
+          .vppn_out           (csr_vppn_out     ),
+
+          .lladdr_out         (csr_lladdr_out   ),
+
+          .tlbrentry_out      (csr_tlbrentry_out),
+          .disable_cache_out  (csr_disable_cache),
+
+          .asid_out           (csr_asid_out     ),
+          .rand_index         (csr_rand_index   ),
+          .tlbehi_out         (csr_tlbehi_out   ),
+          .tlbelo0_out        (csr_tlbelo0_out  ),
+          .tlbelo1_out        (csr_tlbelo1_out  ),
+          .tlbidx_out         (csr_tlbidx_out   ),
+
+          .datf_out           (csr_datf_out     ),
+          .datm_out           (csr_datm_out     ),
+          .ecode_out          (csr_ecode_out    ),
+
+          .tlbrd_en           (0/*csr_tlbrd_en  */   ),
+          .tlbehi_in          (0/*csr_tlbehi_in */   ),
+          .tlbelo0_in         (0/*csr_tlbelo0_in*/   ),
+          .tlbelo1_in         (0/*csr_tlbelo1_in*/   ),
+          .tlbidx_in          (0/*csr_tlbidx_in */   ),
+          .asid_in            (0/*csr_asid_in   */   ),
+
+          .plv_out            (csr_plv_out      )
     );
 
-    dcache u_dcache(
-        .clk           (clk           ),
-        .rst           (rst           ),
-        .sram_en       (data_sram_en       ),
-        .sram_wen      (data_sram_we      ),
-        .sram_addr     (data_sram_addr     ),
-        .sram_wdata    (data_sram_wdata    ),
-        .refresh       (dcache_refresh       ),
-        .cached        (data_cached        ),
-        .cacheline_new (dcache_cacheline_new ),
+  if_stage u_if_stage (
+      .clk              (aclk),
+      .resetn           (aresetn),
 
-        .addr_ok       (dcache_addr_ok),
-        .data_ok       (dcache_data_ok),
-        .sram_rdata    (dcache_temp_rdata    ),
-        .miss          (dcache_miss          ),
-        .raddr         (dcache_raddr         ),
-        .waddr         (dcache_waddr         ),
-        .write_back    (dcache_write_back    ),
-        .cacheline_old (dcache_cacheline_old )
-    );
+      .id_allowin       (id_allowin),
+      .if_to_id_valid   (if_to_id_valid),
+      .if_to_id_bus     (if_to_id_bus),
+
+      .excp_flush       (excp_flush   ),
+      .ertn_flush       (ertn_flush   ),
+      .refetch_flush    (refetch_flush),
+
+      .id_to_if_bus     (id_to_if_bus),
+      .csr_to_if_bus    (csr_to_if_bus),
+
+      .cache_v          (inst_cached       ),
+
+      .inst_sram_req    (inst_sram_en),
+      .inst_sram_wstrb  (inst_sram_we),
+      .inst_sram_addr   (inst_sram_addr),
+      .inst_sram_wdata  (inst_sram_wdata),
+      .inst_sram_rdata  (inst_sram_rdata),
+      .inst_sram_addr_ok(icache_addr_ok),
+      .inst_sram_data_ok(icache_data_ok)
+);
+
+  id_stage u_id_stage(
+      .clk                      (aclk),
+      .resetn                   (aresetn),
     
-    
-    uncache u_uncache(
+      .id_allowin               (id_allowin),
+      .if_to_id_valid           (if_to_id_valid),
+      .if_to_id_bus             (if_to_id_bus),
+      .exe_allowin              (exe_allowin),
+      .id_to_exe_valid          (id_to_exe_valid),
+      .id_to_exe_bus            (id_to_exe_bus),
+
+      .id_to_if_bus             (id_to_if_bus),
+      .exe_to_id_bus            (exe_to_id_bus),
+
+      .mem_to_id_bus            (mem_to_id_bus),
+      .wb_to_rf_bus             (wb_to_id_bus),
+  
+      .excp_flush               (excp_flush   ),
+      .ertn_flush               (ertn_flush   ),
+      .refetch_flush            (refetch_flush),
+
+      .csr_to_id_bus            (csr_to_id_bus),
+      .id_to_csr_bus            (id_to_csr_bus)
+);
+
+  exe_stage u_exe_stage(
+      .clk                       (aclk),
+      .resetn                    (aresetn),
+
+      .exe_allowin               (exe_allowin),
+      .id_to_exe_valid           (id_to_exe_valid),
+      .id_to_exe_bus             (id_to_exe_bus),
+
+      .mem_allowin               (mem_allowin),
+      .exe_to_mem_valid          (exe_to_mem_valid),
+      .exe_to_mem_bus            (exe_to_mem_bus),
+
+      .csr_to_exe_bus            (csr_to_exe_bus   ),
+      .exe_to_id_bus             (exe_to_id_bus),
+      .cache_v                   (data_cached       ),
+
+      .excp_flush                (excp_flush   ),
+      .ertn_flush                (ertn_flush   ),
+      .refetch_flush             (refetch_flush),
+      .flush_from_mem            (flush_from_mem),
+
+      .data_sram_req             (data_sram_en),
+      .data_sram_wr              (data_sram_wr),
+      .data_sram_wstrb           (data_sram_we),
+      .data_sram_size            (data_sram_size),
+      .data_sram_addr            (data_sram_addr),
+      .data_sram_wdata           (data_sram_wdata),
+      .data_sram_addr_ok         (dcache_addr_ok|uncache_addr_ok)
+);
+
+  mem_stage u_mem_stage(
+      .clk                       (aclk),
+      .resetn                    (aresetn),
+
+      .mem_allowin               (mem_allowin),
+      .exe_to_mem_valid          (exe_to_mem_valid),
+      .exe_to_mem_bus            (exe_to_mem_bus),
+
+      .wb_allowin                (wb_allowin),
+      .mem_to_wb_valid           (mem_to_wb_valid),
+      .mem_to_wb_bus             (mem_to_wb_bus),
+
+      .mem_to_id_bus             (mem_to_id_bus),
+
+      .data_cached               (data_cached       ),
+      .dcache_temp_rdata         (dcache_temp_rdata ),
+      .uncache_temp_rdata        (uncache_temp_rdata),
+      .dcache_data_ok            (dcache_data_ok),
+      .uncache_data_ok           (uncache_data_ok),
+
+      .excp_flush                (excp_flush   ),
+      .ertn_flush                (ertn_flush   ),
+      .refetch_flush             (refetch_flush),
+      .flush_from_mem            (flush_from_mem)
+);
+
+  wb_stage u_wb_stage(
+      .clk              (aclk),
+      .resetn           (aresetn),
+
+      .wb_allowin       (wb_allowin),
+      .mem_to_wb_valid  (mem_to_wb_valid),
+      .mem_to_wb_bus    (mem_to_wb_bus),
+
+      .wb_to_id_bus     (wb_to_id_bus),
+
+      .excp_flush   (excp_flush   ),
+      .ertn_flush   (ertn_flush   ),
+      .refetch_flush(refetch_flush),
+
+      .wb_to_csr_bus(wb_to_csr_bus),
+
+      .debug_wb_pc            (debug0_wb_pc       ),
+      .debug_wb_rf_we         (debug0_wb_rf_wen   ),
+      .debug_wb_rf_wnum       (debug0_wb_rf_wnum  ),
+      .debug_wb_rf_wdata      (debug0_wb_rf_wdata )
+);
+//------------------------------cache & uncache------------------------------
+
+  cache u_icache(
+      .clk           (clk           ),
+      .rst           (rst           ),
+      .sram_en       (inst_sram_en       ),
+      .sram_wen      (inst_sram_we      ),
+      .sram_addr     (inst_sram_addr     ),
+      .sram_wdata    (inst_sram_wdata    ),
+      .refresh       (icache_refresh     ),
+      .cached        (1'b1               ),
+      .cacheline_new (icache_cacheline_new ),
+
+      .addr_ok       (icache_addr_ok),
+      .data_ok       (icache_data_ok),
+      .sram_rdata    (inst_sram_rdata    ),
+      .miss          (icache_miss          ),
+      .raddr         (icache_raddr         ),
+      .waddr         (icache_waddr         ),
+      .write_back    (icache_write_back    ),
+      .cacheline_old (icache_cacheline_old )
+  );
+  cache u_dcache(
+      .clk           (clk           ),
+      .rst           (rst           ),
+      .sram_en       (data_sram_en & data_cached),
+      .sram_wen      (data_sram_we      ),
+      .sram_addr     (data_sram_addr     ),
+      .sram_wdata    (data_sram_wdata    ),
+      .refresh       (dcache_refresh       ),
+      .cached        (data_cached        ),
+      .cacheline_new (dcache_cacheline_new ),
+
+      .addr_ok       (dcache_addr_ok),
+      .data_ok       (dcache_data_ok),
+      .sram_rdata    (dcache_temp_rdata    ),
+      .miss          (dcache_miss          ),
+      .raddr         (dcache_raddr         ),
+      .waddr         (dcache_waddr         ),
+      .write_back    (dcache_write_back    ),
+      .cacheline_old (dcache_cacheline_old )
+  );
+  
+  uncache u_uncache(
         .clk        (clk                        ),
         .rst        (rst                        ),
         .addr_ok    (uncache_addr_ok),
@@ -209,9 +420,11 @@ module core_top(
         .axi_wsel   (uncache_wen                ),
         .axi_addr   (uncache_addr               ),
         .axi_wdata  (uncache_wdata              ),
-        .reload     (uncache_refresh            ),
+        .refresh    (uncache_refresh            ),
         .axi_rdata  (uncache_rdata              )
-    );
+  );
+
+//--------------------------------axi control----------------------------------
     
     axi_control u_axi_control(
         .clk                  (clk                  ),

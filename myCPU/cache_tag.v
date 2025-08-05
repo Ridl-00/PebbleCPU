@@ -209,7 +209,7 @@ module cache_tag(
         end
     end
 //============================refresh=============================
-    // assign hit = cached_v & sram_en & ({1'b1,tag} == tag_ram_out);
+    // 此处为组合逻辑实现，无状态机
     assign lru = lru_r[index];
     assign hit = {
         hit_way1,

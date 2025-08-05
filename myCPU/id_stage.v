@@ -20,7 +20,7 @@ module id_stage (
     input wire [`MEM_TO_ID_WD] mem_to_id_bus,
     input wire [`WB_TO_ID_WD]  wb_to_rf_bus,
 
-    input wire                 excp_flush   , //exe
+    input wire                 excp_flush   , //wb
     input wire                 ertn_flush   , //wb
     input wire                 refetch_flush, //wb
 
@@ -286,7 +286,7 @@ wire        rdcnt_en; //硬件计数器读使能
 
 //exception
     //interrupt
-    wire                      has_int       ;//是否 有外部中断请求
+    wire                 has_int       ;//是否 有外部中断请求
     //csr
     wire  [31:0]              rd_csr_data   ;//读csr数据
     wire  [ 1:0]              csr_plv       ;//确保特权指令（如 CSR 操作）仅在合法特权级别下执行，防止低特权级代码越权访问系统资源
@@ -303,7 +303,7 @@ assign {
 
     rd_csr_data, //32
     csr_plv, //2
-    has_int //8
+    has_int //1
 
 } = csr_to_id_bus;
 
@@ -729,6 +729,7 @@ assign rf_raddr2 = src_reg_is_rd ? rd : rk;
 
 regfile u_regfile(
     .clk    (clk      ),
+    .resetn (resetn   ),
     .raddr1 (rf_raddr1),
     .rdata1 (rf_rdata1),
     .raddr2 (rf_raddr2),

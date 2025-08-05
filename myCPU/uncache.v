@@ -1,15 +1,12 @@
 `include "defines.v"
-`define STAGE_WD 4
-`define WAIT 4'b1000
-`define IDLE 4'b0001
-`define BUFFER 4'b0010
-// `define VIRTUAL_UART_ADDR 32'h1faf_fff0
+
 module uncache(
     input wire clk,
     input wire rst,
-    // output wire stallreq,
+    
     output wire addr_ok,
     output wire data_ok,
+
     input wire conf_en,
     input wire [3:0] conf_wen,
     input wire [31:0] conf_addr,
@@ -21,109 +18,51 @@ module uncache(
     output reg [31:0] axi_addr, // addr
     output reg [31:0] axi_wdata,
 
-    input wire reload,
+    input wire refresh,
     input wire [31:0] axi_rdata
 );
-    reg valid;
     reg finish;
-    reg buffer_valid;
-    reg [`STAGE_WD-1:0] stage;
-    assign addr_ok=reload;
-    assign data_ok=finish|~buffer_valid;
-    wire conf_rd_req;
-    wire conf_wr_req;
-    assign conf_rd_req = conf_en & ~valid & ~(|conf_wen);
-    assign conf_wr_req = conf_en & ~valid & (|conf_wen);
+    reg axi_busy;
+    //用axi_buzy信号判断uncache是否已经发出请求，此时等待refresh信号
 
-    // assign stallreq = conf_rd_req & ~valid | conf_wr_req & buffer_valid & ~valid | stage[3];//写暂停和valid好像无关，valid应该是标志当前读数据是否有效
+    assign addr_ok=refresh & conf_en;
+    assign data_ok=finish;
     always @ (posedge clk) begin
         if (rst) begin
-            valid <= 1'b0;
-        end
-        else if (finish) begin
-            valid <= 1'b1;
-        end
-        else begin
-            valid <= 1'b0;
-        end
-    end
-
-    // assign rd_req = conf_en & ~valid & ~(|conf_wen);
-    // assign rd_addr = conf_addr;
-    // assign wr_req = conf_en & ~valid & (|conf_wen);
-    // assign wr_wstrb = conf_wen;
-    // assign wr_addr = conf_addr;
-    // assign wr_data = conf_wdata;
-
-    always @ (posedge clk) begin
-        if (rst) begin
+            finish <= 1'b0;
             conf_rdata <= 32'b0;
         end
-        else if (reload) begin
+        else if (refresh) begin
+            finish <= 1'b1;
             conf_rdata <= axi_rdata; //data有hold功能
+        end
+        else begin
+            finish <= 1'b0;
         end
     end
 
     always @ (posedge clk) begin
         if (rst) begin
-            buffer_valid <= 1'b0;
-
-            stage <= `STAGE_WD'b1;
-            finish <= 1'b0;
-
             axi_en <= 1'b0;
             axi_wsel <= 4'b0;
             axi_addr <= 32'b0;
             axi_wdata <= 32'b0;
         end
         else begin
-            case(1'b1)
-                stage[0]:begin
-                    if (conf_rd_req & ~buffer_valid) begin
-                        axi_en <= 1'b1;
-                        axi_wsel <= conf_wen;
-                        axi_addr <= conf_addr;
-                        axi_wdata <= conf_wdata;
-                        stage <= `WAIT;
-                    end
-                    else if (conf_wr_req & ~buffer_valid) begin
-                        axi_en <= 1'b1;
-                        axi_wsel <= conf_wen;
-                        axi_addr <= conf_addr;
-                        axi_wdata <= conf_wdata;
-                        buffer_valid <= 1'b1;
-                        // finish <= 1'b1;
-                        stage <= `BUFFER;
-                    end
-                end
-                stage[1]:begin //BUFFER 写缓冲状态
-                    // finish <= 1'b0;
-                    if (reload) begin
-                        buffer_valid <= 1'b0;
-                        axi_en <= 1'b0;
-                        axi_wsel <= 4'b0;
-                        axi_addr <= 32'b0;
-                        axi_wdata <= 32'b0;
-                        stage <= `IDLE;
-                    end
-                end
-                stage[3]:begin  //WAIT 读等待状态
-                    if (reload) begin
-                        axi_en <= 1'b0;
-                        axi_wsel <= 4'b0;
-                        axi_addr <= 32'b0;
-                        axi_wdata <= 32'b0;
-                        finish <= 1'b1;
-                    end
-                    else if (finish) begin
-                        finish <= 1'b0;
-                        stage <= `STAGE_WD'b1;
-                    end
-                end
-                default:begin
-                    stage <= `STAGE_WD'b1;
-                end
-            endcase
+            if (addr_ok | data_ok ) begin
+                axi_en <= 1'b0;
+                axi_wsel <= 4'b0;
+                axi_addr <= 32'b0;
+                axi_wdata <= 32'b0;
+
+            end
+            else if (conf_en) begin
+                axi_en <= 1'b1;
+                axi_wsel <= conf_wen;
+                axi_addr <= conf_addr;
+                axi_wdata <= conf_wdata;            
+            end
         end
     end
 endmodule
+

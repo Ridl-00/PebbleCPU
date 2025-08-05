@@ -11,6 +11,7 @@ module csr
     //bus
     output wire [ `CSR_TO_IF_WD] csr_to_if_bus   ,
     output wire [ `CSR_TO_ID_WD] csr_to_id_bus   ,
+    output wire [`CSR_TO_EXE_WD] csr_to_exe_bus  ,
     
     input  wire [ `ID_TO_CSR_WD] id_to_csr_bus  ,
     input  wire [ `WB_TO_CSR_WD] wb_to_csr_bus  ,
@@ -282,6 +283,13 @@ wire  [31:0]                  wr_data     ;
 
 //out bus
 assign csr_to_if_bus = {
+    plv_out, //2
+    datf_out,   //2 
+    da_out, //1
+    pg_out, //1
+    dmw1_out, //32
+    dmw0_out, //32
+
     era_in,
     eentry_out,
     era_out   
@@ -294,6 +302,15 @@ assign csr_to_id_bus = {
     rd_data,
     plv_out,
     has_int
+};
+
+assign csr_to_exe_bus = {
+    plv_out, //2
+    datm_out,   //2 
+    da_out, //1
+    pg_out, //1
+    dmw1_out, //32
+    dmw0_out //32
 };
 
 //in bus
@@ -428,8 +445,8 @@ always @(posedge clk) begin
         csr_crmd[  `IE] <=  1'b0;
         csr_crmd[  `DA] <=  1'b1;
         csr_crmd[  `PG] <=  1'b0;
-        csr_crmd[`DATF] <=  2'b01;//默认取指可缓存
-        csr_crmd[`DATM] <=  2'b00;
+        csr_crmd[`DATF] <=  2'b0;
+        csr_crmd[`DATM] <=  2'b0;
         csr_crmd[31: 9] <= 23'b0;
     end
     //异常处理
@@ -469,7 +486,8 @@ end
 //csr_prmd[`PPLV] 1:0 异常前特权级别
 always @(posedge clk) begin
     if (reset) begin
-        csr_prmd[31:3] <= 29'b0;
+        // csr_prmd[31:3] <= 29'b0;
+        csr_prmd<=32'b0;
     end
     //异常处理
     else if (excp_flush) begin
@@ -509,11 +527,12 @@ end
 
 always @(posedge clk) begin
     if (reset) begin
-        csr_estat[1:0] <= 2'b0; 
-        csr_estat[10]    <= 1'b0;
-        csr_estat[12]    <= 1'b0;
-        csr_estat[15:13] <= 3'b0;
-        csr_estat[31]    <= 1'b0;
+        // csr_estat[1:0] <= 2'b0; 
+        // csr_estat[10]    <= 1'b0;
+        // csr_estat[12]    <= 1'b0;
+        // csr_estat[15:13] <= 3'b0;
+        // csr_estat[31]    <= 1'b0;
+        csr_estat<=32'b0;
         
         timer_en <= 1'b0; //定时器禁用
     end
@@ -547,7 +566,10 @@ end
 
 //era
 always @(posedge clk) begin
-    if (excp_flush) begin
+    if (reset) begin
+        csr_era <= 32'b0;
+    end
+    else if (excp_flush) begin
         csr_era <= era_in;
     end
     else if (era_wen) begin
@@ -558,7 +580,10 @@ end
 //badv 出错虚地址
 //触发地址错误相关例外时，记录出错的虚地址
 always @(posedge clk) begin
-    if (badv_wen) begin
+    if (reset) begin
+        csr_badv <= 32'b0;
+    end
+    else if (badv_wen) begin
         csr_badv <= wr_data;
     end
     else if (va_error_in) begin
@@ -579,9 +604,10 @@ end
 //tlbidx
 always @(posedge clk) begin
     if (reset) begin
-        csr_tlbidx[23: 5] <= 19'b0;
-        csr_tlbidx[30]    <= 1'b0;
-		csr_tlbidx[`INDEX]<= 5'b0;
+        // csr_tlbidx[23: 5] <= 19'b0;
+        // csr_tlbidx[30]    <= 1'b0;
+		// csr_tlbidx[`INDEX]<= 5'b0;
+        csr_tlbidx <= 32'b0;
     end
     else if (tlbidx_wen) begin
 		csr_tlbidx[$clog2(TLBNUM)-1:0] <= wr_data[$clog2(TLBNUM)-1:0];
@@ -610,7 +636,8 @@ end
 //tlbehi
 always @(posedge clk) begin
     if (reset) begin
-        csr_tlbehi[12:0] <= 13'b0;
+        // csr_tlbehi[12:0] <= 13'b0;
+        csr_tlbehi <= 32'b0;
     end
     else if (tlbehi_wen) begin
         csr_tlbehi[`VPPN] <= wr_data[`VPPN];
@@ -629,7 +656,8 @@ end
 //tlbelo0
 always @(posedge clk) begin
     if (reset) begin
-        csr_tlbelo0[7] <= 1'b0;
+        // csr_tlbelo0[7] <= 1'b0;
+        csr_tlbelo0 <= 32'b0;
     end
     else if (tlbelo0_wen) begin
         csr_tlbelo0[`TLB_V]   <= wr_data[`TLB_V];
@@ -660,7 +688,8 @@ end
 //tlbelo1
 always @(posedge clk) begin
     if (reset) begin
-        csr_tlbelo1[7] <= 1'b0;
+        // csr_tlbelo1[7] <= 1'b0;
+        csr_tlbelo1 <= 32'b0;
     end
     else if (tlbelo1_wen) begin
         csr_tlbelo1[`TLB_V]   <= wr_data[`TLB_V];
@@ -688,10 +717,12 @@ always @(posedge clk) begin
     end
 end
 
+//类似TLB参数，先都设0反正没有TLB
 //asid
 always @(posedge clk) begin
     if (reset) begin
-        csr_asid[31:10] <= 22'h280; //ASIDBITS = 10
+        // csr_asid[31:10] <= 22'h280; //ASIDBITS = 10
+        csr_asid <= 32'b0;
     end
     else if (asid_wen) begin
         csr_asid[`TLB_ASID] <= wr_data[`TLB_ASID];
@@ -707,7 +738,8 @@ end
 //TLBRENTRY
 always @(posedge clk) begin
     if (reset) begin
-        csr_tlbrentry[5:0] <= 6'b0;
+        // csr_tlbrentry[5:0] <= 6'b0;
+        csr_tlbrentry <= 32'b0;
     end
     else if (tlbrentry_wen) begin
         csr_tlbrentry[`TLBRENTRY_PA] <= wr_data[`TLBRENTRY_PA];
@@ -751,28 +783,40 @@ end
 
 //save0
 always @(posedge clk) begin
-    if (save0_wen) begin
+    if (reset) begin
+        csr_save0 <= 32'b0;
+    end
+    else if (save0_wen) begin
         csr_save0 <= wr_data;
     end 
 end
 
 //save1
 always @(posedge clk) begin
-    if (save1_wen) begin
+    if (reset) begin
+        csr_save1 <= 32'b0;
+    end
+    else if (save1_wen) begin
         csr_save1 <= wr_data;
     end 
 end
 
 //save2
 always @(posedge clk) begin
-    if (save2_wen) begin
+    if (reset) begin
+        csr_save2 <= 32'b0;
+    end
+    else if (save2_wen) begin
         csr_save2 <= wr_data;
     end 
 end
 
 //save3
 always @(posedge clk) begin
-    if (save3_wen) begin
+    if (reset) begin
+        csr_save3 <= 32'b0;
+    end
+    else if (save3_wen) begin
         csr_save3 <= wr_data;
     end 
 end
@@ -790,7 +834,8 @@ end
 //tcfg
 always @(posedge clk) begin
     if (reset) begin
-        csr_tcfg[`EN] <= 1'b0;
+        // csr_tcfg[`EN] <= 1'b0;
+        csr_tcfg <= 32'b0;
     end
     else if (tcfg_wen) begin
         csr_tcfg[      `EN] <= wr_data[      `EN];
@@ -811,7 +856,10 @@ end
 
 //tval
 always @(posedge clk) begin
-    if (tcfg_wen) begin
+    if (reset) begin
+        csr_tval <= 32'b0;
+    end
+    else if (tcfg_wen) begin
         csr_tval <= {wr_data[ `INITVAL], 2'b0};
     end
     else if (timer_en) begin
@@ -835,9 +883,10 @@ end
 //llbctl
 always @(posedge clk) begin
     if (reset) begin
-        csr_llbctl[`KLO]   <= 1'b0;
-        csr_llbctl[31:3]   <= 29'b0;
-		csr_llbctl[`WCLLB] <= 1'b0;
+        // csr_llbctl[`KLO]   <= 1'b0;
+        // csr_llbctl[31:3]   <= 29'b0;
+		// csr_llbctl[`WCLLB] <= 1'b0;
+        csr_llbctl <= 32'b0;
         llbit <= 1'b0;
     end 
     else if (ertn_flush) begin
@@ -880,13 +929,19 @@ end
 
 //pgdl
 always @(posedge clk) begin
-    if (pgdl_wen) begin
+    if (reset) begin
+        csr_pgdl <= 32'b0;
+    end
+    else if (pgdl_wen) begin
         csr_pgdl[`BASE] <= wr_data[`BASE];
     end
 end
 
 //pgdh
 always @(posedge clk) begin
+    if (reset) begin
+        csr_pgdh <= 32'b0;
+    end 
     if (pgdh_wen) begin
         csr_pgdh[`BASE] <= wr_data[`BASE];
     end

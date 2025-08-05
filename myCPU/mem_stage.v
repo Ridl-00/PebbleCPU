@@ -1,3 +1,4 @@
+
 // `timescale 1ns / 1ps
 `include "defines.v"
 
@@ -19,8 +20,13 @@ module mem_stage(
     output wire [`MEM_TO_ID_WD] mem_to_id_bus,
 
     //dataRAM读数据
-    input [31:0] data_sram_rdata,
-    input        data_sram_data_ok,
+    // input [31:0] data_sram_rdata,
+    input wire         data_cached  ,
+    input wire [31:0]  dcache_temp_rdata ,
+    input wire [31:0]  uncache_temp_rdata,
+    // input        data_sram_data_ok,
+    input wire    dcache_data_ok,
+    input wire    uncache_data_ok,
 
     input wire  excp_flush        ,
     input wire  ertn_flush        ,
@@ -123,7 +129,12 @@ wire        excp;
 //mem-id
 wire        forward_enable;
 
-
+//cache/uncache
+wire [31:0] data_sram_rdata;
+wire data_sram_data_ok;
+assign data_sram_rdata = dcache_data_ok ? dcache_temp_rdata : uncache_temp_rdata;
+assign data_sram_data_ok = dcache_data_ok || uncache_data_ok; //从某种程度上来说，cached由上一个发req的addr决定
+                                                              //但鉴于同时读写机制，或许直接或一下就行
 
 //======================================================
 //=================== Main Code ====================
@@ -149,16 +160,12 @@ always @(posedge clk) begin
   if (mem_allowin && exe_to_mem_valid) begin
     mem_data <= exe_to_mem_bus;
   end
-  // else begin
-  //   mem_data <= 'b0;
-  // end
 end
 
 assign access_mem = mem_store_op || mem_load_op;
 
 assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
 
-// assign mem_rdata = data_buff_enable ? data_rd_buff : data_rdata;
 assign mem_rdata = data_sram_rdata;
 
 assign sram_addr_low2bit = {mem_exe_result[1], mem_exe_result[0]};
@@ -190,8 +197,7 @@ assign dep_need_stall       = mem_load_op && !data_sram_data_ok;
 
 //exception
 assign excp = /*excp_tlbr || excp_pil || excp_pis || excp_ppi || excp_pme || */mem_excp;
-// assign excp_num = {excp_pil, excp_pis, excp_ppi, excp_pme, excp_tlbr, 1'b0, mem_excp_num};
-assign excp_num = {1'b0, 1'b0, 1'b0, 1'b0, 1'b0, 1'b0, mem_excp_num};
+assign excp_num = {/*excp_pil, excp_pis, excp_ppi, excp_pme, excp_tlbr, 1'b0,*/6'b0, mem_excp_num};
 
 assign flush_from_mem = (excp | mem_ertn | (mem_csr_we /*| (mem_ll_w | mem_sc_w) & !excp*/) /*| mem_refetch | mem_idle*/) & mem_valid;
 

@@ -33,8 +33,10 @@ module if_stage (
       input wire                 ertn_flush   , //wb
       input wire                 refetch_flush, //wb 
 
+      output wire  cache_v                    ,
     //例外（实际上是wb来的）
       input wire [`CSR_TO_IF_WD] csr_to_if_bus
+
 
 
 );
@@ -65,8 +67,6 @@ wire [`InstAddrBus] nextpc;  //最终更新到PC寄存器的指令地址
 
 
 wire         inst_addr_trans_en; //地址转换使能
-wire         inst_addr_ok;//指令地址是否准备就绪(与cache有关)
-wire         inst_valid;
 
 wire         preif_excp_adef; //地址对齐错误
 // wire         if_excp_tlbr; //TLB 相关异常
@@ -141,34 +141,33 @@ assign if_to_id_bus = {
     // wire  [31:0]                  csr_tlbrentry    ;
     // wire                          has_int          ;
 
-    //from csr
-    // wire                          csr_pg            ;
-    // wire                          csr_da            ;
-    // wire  [31:0]                  csr_dmw0          ;
-    // wire  [31:0]                  csr_dmw1          ;
-    // wire  [ 1:0]                  csr_plv           ;
-    // wire  [ 1:0]                  csr_datf          ;
-    // wire                          disable_cache     ;
-
     reg                          excp_flush_r       ;
     reg                          ertn_flush_r       ;
     reg                          refetch_flush_r    ;
+reg if_inst_cancel;
 
+//addr trans(cache)
+wire  [`InstAddrBus] p_inst_sram_addr;
+wire  [ 1:0]  crmd_plv ;
+wire  [ 1:0]  crmd_datf;
+wire          csr_da       ;
+wire          csr_pg       ;
+wire  [31:0]  csr_dmw1     ;
+wire  [31:0]  csr_dmw0     ;
 
 assign {
+    crmd_plv ,
+    crmd_datf,
+    csr_da   ,
+    csr_pg   ,
+    csr_dmw1 ,
+    csr_dmw0 ,
     wb_pc            ,  //95:64
     csr_eentry       ,  //63:32
     csr_era          //, //31:0
     // excp_tlbrefill   ,
     // csr_tlbrentry    , //32
     // has_int          ,
-
-    // csr_pg            ,
-    // csr_da            ,
-    // csr_dmw0          , //32
-    // csr_dmw1          , //32
-    // csr_plv           , //2
-    //csr_datf          , //2
     //disable_cache     
 
 }=csr_to_if_bus;
@@ -360,7 +359,7 @@ end
   assign inst_sram_wr = 1'b0;
   assign inst_sram_wstrb = 4'h0;
   assign inst_sram_size = 2'b10;
-  assign inst_sram_addr = nextpc;
+  assign inst_sram_addr = p_inst_sram_addr;//nextpc;
   assign inst_sram_wdata = 32'b0;
 
 
@@ -382,13 +381,11 @@ assign preif_excp = preif_excp_adef;
 assign preif_excp_num = {preif_excp_adef};
 
 assign excp = if_excp /*|| if_excp_tlbr || if_excp_pif || if_excp_ppi */;
-assign excp_num = {if_excp_ppi, if_excp_pif, if_excp_tlbr, if_excp_num};
+assign excp_num = {/*if_excp_ppi, if_excp_pif, if_excp_tlbr,*/3'b0, if_excp_num};
 
 //addr trans
 // assign inst_addr_trans_en = pg_mode && !dmw0_en && !dmw1_en;
 assign inst_addr_trans_en = 1'b0;
-//因为还没有实现cache所以地址始终有效
-assign inst_addr_ok = 1'b1;
 
 
 //csr
@@ -420,14 +417,6 @@ assign flush_sign_wire_o = ertn_flush || excp_flush || refetch_flush;
 //     endcase
 // end
 
-//when flush_sign meet icache_busy 1, flush_sign's inst valid should not set immediately
-// assign inst_valid = (if_allowin && !preif_excp /*&& !tlb_excp_lock_pc*/ || flush_sign /*|| btb_pre_error_flush*/)/* && !(idle_flush || idle_lock)*/;
-// assign inst_op     = 1'b0;
-// assign inst_wstrb  = 4'h0;
-// assign inst_addr   = nextpc; //nextpc
-// assign inst_wdata  = 32'b0;
-
-reg if_inst_cancel;
 always @ (posedge clk) begin
     if (~resetn) begin
         if_inst_cancel <= 1'b0;
@@ -446,6 +435,36 @@ always @ (posedge clk) begin
     end
 end
 
+//addr trans(cache)
+    wire [2:0] addr_head_i,addr_head_o;
+    assign addr_head_i = nextpc[31:29];
 
+    wire [2:0] dmw0_vseg,dmw0_pseg,dmw1_vseg,dmw1_pseg;
+    assign dmw0_vseg = csr_dmw0[31:29];
+    assign dmw0_pseg = csr_dmw0[27:25];
+    assign dmw1_vseg = csr_dmw1[31:29];
+    assign dmw1_pseg = csr_dmw1[27:25];
+
+//此处hit没判断特权等级
+    wire dmw0_hit,dmw1_hit;
+    assign dmw0_hit = addr_head_i == dmw0_vseg;
+    assign dmw1_hit = addr_head_i == dmw1_vseg;
+
+    // assign addr_head_o = dmw0_hit? dmw0_pseg : (dmw1_hit? dmw1_pseg : addr_head_i);
+    assign p_inst_sram_addr = csr_da ? nextpc                     :
+                    csr_pg && dmw0_hit ? {dmw0_pseg, nextpc[28:0]} :
+                    csr_pg && dmw1_hit ? {dmw1_pseg, nextpc[28:0]} :
+                    32'b0;
+
+    // //存储访问控制逻辑
+    // wire [1:0] dmw0_mat,dmw1_mat,page_mat;
+    // assign dmw0_mat = dmw0[5:4];
+    // assign dmw1_mat = dmw1[5:4];
+    // wire dmw0_uncache,dmw1_uncache,page_uncache;
+    // assign dmw0_uncache = dmw0_mat == 2'b00;
+    // assign dmw1_uncache = dmw1_mat == 2'b00;
+    // assign page_uncache = 1'b0;//暂时不考虑页表缓存
+
+    assign cache_v = 1'b1; //~(dmw0_hit&dmw0_uncache | dmw1_hit&dmw1_uncache | page_uncache );
 
 endmodule
