@@ -110,38 +110,6 @@ localparam CPUCFG_11 = 14'hc1;
 localparam CPUCFG_12 = 14'hc2;
 localparam CPUCFG_13 = 14'hc3;
 
-wire crmd_wen   = csr_wr_en & (wr_addr == CRMD);
-wire prmd_wen   = csr_wr_en & (wr_addr == PRMD);
-wire ectl_wen   = csr_wr_en & (wr_addr == ECTL);
-wire estat_wen  = csr_wr_en & (wr_addr == ESTAT);
-wire era_wen    = csr_wr_en & (wr_addr == ERA);
-wire badv_wen   = csr_wr_en & (wr_addr == BADV);
-wire eentry_wen = csr_wr_en & (wr_addr == EENTRY);
-wire tlbidx_wen = csr_wr_en & (wr_addr == TLBIDX);
-wire tlbehi_wen = csr_wr_en & (wr_addr == TLBEHI);
-wire tlbelo0_wen= csr_wr_en & (wr_addr == TLBELO0);
-wire tlbelo1_wen= csr_wr_en & (wr_addr == TLBELO1);
-wire asid_wen   = csr_wr_en & (wr_addr == ASID);
-wire pgdl_wen   = csr_wr_en & (wr_addr == PGDL);
-wire pgdh_wen   = csr_wr_en & (wr_addr == PGDH);
-wire pgd_wen    = csr_wr_en & (wr_addr == PGD);
-wire cpuid_wen  = csr_wr_en & (wr_addr == CPUID);
-wire save0_wen  = csr_wr_en & (wr_addr == SAVE0);
-wire save1_wen  = csr_wr_en & (wr_addr == SAVE1);
-wire save2_wen  = csr_wr_en & (wr_addr == SAVE2);
-wire save3_wen  = csr_wr_en & (wr_addr == SAVE3);
-wire tid_wen    = csr_wr_en & (wr_addr == TID);
-wire tcfg_wen   = csr_wr_en & (wr_addr == TCFG);
-wire tval_wen   = csr_wr_en & (wr_addr == TVAL);
-wire cntc_wen   = csr_wr_en & (wr_addr == CNTC);
-wire ticlr_wen  = csr_wr_en & (wr_addr == TICLR);
-wire llbctl_wen = csr_wr_en & (wr_addr == LLBCTL);
-wire tlbrentry_wen = csr_wr_en & (wr_addr == TLBRENTRY);
-wire DMW0_wen   = csr_wr_en & (wr_addr == DMW0);
-wire DMW1_wen   = csr_wr_en & (wr_addr == DMW1);
-wire BRK_wen    = csr_wr_en & (wr_addr == BRK);
-wire disable_cache_wen = csr_wr_en & (wr_addr == DISABLE_CACHE);
-
 reg [31:0] csr_crmd;  //0x0 当前模式信息
 reg [31:0] csr_prmd;  //1 例外前模式信息
                       //2 扩展部件使能 euen
@@ -275,6 +243,40 @@ assign {
   va_error_in    , //1
   bad_va_in        // 32
 } = wb_to_csr_bus;
+
+
+wire crmd_wen   = csr_wr_en & (wr_addr == CRMD);
+wire prmd_wen   = csr_wr_en & (wr_addr == PRMD);
+wire ectl_wen   = csr_wr_en & (wr_addr == ECTL);
+wire estat_wen  = csr_wr_en & (wr_addr == ESTAT);
+wire era_wen    = csr_wr_en & (wr_addr == ERA);
+wire badv_wen   = csr_wr_en & (wr_addr == BADV);
+wire eentry_wen = csr_wr_en & (wr_addr == EENTRY);
+wire tlbidx_wen = csr_wr_en & (wr_addr == TLBIDX);
+wire tlbehi_wen = csr_wr_en & (wr_addr == TLBEHI);
+wire tlbelo0_wen= csr_wr_en & (wr_addr == TLBELO0);
+wire tlbelo1_wen= csr_wr_en & (wr_addr == TLBELO1);
+wire asid_wen   = csr_wr_en & (wr_addr == ASID);
+wire pgdl_wen   = csr_wr_en & (wr_addr == PGDL);
+wire pgdh_wen   = csr_wr_en & (wr_addr == PGDH);
+wire pgd_wen    = csr_wr_en & (wr_addr == PGD);
+wire cpuid_wen  = csr_wr_en & (wr_addr == CPUID);
+wire save0_wen  = csr_wr_en & (wr_addr == SAVE0);
+wire save1_wen  = csr_wr_en & (wr_addr == SAVE1);
+wire save2_wen  = csr_wr_en & (wr_addr == SAVE2);
+wire save3_wen  = csr_wr_en & (wr_addr == SAVE3);
+wire tid_wen    = csr_wr_en & (wr_addr == TID);
+wire tcfg_wen   = csr_wr_en & (wr_addr == TCFG);
+wire tval_wen   = csr_wr_en & (wr_addr == TVAL);
+wire cntc_wen   = csr_wr_en & (wr_addr == CNTC);
+wire ticlr_wen  = csr_wr_en & (wr_addr == TICLR);
+wire llbctl_wen = csr_wr_en & (wr_addr == LLBCTL);
+wire tlbrentry_wen = csr_wr_en & (wr_addr == TLBRENTRY);
+wire DMW0_wen   = csr_wr_en & (wr_addr == DMW0);
+wire DMW1_wen   = csr_wr_en & (wr_addr == DMW1);
+wire BRK_wen    = csr_wr_en & (wr_addr == BRK);
+wire disable_cache_wen = csr_wr_en & (wr_addr == DISABLE_CACHE);
+
 
 //======================================================
 //=================== Main Code ====================

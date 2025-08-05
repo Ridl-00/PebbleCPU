@@ -727,7 +727,25 @@ regfile u_regfile(
     );                       
 
 //分支实际判断
-assign rj_eq_rd        = (rj_value == rkd_value);
+// assign rj_eq_rd        = (rj_value == rkd_value);
+
+wire [7:0] rj_val_31_24 = rj_value[31:24];
+wire [7:0] rj_val_23_16 = rj_value[23:16];
+wire [7:0] rj_val_15_8  = rj_value[15:8];
+wire [7:0] rj_val_7_0   = rj_value[7:0];
+
+wire [7:0] rk_val_31_24 = rkd_value[31:24];
+wire [7:0] rk_val_23_16 = rkd_value[23:16];
+wire [7:0] rk_val_15_8  = rkd_value[15:8];
+wire [7:0] rk_val_7_0   = rkd_value[7:0];
+
+wire eq_31_24 = (rj_val_31_24 == rk_val_31_24);
+wire eq_23_16 = (rj_val_23_16 == rk_val_23_16);
+wire eq_15_8  = (rj_val_15_8  == rk_val_15_8);
+wire eq_7_0   = (rj_val_7_0   == rk_val_7_0);
+
+assign rj_eq_rd = eq_31_24 & eq_23_16 & eq_15_8 & eq_7_0;
+
 assign rj_lt_rd_unsign = (rj_value < rkd_value);   //operate "<" has nice timing
 assign rj_lt_rd_sign   = (rj_value[31] && ~rkd_value[31]) ? 1'b1 :
                          (~rj_value[31] && rkd_value[31]) ? 1'b0 : rj_lt_rd_unsign;                         

@@ -320,81 +320,102 @@ module cache_data(
     );
 // data_bram_way1 end
 
-    wire [31:0] sram_rdata_way0,sram_rdata_way1;
+    // wire [31:0] sram_rdata_way0,sram_rdata_way1;
 
-    assign sram_rdata_way0 = ~cached_r ? 32'b0 :
-                            bank_sel_r[0] ? rdata_way0[0] :
-                            bank_sel_r[1] ? rdata_way0[1] :
-                            bank_sel_r[2] ? rdata_way0[2] :
-                            bank_sel_r[3] ? rdata_way0[3] :
-                            bank_sel_r[4] ? rdata_way0[4] :
-                            bank_sel_r[5] ? rdata_way0[5] :
-                            bank_sel_r[6] ? rdata_way0[6] :
-                            bank_sel_r[7] ? rdata_way0[7] :
-                            bank_sel_r[8] ? rdata_way0[8] :
-                            bank_sel_r[9] ? rdata_way0[9] :
-                            bank_sel_r[10] ? rdata_way0[10] :
-                            bank_sel_r[11] ? rdata_way0[11] :
-                            bank_sel_r[12] ? rdata_way0[12] :
-                            bank_sel_r[13] ? rdata_way0[13] :
-                            bank_sel_r[14] ? rdata_way0[14] :
-                            bank_sel_r[15] ? rdata_way0[15] : 32'b0;
-    assign sram_rdata_way1 = ~cached_r ? 32'b0 :
-                            bank_sel_r[0] ? rdata_way1[0] :
-                            bank_sel_r[1] ? rdata_way1[1] :
-                            bank_sel_r[2] ? rdata_way1[2] :
-                            bank_sel_r[3] ? rdata_way1[3] :
-                            bank_sel_r[4] ? rdata_way1[4] :
-                            bank_sel_r[5] ? rdata_way1[5] :
-                            bank_sel_r[6] ? rdata_way1[6] :
-                            bank_sel_r[7] ? rdata_way1[7] :
-                            bank_sel_r[8] ? rdata_way1[8] :
-                            bank_sel_r[9] ? rdata_way1[9] :
-                            bank_sel_r[10] ? rdata_way1[10] :
-                            bank_sel_r[11] ? rdata_way1[11] :
-                            bank_sel_r[12] ? rdata_way1[12] :
-                            bank_sel_r[13] ? rdata_way1[13] :
-                            bank_sel_r[14] ? rdata_way1[14] :
-                            bank_sel_r[15] ? rdata_way1[15] : 32'b0;
-    assign sram_rdata = hit_r[0] ? sram_rdata_way0 :
-                        hit_r[1] ? sram_rdata_way1 : 32'b0;
+    // assign sram_rdata_way0 = ~cached_r ? 32'b0 :
+    //                         bank_sel_r[0] ? rdata_way0[0] :
+    //                         bank_sel_r[1] ? rdata_way0[1] :
+    //                         bank_sel_r[2] ? rdata_way0[2] :
+    //                         bank_sel_r[3] ? rdata_way0[3] :
+    //                         bank_sel_r[4] ? rdata_way0[4] :
+    //                         bank_sel_r[5] ? rdata_way0[5] :
+    //                         bank_sel_r[6] ? rdata_way0[6] :
+    //                         bank_sel_r[7] ? rdata_way0[7] :
+    //                         bank_sel_r[8] ? rdata_way0[8] :
+    //                         bank_sel_r[9] ? rdata_way0[9] :
+    //                         bank_sel_r[10] ? rdata_way0[10] :
+    //                         bank_sel_r[11] ? rdata_way0[11] :
+    //                         bank_sel_r[12] ? rdata_way0[12] :
+    //                         bank_sel_r[13] ? rdata_way0[13] :
+    //                         bank_sel_r[14] ? rdata_way0[14] :
+    //                         bank_sel_r[15] ? rdata_way0[15] : 32'b0;
+    // assign sram_rdata_way1 = ~cached_r ? 32'b0 :
+    //                         bank_sel_r[0] ? rdata_way1[0] :
+    //                         bank_sel_r[1] ? rdata_way1[1] :
+    //                         bank_sel_r[2] ? rdata_way1[2] :
+    //                         bank_sel_r[3] ? rdata_way1[3] :
+    //                         bank_sel_r[4] ? rdata_way1[4] :
+    //                         bank_sel_r[5] ? rdata_way1[5] :
+    //                         bank_sel_r[6] ? rdata_way1[6] :
+    //                         bank_sel_r[7] ? rdata_way1[7] :
+    //                         bank_sel_r[8] ? rdata_way1[8] :
+    //                         bank_sel_r[9] ? rdata_way1[9] :
+    //                         bank_sel_r[10] ? rdata_way1[10] :
+    //                         bank_sel_r[11] ? rdata_way1[11] :
+    //                         bank_sel_r[12] ? rdata_way1[12] :
+    //                         bank_sel_r[13] ? rdata_way1[13] :
+    //                         bank_sel_r[14] ? rdata_way1[14] :
+    //                         bank_sel_r[15] ? rdata_way1[15] : 32'b0;
+
+reg [31:0] sram_rdata_way0, sram_rdata_way1;
+
+always @(*) begin
+    case (bank_sel_r)
+        16'b0000_0000_0000_0001: sram_rdata_way0 = rdata_way0[0];
+        16'b0000_0000_0000_0010: sram_rdata_way0 = rdata_way0[1];
+        16'b0000_0000_0000_0100: sram_rdata_way0 = rdata_way0[2];
+        16'b0000_0000_0000_1000: sram_rdata_way0 = rdata_way0[3];
+        16'b0000_0000_0001_0000: sram_rdata_way0 = rdata_way0[4];
+        16'b0000_0000_0010_0000: sram_rdata_way0 = rdata_way0[5];
+        16'b0000_0000_0100_0000: sram_rdata_way0 = rdata_way0[6];
+        16'b0000_0000_1000_0000: sram_rdata_way0 = rdata_way0[7];
+        16'b0000_0001_0000_0000: sram_rdata_way0 = rdata_way0[8];
+        16'b0000_0010_0000_0000: sram_rdata_way0 = rdata_way0[9];
+        16'b0000_0100_0000_0000: sram_rdata_way0 = rdata_way0[10];
+        16'b0000_1000_0000_0000: sram_rdata_way0 = rdata_way0[11];
+        16'b0001_0000_0000_0000: sram_rdata_way0 = rdata_way0[12];
+        16'b0010_0000_0000_0000: sram_rdata_way0 = rdata_way0[13];
+        16'b0100_0000_0000_0000: sram_rdata_way0 = rdata_way0[14];
+        16'b1000_0000_0000_0000: sram_rdata_way0 = rdata_way0[15];
+        default: sram_rdata_way0 = 32'b0;
+    endcase
+
+    case (bank_sel_r)
+        16'b0000_0000_0000_0001: sram_rdata_way1 = rdata_way1[0];
+        16'b0000_0000_0000_0010: sram_rdata_way1 = rdata_way1[1];
+        16'b0000_0000_0000_0100: sram_rdata_way1 = rdata_way1[2];
+        16'b0000_0000_0000_1000: sram_rdata_way1 = rdata_way1[3];
+        16'b0000_0000_0001_0000: sram_rdata_way1 = rdata_way1[4];
+        16'b0000_0000_0010_0000: sram_rdata_way1 = rdata_way1[5];
+        16'b0000_0000_0100_0000: sram_rdata_way1 = rdata_way1[6];
+        16'b0000_0000_1000_0000: sram_rdata_way1 = rdata_way1[7];
+        16'b0000_0001_0000_0000: sram_rdata_way1 = rdata_way1[8];
+        16'b0000_0010_0000_0000: sram_rdata_way1 = rdata_way1[9];
+        16'b0000_0100_0000_0000: sram_rdata_way1 = rdata_way1[10];
+        16'b0000_1000_0000_0000: sram_rdata_way1 = rdata_way1[11];
+        16'b0001_0000_0000_0000: sram_rdata_way1 = rdata_way1[12];
+        16'b0010_0000_0000_0000: sram_rdata_way1 = rdata_way1[13];
+        16'b0100_0000_0000_0000: sram_rdata_way1 = rdata_way1[14];
+        16'b1000_0000_0000_0000: sram_rdata_way1 = rdata_way1[15];
+        default: sram_rdata_way1 = 32'b0;
+    endcase
+end
+
+    assign sram_rdata = hit_r[0] && cached_r ? sram_rdata_way0 :
+                        hit_r[1] && cached_r ? sram_rdata_way1 : 32'b0;
 
     wire [`CACHELINE_WIDTH-1:0] cacheline_old_way0, cacheline_old_way1;
-    assign cacheline_old_way0 = {
-        rdata_way0[15],
-        rdata_way0[14],
-        rdata_way0[13],
-        rdata_way0[12],
-        rdata_way0[11],
-        rdata_way0[10],
-        rdata_way0[9],
-        rdata_way0[8],
-        rdata_way0[7],
-        rdata_way0[6],
-        rdata_way0[5],
-        rdata_way0[4],
-        rdata_way0[3],
-        rdata_way0[2],
-        rdata_way0[1],
-        rdata_way0[0]
-    };
-    assign cacheline_old_way1 = {
-        rdata_way1[15],
-        rdata_way1[14],
-        rdata_way1[13],
-        rdata_way1[12],
-        rdata_way1[11],
-        rdata_way1[10],
-        rdata_way1[9],
-        rdata_way1[8],
-        rdata_way1[7],
-        rdata_way1[6],
-        rdata_way1[5],
-        rdata_way1[4],
-        rdata_way1[3],
-        rdata_way1[2],
-        rdata_way1[1],
-        rdata_way1[0]
-    };
+assign cacheline_old_way0 = {
+    rdata_way0[15], rdata_way0[14], rdata_way0[13], rdata_way0[12],
+    rdata_way0[11], rdata_way0[10], rdata_way0[9],  rdata_way0[8],
+    rdata_way0[7],  rdata_way0[6],  rdata_way0[5],  rdata_way0[4],
+    rdata_way0[3],  rdata_way0[2],  rdata_way0[1],  rdata_way0[0]
+};
+assign cacheline_old_way1 = {
+    rdata_way1[15], rdata_way1[14], rdata_way1[13], rdata_way1[12],
+    rdata_way1[11], rdata_way1[10], rdata_way1[9],  rdata_way1[8],
+    rdata_way1[7],  rdata_way1[6],  rdata_way1[5],  rdata_way1[4],
+    rdata_way1[3],  rdata_way1[2],  rdata_way1[1],  rdata_way1[0]
+};
     assign cacheline_old = lru_r ? cacheline_old_way1 : cacheline_old_way0;
 endmodule
