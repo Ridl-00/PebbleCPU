@@ -70,33 +70,6 @@ wire common_ena_part; // 提取公共部分
 // 计算公共使能部分 (cached & refresh | write_back)
 assign common_ena_part = (cached & refresh) | write_back;
 
-// genvar i;
-// generate
-//     for (i = 0; i < NUM_BANKS; i = i + 1) begin : gen_banks
-//         assign ena_way0_pre[i] = common_ena_part | (sram_en & bank_sel[i] & hit[0]);
-//         assign ena_way1_pre[i] = common_ena_part | (sram_en & bank_sel[i] & hit[1]);
-
-//         // --- Way 0 Instances ---
-//         data_bram_bank bank_way0 (
-//             .clka(clk),
-//             .ena(ena_way0_pre[i]),
-//             .wea(refresh ? (lru ? 4'b0000 : 4'b1111) : (write_back ? 4'b0000 : sram_wen)),
-//             .addra(index),
-//             .dina(refresh ? cacheline_new[(i*DATA_WIDTH + DATA_WIDTH - 1) : (i*DATA_WIDTH)] : sram_wdata),
-//             .douta(rdata_way0[i])
-//         );
-
-//         // --- Way 1 Instances ---
-//         data_bram_bank bank_way1 (
-//             .clka(clk),
-//             .ena(ena_way1_pre[i]),
-//             .wea(refresh ? (lru ? 4'b1111 : 4'b0000) : (write_back ? 4'b0000 : sram_wen)),
-//             .addra(index),
-//             .dina(refresh ? cacheline_new[(i*DATA_WIDTH + DATA_WIDTH - 1) : (i*DATA_WIDTH)] : sram_wdata),
-//             .douta(rdata_way1[i])
-//         );
-//     end
-// endgenerate
 
 // data_bram_way0 begin
     data_bram_bank bank0_way0(
@@ -358,44 +331,6 @@ assign common_ena_part = (cached & refresh) | write_back;
         .dina(refresh?cacheline_new[511:480]:sram_wdata),    // 32
         .douta(rdata_way1[15])    //32
     );
-// data_bram_way1 end
-
-    // wire [31:0] sram_rdata_way0,sram_rdata_way1;
-
-    // assign sram_rdata_way0 = ~cached_r ? 32'b0 :
-    //                         bank_sel_r[0] ? rdata_way0[0] :
-    //                         bank_sel_r[1] ? rdata_way0[1] :
-    //                         bank_sel_r[2] ? rdata_way0[2] :
-    //                         bank_sel_r[3] ? rdata_way0[3] :
-    //                         bank_sel_r[4] ? rdata_way0[4] :
-    //                         bank_sel_r[5] ? rdata_way0[5] :
-    //                         bank_sel_r[6] ? rdata_way0[6] :
-    //                         bank_sel_r[7] ? rdata_way0[7] :
-    //                         bank_sel_r[8] ? rdata_way0[8] :
-    //                         bank_sel_r[9] ? rdata_way0[9] :
-    //                         bank_sel_r[10] ? rdata_way0[10] :
-    //                         bank_sel_r[11] ? rdata_way0[11] :
-    //                         bank_sel_r[12] ? rdata_way0[12] :
-    //                         bank_sel_r[13] ? rdata_way0[13] :
-    //                         bank_sel_r[14] ? rdata_way0[14] :
-    //                         bank_sel_r[15] ? rdata_way0[15] : 32'b0;
-    // assign sram_rdata_way1 = ~cached_r ? 32'b0 :
-    //                         bank_sel_r[0] ? rdata_way1[0] :
-    //                         bank_sel_r[1] ? rdata_way1[1] :
-    //                         bank_sel_r[2] ? rdata_way1[2] :
-    //                         bank_sel_r[3] ? rdata_way1[3] :
-    //                         bank_sel_r[4] ? rdata_way1[4] :
-    //                         bank_sel_r[5] ? rdata_way1[5] :
-    //                         bank_sel_r[6] ? rdata_way1[6] :
-    //                         bank_sel_r[7] ? rdata_way1[7] :
-    //                         bank_sel_r[8] ? rdata_way1[8] :
-    //                         bank_sel_r[9] ? rdata_way1[9] :
-    //                         bank_sel_r[10] ? rdata_way1[10] :
-    //                         bank_sel_r[11] ? rdata_way1[11] :
-    //                         bank_sel_r[12] ? rdata_way1[12] :
-    //                         bank_sel_r[13] ? rdata_way1[13] :
-    //                         bank_sel_r[14] ? rdata_way1[14] :
-    //                         bank_sel_r[15] ? rdata_way1[15] : 32'b0;
 
 reg [31:0] sram_rdata_way0, sram_rdata_way1;
 

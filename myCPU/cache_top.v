@@ -43,17 +43,6 @@ module cache
      reg [31:0] cache_raddr;
      reg        cache_raddr_valid;
      wire [31:0] selected_addr = cache_raddr_valid ? cache_raddr : sram_addr;
-    // always@(posedge clk) begin
-    //     if(rst)begin
-    //         cache_raddr<=32'b0;
-    //     end
-    //     else if(miss&&cache_raddr==32'b0) begin
-    //         cache_raddr<=sram_addr;
-    //     end
-    //     else if(refresh) begin
-    //         cache_raddr<=32'b0;
-    //     end
-    // end
 
         always @(posedge clk) begin
         if (rst) begin
