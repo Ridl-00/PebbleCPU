@@ -13,13 +13,10 @@ module regfile(
     input  wire [31:0] wdata
 );
 reg [31:0] rf[31:0];
-integer i;
+
 //WRITE
 always @(posedge clk) begin
-    if (~resetn) begin
-        for (i = 0; i < 32; i = i + 1)
-            rf[i] <= 32'b0;
-    end else if (we) begin
+    if (we) begin
         rf[waddr] <= wdata;
     end
 end

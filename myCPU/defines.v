@@ -22,9 +22,9 @@
 
 //各级间总线宽
     `define IF_TO_ID_WD 69-1:0
-    `define ID_TO_EXE_WD 218-1:0
+    `define ID_TO_EXE_WD 219-1:0
     `define EXE_TO_MEM_WD 170-1:0
-    `define MEM_TO_WB_WD 168-1:0
+    `define MEM_TO_WB_WD 167-1:0
 
     `define ID_TO_IF_WD 34-1:0
 

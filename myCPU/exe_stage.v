@@ -29,7 +29,6 @@ module exe_stage (
     output wire        data_sram_req,
     output wire        data_sram_wr,
     output wire [ 3:0] data_sram_wstrb,
-    output wire [ 1:0] data_sram_size,
     output wire [31:0] data_sram_addr,
     output wire [31:0] data_sram_wdata,
     input  wire        data_sram_addr_ok
@@ -169,11 +168,11 @@ assign {
 } = csr_to_exe_bus;
 
 
-//==============================================================================================
-//======================================== Main Code ===========================================
-//==============================================================================================
-//stage流水级控制
-  assign exe_ready_go = (!div_stall && (!(access_mem)||(data_sram_req && data_sram_addr_ok)))|| excp;
+
+//======================================================
+//=================== Main Code ====================
+//======================================================
+  assign exe_ready_go = (!div_stall && !mul_stall && (!(access_mem)||(data_sram_req && data_sram_addr_ok)))|| excp;
   assign exe_allowin = ~exe_valid | exe_ready_go & mem_allowin;
   assign exe_to_mem_valid = exe_valid && exe_ready_go && !flush_sign;
 
@@ -218,8 +217,6 @@ assign sram_addr_low2bit = {exe_alu_result[1], exe_alu_result[0]};
                          ({4{sram_addr_low2bit == 2'b00}} & 4'b0011 |
                           {4{sram_addr_low2bit == 2'b10}} & 4'b1100)
                       :(exe_mem_size == 2'b00 ? 4'b1111 : 4'b0000)));
-  assign data_sram_size = exe_mem_size == 2'b00 ? 2'b10 : 
-                          exe_mem_size == 2'b10 ? 2'b01 : 2'b00;
 
   assign data_sram_addr = p_data_sram_addr;
   assign data_sram_wdata = exe_mem_size==2'b01 ? {4{exe_rkd_value[7:0]}} : 
@@ -243,14 +240,14 @@ alu u_alu(
     .alu_result (exe_alu_result)
     );
 
-  // mul u_mul (
-  //     .mul_clk   (clk),
-  //     .reset     (~resetn),
-  //     .mul_signed(exe_mul_div_sign),
-  //     .x         (exe_alu_src1),
-  //     .y         (exe_alu_src2),
-  //     .result    (exe_mul_result)
-  // );
+  // //mul
+  // wire [63:0] exe_mul_result;
+  // wire [63:0] mul_result_signed, mul_result_unsigned;
+
+  // assign mul_result_unsigned = exe_rj_value * exe_rkd_value;
+  // assign mul_result_signed = $signed(exe_rj_value) * $signed(exe_rkd_value);
+  // assign exe_mul_result = exe_mul_div_sign ? mul_result_signed : mul_result_unsigned;
+
 
   //div
   assign div_stall     = exe_div_enable & ~div_complete;//除法暂停高有效
@@ -278,11 +275,6 @@ alu u_alu(
 
   //mul
   wire [65:0] exe_mul_result;
-  // wire [63:0] mul_result_signed, mul_result_unsigned;
-
-  // assign mul_result_unsigned = exe_rj_value * exe_rkd_value;
-  // assign mul_result_signed = $signed(exe_rj_value) * $signed(exe_rkd_value);
-  // assign exe_mul_result = exe_mul_div_sign ? mul_result_signed : mul_result_unsigned;
 
     reg  [1:0]  state_mul;
     reg  [1:0]  next_state_mul;
@@ -299,7 +291,7 @@ alu u_alu(
         2'h0:    next_state_mul = (exe_valid && exe_mul_enable) ? 2'h1 : 2'h0;
         2'h1:    next_state_mul = 2'h2;
         2'h2:    next_state_mul = 2'h0;
-        2'h3:    next_state_mul = 2'h0;
+        // 2'h3:    next_state_mul = 2'h0;
         endcase
     end
     assign mul_stall = ~(next_state_mul == 2'h0);
@@ -307,50 +299,10 @@ alu u_alu(
   // wire [65:0] mul_prod;
     mul33_3cycle MUL(
       .clk(clk),
-      .x({(exe_mul_div_sign & exe_rj_value[31]),exe_rj_value}),
+      .x({(exe_mul_div_sign &  exe_rj_value[31]),exe_rj_value}),
       .y({(exe_mul_div_sign & exe_rkd_value[31]),exe_rkd_value}),
       .res(exe_mul_result)
     );
-
-
-
-  // assign s_axis_divisor_tvalid_signed = r_axis_divisor_tvalid_signed;
-  // assign s_axis_dividend_tvalid_signed = r_axis_dividend_tvalid_signed;
-  // assign s_axis_divisor_tdata_signed  = exe_alu_src1;
-  // assign s_axis_dividend_tdata_signed = exe_alu_src2;
-  
-
-
-
-
-  
-// div_gen_signed div_gen_signed_0 (
-//   .aclk                   (clk),                    
-//   //除数
-//   .s_axis_divisor_tvalid  (s_axis_divisor_tvalid_signed),  //in 
-//   .s_axis_divisor_tready  (s_axis_divisor_tready_signed),  //out
-//   .s_axis_divisor_tdata   (s_axis_divisor_tdata_signed ),  //in
-//   //被除数
-//   .s_axis_dividend_tvalid (s_axis_dividend_tvalid_signed), 
-//   .s_axis_dividend_tready (s_axis_dividend_tready_signed), 
-//   .s_axis_dividend_tdata  (s_axis_dividend_tdata_signed),  
-//   //结果
-//   .m_axis_dout_tvalid     (m_axis_dout_tvalid_signed),    //out 
-//   .m_axis_dout_tdata      (div_result_signed)             //out
-// );
-
-// div_gen_unsigned div_gen_unsigned_0 (
-//   .aclk                   (clk),                    
-//   .s_axis_divisor_tvalid  (s_axis_divisor_tvalid_unsigned),  
-//   .s_axis_divisor_tready  (s_axis_divisor_tready_unsigned),  
-//   .s_axis_divisor_tdata   (s_axis_divisor_tdata_unsigned),   
-//   .s_axis_dividend_tvalid (s_axis_dividend_tvalid_unsigned), 
-//   .s_axis_dividend_tready (s_axis_dividend_tready_unsigned), 
-//   .s_axis_dividend_tdata  (s_axis_dividend_tdata_unsigned),  
-//   .m_axis_dout_tvalid     (m_axis_dout_tvalid_unsigned),     
-//   .m_axis_dout_tdata      (div_result_unsigned)     
-// );
-// assign exe_result     = exe_res_from_csr ? exe_csr_data : exe_alu_result;
 
 assign exe_result = exe_res_from_csr  ? exe_csr_data :
                     exe_mul_div_op[0] ? exe_mul_result[31:0] : 
@@ -362,7 +314,7 @@ assign exe_result = exe_res_from_csr  ? exe_csr_data :
 //前递和阻塞
 assign dest_zero            = (exe_dest == 5'b0); 
 assign forward_enable       = exe_gr_we & ~dest_zero & exe_valid;
-assign dep_need_stall       = exe_load_op || div_stall ; //如果是load，需要等load在exe的操作，接着等load在mem的操作
+assign dep_need_stall       = exe_load_op || div_stall || mul_stall; //如果是load，需要等load在exe的操作，接着等load在mem的操作
 
 //异常处理excp
 assign excp_ale        = access_mem & ((exe_mem_size[0] &  1'b0)                                   | 

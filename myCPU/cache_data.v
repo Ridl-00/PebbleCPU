@@ -21,6 +21,10 @@ module cache_data(
     input wire [`CACHELINE_WIDTH-1:0] cacheline_new,
     output wire [`CACHELINE_WIDTH-1:0] cacheline_old
 );
+
+parameter NUM_BANKS = 16;
+parameter DATA_WIDTH = 32;
+
     wire [31:0] rdata_way0 [15:0];
     wire [31:0] rdata_way1 [15:0];
     wire [`TAG_WIDTH-2:0] tag;
@@ -58,10 +62,46 @@ module cache_data(
         end
     end
     
+
+wire [NUM_BANKS-1:0] ena_way0_pre;
+wire [NUM_BANKS-1:0] ena_way1_pre;
+wire common_ena_part; // 提取公共部分
+
+// 计算公共使能部分 (cached & refresh | write_back)
+assign common_ena_part = (cached & refresh) | write_back;
+
+// genvar i;
+// generate
+//     for (i = 0; i < NUM_BANKS; i = i + 1) begin : gen_banks
+//         assign ena_way0_pre[i] = common_ena_part | (sram_en & bank_sel[i] & hit[0]);
+//         assign ena_way1_pre[i] = common_ena_part | (sram_en & bank_sel[i] & hit[1]);
+
+//         // --- Way 0 Instances ---
+//         data_bram_bank bank_way0 (
+//             .clka(clk),
+//             .ena(ena_way0_pre[i]),
+//             .wea(refresh ? (lru ? 4'b0000 : 4'b1111) : (write_back ? 4'b0000 : sram_wen)),
+//             .addra(index),
+//             .dina(refresh ? cacheline_new[(i*DATA_WIDTH + DATA_WIDTH - 1) : (i*DATA_WIDTH)] : sram_wdata),
+//             .douta(rdata_way0[i])
+//         );
+
+//         // --- Way 1 Instances ---
+//         data_bram_bank bank_way1 (
+//             .clka(clk),
+//             .ena(ena_way1_pre[i]),
+//             .wea(refresh ? (lru ? 4'b1111 : 4'b0000) : (write_back ? 4'b0000 : sram_wen)),
+//             .addra(index),
+//             .dina(refresh ? cacheline_new[(i*DATA_WIDTH + DATA_WIDTH - 1) : (i*DATA_WIDTH)] : sram_wdata),
+//             .douta(rdata_way1[i])
+//         );
+//     end
+// endgenerate
+
 // data_bram_way0 begin
     data_bram_bank bank0_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[0]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[0] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[31:0]:sram_wdata),    // 32
@@ -69,7 +109,7 @@ module cache_data(
     );
     data_bram_bank bank1_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[1]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[1] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[63:32]:sram_wdata),    // 32
@@ -77,7 +117,7 @@ module cache_data(
     );
     data_bram_bank bank2_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[2]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[2] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[95:64]:sram_wdata),    // 32
@@ -85,7 +125,7 @@ module cache_data(
     );
     data_bram_bank bank3_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[3]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[3] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[127:96]:sram_wdata),    // 32
@@ -93,7 +133,7 @@ module cache_data(
     );
     data_bram_bank bank4_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[4]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[4] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[159:128]:sram_wdata),    // 32
@@ -101,7 +141,7 @@ module cache_data(
     );
     data_bram_bank bank5_way0(
         .clka(clk),
-        .ena((cached&refresh|sram_en&bank_sel[5]&hit[0]|write_back)),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[5] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[191:160]:sram_wdata),    // 32
@@ -109,7 +149,7 @@ module cache_data(
     );
     data_bram_bank bank6_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[6]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[6] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[223:192]:sram_wdata),    // 32
@@ -117,7 +157,7 @@ module cache_data(
     );
     data_bram_bank bank7_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[7]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[7] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[255:224]:sram_wdata),    // 32
@@ -125,7 +165,7 @@ module cache_data(
     );
     data_bram_bank bank8_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[8]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[8] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[287:256]:sram_wdata),    // 32
@@ -133,7 +173,7 @@ module cache_data(
     );
     data_bram_bank bank9_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[9]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[9] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[319:288]:sram_wdata),    // 32
@@ -141,7 +181,7 @@ module cache_data(
     );
     data_bram_bank bank10_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[10]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[10] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[351:320]:sram_wdata),    // 32
@@ -149,7 +189,7 @@ module cache_data(
     );
     data_bram_bank bank11_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[11]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[11] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[383:352]:sram_wdata),    // 32
@@ -157,7 +197,7 @@ module cache_data(
     );
     data_bram_bank bank12_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[12]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[12] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[415:384]:sram_wdata),    // 32
@@ -165,7 +205,7 @@ module cache_data(
     );
     data_bram_bank bank13_way0(
         .clka(clk),
-        .ena((cached&refresh|sram_en&bank_sel[13]&hit[0]|write_back)),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[13] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[447:416]:sram_wdata),    // 32
@@ -173,7 +213,7 @@ module cache_data(
     );
     data_bram_bank bank14_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[14]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[14] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[479:448]:sram_wdata),    // 32
@@ -181,7 +221,7 @@ module cache_data(
     );
     data_bram_bank bank15_way0(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[15]&hit[0]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[15] & hit[0])),     // 1
         .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[511:480]:sram_wdata),    // 32
@@ -192,7 +232,7 @@ module cache_data(
 // data_bram_way1 begin
     data_bram_bank bank0_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[0]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[0] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[31:0]:sram_wdata),    // 32
@@ -200,7 +240,7 @@ module cache_data(
     );
     data_bram_bank bank1_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[1]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[1] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[63:32]:sram_wdata),    // 32
@@ -208,7 +248,7 @@ module cache_data(
     );
     data_bram_bank bank2_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[2]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[2] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[95:64]:sram_wdata),    // 32
@@ -216,7 +256,7 @@ module cache_data(
     );
     data_bram_bank bank3_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[3]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[3] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[127:96]:sram_wdata),    // 32
@@ -224,7 +264,7 @@ module cache_data(
     );
     data_bram_bank bank4_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[4]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[4] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[159:128]:sram_wdata),    // 32
@@ -232,7 +272,7 @@ module cache_data(
     );
     data_bram_bank bank5_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[5]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[5] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[191:160]:sram_wdata),    // 32
@@ -240,7 +280,7 @@ module cache_data(
     );
     data_bram_bank bank6_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[6]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[6] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[223:192]:sram_wdata),    // 32
@@ -248,7 +288,7 @@ module cache_data(
     );
     data_bram_bank bank7_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[7]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[7] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[255:224]:sram_wdata),    // 32
@@ -256,7 +296,7 @@ module cache_data(
     );
     data_bram_bank bank8_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[8]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[8] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[287:256]:sram_wdata),    // 32
@@ -264,7 +304,7 @@ module cache_data(
     );
     data_bram_bank bank9_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[9]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[9] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[319:288]:sram_wdata),    // 32
@@ -272,7 +312,7 @@ module cache_data(
     );
     data_bram_bank bank10_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[10]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[10] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[351:320]:sram_wdata),    // 32
@@ -280,7 +320,7 @@ module cache_data(
     );
     data_bram_bank bank11_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[11]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[11] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[383:352]:sram_wdata),    // 32
@@ -288,7 +328,7 @@ module cache_data(
     );
     data_bram_bank bank12_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[12]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[12] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[415:384]:sram_wdata),    // 32
@@ -296,7 +336,7 @@ module cache_data(
     );
     data_bram_bank bank13_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[13]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[13] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[447:416]:sram_wdata),    // 32
@@ -304,7 +344,7 @@ module cache_data(
     );
     data_bram_bank bank14_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[14]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[14] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[479:448]:sram_wdata),    // 32
@@ -312,7 +352,7 @@ module cache_data(
     );
     data_bram_bank bank15_way1(
         .clka(clk),
-        .ena(cached&refresh|sram_en&bank_sel[15]&hit[1]|write_back),     // 1
+        .ena(common_ena_part | (sram_en & bank_sel[15] & hit[1])),     // 1
         .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
         .addra(index),   // 7
         .dina(refresh?cacheline_new[511:480]:sram_wdata),    // 32

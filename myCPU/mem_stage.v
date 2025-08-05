@@ -210,7 +210,6 @@ assign {
 
 //mem-wb
 assign mem_to_wb_bus = {
-                       access_mem     ,  //167:167
                        mem_error_va    ,  //166:135
                        excp_num       ,  //134:119
                        mem_csr_we      ,  //118:118

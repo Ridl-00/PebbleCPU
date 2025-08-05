@@ -188,10 +188,10 @@ wire [ 1:0]                   csr_plv_out      ;
         .ertn_flush         (ertn_flush       ),
 
         //tlb-mmu地址翻译信号
-        .pg_out             (csr_pg_out       ),
-        .da_out             (csr_da_out       ),
-        .dmw0_out           (csr_dmw0_out     ),
-        .dmw1_out           (csr_dmw1_out     ),
+        // .pg_out             (csr_pg_out       ),
+        // .da_out             (csr_da_out       ),
+        // .dmw0_out           (csr_dmw0_out     ),
+        // .dmw1_out           (csr_dmw1_out     ),
 
         //未实现的无效信号
           .tlbsrch_en         (0/*csr_tlbsrch_en*/   ),
@@ -310,7 +310,6 @@ wire [ 1:0]                   csr_plv_out      ;
       .data_sram_req             (data_sram_en),
       .data_sram_wr              (data_sram_wr),
       .data_sram_wstrb           (data_sram_we),
-      .data_sram_size            (data_sram_size),
       .data_sram_addr            (data_sram_addr),
       .data_sram_wdata           (data_sram_wdata),
       .data_sram_addr_ok         (dcache_addr_ok|uncache_addr_ok)

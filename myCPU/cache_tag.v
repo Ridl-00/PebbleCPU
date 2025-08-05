@@ -64,174 +64,152 @@ module cache_tag(
     //axi返回refresh的下一拍，tag写入，tag一旦写入，hit就高了，此时miss解除
     //refresh当拍data就开始写入（wea拉高）,miss解除时已经是写入的下一拍
     // way0
-    // always @ (posedge clk) begin
-    //     if (rst) begin
-    //         tag_way0[  0] <= 21'b0;
-    //         tag_way0[  1] <= 21'b0;
-    //         tag_way0[  2] <= 21'b0;
-    //         tag_way0[  3] <= 21'b0;
-    //         tag_way0[  4] <= 21'b0;
-    //         tag_way0[  5] <= 21'b0;
-    //         tag_way0[  6] <= 21'b0;
-    //         tag_way0[  7] <= 21'b0;
-    //         tag_way0[  8] <= 21'b0;
-    //         tag_way0[  9] <= 21'b0;
-    //         tag_way0[ 10] <= 21'b0;
-    //         tag_way0[ 11] <= 21'b0;
-    //         tag_way0[ 12] <= 21'b0;
-    //         tag_way0[ 13] <= 21'b0;
-    //         tag_way0[ 14] <= 21'b0;
-    //         tag_way0[ 15] <= 21'b0;
-    //         tag_way0[ 16] <= 21'b0;
-    //         tag_way0[ 17] <= 21'b0;
-    //         tag_way0[ 18] <= 21'b0;
-    //         tag_way0[ 19] <= 21'b0;
-    //         tag_way0[ 20] <= 21'b0;
-    //         tag_way0[ 21] <= 21'b0;
-    //         tag_way0[ 22] <= 21'b0;
-    //         tag_way0[ 23] <= 21'b0;
-    //         tag_way0[ 24] <= 21'b0;
-    //         tag_way0[ 25] <= 21'b0;
-    //         tag_way0[ 26] <= 21'b0;
-    //         tag_way0[ 27] <= 21'b0;
-    //         tag_way0[ 28] <= 21'b0;
-    //         tag_way0[ 29] <= 21'b0;
-    //         tag_way0[ 30] <= 21'b0;
-    //         tag_way0[ 31] <= 21'b0;
-    //         tag_way0[ 32] <= 21'b0;
-    //         tag_way0[ 33] <= 21'b0;
-    //         tag_way0[ 34] <= 21'b0;
-    //         tag_way0[ 35] <= 21'b0;
-    //         tag_way0[ 36] <= 21'b0;
-    //         tag_way0[ 37] <= 21'b0;
-    //         tag_way0[ 38] <= 21'b0;
-    //         tag_way0[ 39] <= 21'b0;
-    //         tag_way0[ 40] <= 21'b0;
-    //         tag_way0[ 41] <= 21'b0;
-    //         tag_way0[ 42] <= 21'b0;
-    //         tag_way0[ 43] <= 21'b0;
-    //         tag_way0[ 44] <= 21'b0;
-    //         tag_way0[ 45] <= 21'b0;
-    //         tag_way0[ 46] <= 21'b0;
-    //         tag_way0[ 47] <= 21'b0;
-    //         tag_way0[ 48] <= 21'b0;
-    //         tag_way0[ 49] <= 21'b0;
-    //         tag_way0[ 50] <= 21'b0;
-    //         tag_way0[ 51] <= 21'b0;
-    //         tag_way0[ 52] <= 21'b0;
-    //         tag_way0[ 53] <= 21'b0;
-    //         tag_way0[ 54] <= 21'b0;
-    //         tag_way0[ 55] <= 21'b0;
-    //         tag_way0[ 56] <= 21'b0;
-    //         tag_way0[ 57] <= 21'b0;
-    //         tag_way0[ 58] <= 21'b0;
-    //         tag_way0[ 59] <= 21'b0;
-    //         tag_way0[ 60] <= 21'b0;
-    //         tag_way0[ 61] <= 21'b0;
-    //         tag_way0[ 62] <= 21'b0;
-    //         tag_way0[ 63] <= 21'b0;
-    //     end
-    //     else if (refresh&(~lru_r[index])) begin
-    //         tag_way0[index] <= {cached_v,tag};
-    //     end
-    // end
+    always @ (posedge clk) begin
+        if (rst) begin
+            tag_way0[  0] <= 21'b0;
+            tag_way0[  1] <= 21'b0;
+            tag_way0[  2] <= 21'b0;
+            tag_way0[  3] <= 21'b0;
+            tag_way0[  4] <= 21'b0;
+            tag_way0[  5] <= 21'b0;
+            tag_way0[  6] <= 21'b0;
+            tag_way0[  7] <= 21'b0;
+            tag_way0[  8] <= 21'b0;
+            tag_way0[  9] <= 21'b0;
+            tag_way0[ 10] <= 21'b0;
+            tag_way0[ 11] <= 21'b0;
+            tag_way0[ 12] <= 21'b0;
+            tag_way0[ 13] <= 21'b0;
+            tag_way0[ 14] <= 21'b0;
+            tag_way0[ 15] <= 21'b0;
+            tag_way0[ 16] <= 21'b0;
+            tag_way0[ 17] <= 21'b0;
+            tag_way0[ 18] <= 21'b0;
+            tag_way0[ 19] <= 21'b0;
+            tag_way0[ 20] <= 21'b0;
+            tag_way0[ 21] <= 21'b0;
+            tag_way0[ 22] <= 21'b0;
+            tag_way0[ 23] <= 21'b0;
+            tag_way0[ 24] <= 21'b0;
+            tag_way0[ 25] <= 21'b0;
+            tag_way0[ 26] <= 21'b0;
+            tag_way0[ 27] <= 21'b0;
+            tag_way0[ 28] <= 21'b0;
+            tag_way0[ 29] <= 21'b0;
+            tag_way0[ 30] <= 21'b0;
+            tag_way0[ 31] <= 21'b0;
+            tag_way0[ 32] <= 21'b0;
+            tag_way0[ 33] <= 21'b0;
+            tag_way0[ 34] <= 21'b0;
+            tag_way0[ 35] <= 21'b0;
+            tag_way0[ 36] <= 21'b0;
+            tag_way0[ 37] <= 21'b0;
+            tag_way0[ 38] <= 21'b0;
+            tag_way0[ 39] <= 21'b0;
+            tag_way0[ 40] <= 21'b0;
+            tag_way0[ 41] <= 21'b0;
+            tag_way0[ 42] <= 21'b0;
+            tag_way0[ 43] <= 21'b0;
+            tag_way0[ 44] <= 21'b0;
+            tag_way0[ 45] <= 21'b0;
+            tag_way0[ 46] <= 21'b0;
+            tag_way0[ 47] <= 21'b0;
+            tag_way0[ 48] <= 21'b0;
+            tag_way0[ 49] <= 21'b0;
+            tag_way0[ 50] <= 21'b0;
+            tag_way0[ 51] <= 21'b0;
+            tag_way0[ 52] <= 21'b0;
+            tag_way0[ 53] <= 21'b0;
+            tag_way0[ 54] <= 21'b0;
+            tag_way0[ 55] <= 21'b0;
+            tag_way0[ 56] <= 21'b0;
+            tag_way0[ 57] <= 21'b0;
+            tag_way0[ 58] <= 21'b0;
+            tag_way0[ 59] <= 21'b0;
+            tag_way0[ 60] <= 21'b0;
+            tag_way0[ 61] <= 21'b0;
+            tag_way0[ 62] <= 21'b0;
+            tag_way0[ 63] <= 21'b0;
+        end
+        else if (refresh&(~lru_r[index])) begin
+            tag_way0[index] <= {cached_v,tag};
+        end
+    end
 
 
     // way1
-    // always @ (posedge clk) begin
-    //     if (rst) begin
-    //         tag_way1[  0] <= 21'b0;
-    //         tag_way1[  1] <= 21'b0;
-    //         tag_way1[  2] <= 21'b0;
-    //         tag_way1[  3] <= 21'b0;
-    //         tag_way1[  4] <= 21'b0;
-    //         tag_way1[  5] <= 21'b0;
-    //         tag_way1[  6] <= 21'b0;
-    //         tag_way1[  7] <= 21'b0;
-    //         tag_way1[  8] <= 21'b0;
-    //         tag_way1[  9] <= 21'b0;
-    //         tag_way1[ 10] <= 21'b0;
-    //         tag_way1[ 11] <= 21'b0;
-    //         tag_way1[ 12] <= 21'b0;
-    //         tag_way1[ 13] <= 21'b0;
-    //         tag_way1[ 14] <= 21'b0;
-    //         tag_way1[ 15] <= 21'b0;
-    //         tag_way1[ 16] <= 21'b0;
-    //         tag_way1[ 17] <= 21'b0;
-    //         tag_way1[ 18] <= 21'b0;
-    //         tag_way1[ 19] <= 21'b0;
-    //         tag_way1[ 20] <= 21'b0;
-    //         tag_way1[ 21] <= 21'b0;
-    //         tag_way1[ 22] <= 21'b0;
-    //         tag_way1[ 23] <= 21'b0;
-    //         tag_way1[ 24] <= 21'b0;
-    //         tag_way1[ 25] <= 21'b0;
-    //         tag_way1[ 26] <= 21'b0;
-    //         tag_way1[ 27] <= 21'b0;
-    //         tag_way1[ 28] <= 21'b0;
-    //         tag_way1[ 29] <= 21'b0;
-    //         tag_way1[ 30] <= 21'b0;
-    //         tag_way1[ 31] <= 21'b0;
-    //         tag_way1[ 32] <= 21'b0;
-    //         tag_way1[ 33] <= 21'b0;
-    //         tag_way1[ 34] <= 21'b0;
-    //         tag_way1[ 35] <= 21'b0;
-    //         tag_way1[ 36] <= 21'b0;
-    //         tag_way1[ 37] <= 21'b0;
-    //         tag_way1[ 38] <= 21'b0;
-    //         tag_way1[ 39] <= 21'b0;
-    //         tag_way1[ 40] <= 21'b0;
-    //         tag_way1[ 41] <= 21'b0;
-    //         tag_way1[ 42] <= 21'b0;
-    //         tag_way1[ 43] <= 21'b0;
-    //         tag_way1[ 44] <= 21'b0;
-    //         tag_way1[ 45] <= 21'b0;
-    //         tag_way1[ 46] <= 21'b0;
-    //         tag_way1[ 47] <= 21'b0;
-    //         tag_way1[ 48] <= 21'b0;
-    //         tag_way1[ 49] <= 21'b0;
-    //         tag_way1[ 50] <= 21'b0;
-    //         tag_way1[ 51] <= 21'b0;
-    //         tag_way1[ 52] <= 21'b0;
-    //         tag_way1[ 53] <= 21'b0;
-    //         tag_way1[ 54] <= 21'b0;
-    //         tag_way1[ 55] <= 21'b0;
-    //         tag_way1[ 56] <= 21'b0;
-    //         tag_way1[ 57] <= 21'b0;
-    //         tag_way1[ 58] <= 21'b0;
-    //         tag_way1[ 59] <= 21'b0;
-    //         tag_way1[ 60] <= 21'b0;
-    //         tag_way1[ 61] <= 21'b0;
-    //         tag_way1[ 62] <= 21'b0;
-    //         tag_way1[ 63] <= 21'b0;
-    //     end
-    //     else if (refresh&lru_r[index]) begin
-    //         tag_way1[index] <= {cached_v,tag};
-    //     end
-    // end
-
-integer i;
-always @ (posedge clk) begin
-    if (rst) begin
-        for (i = 0; i < (1 << `INDEX_WIDTH); i = i + 1) begin
-            tag_way0[i] <= 21'b0;
+    always @ (posedge clk) begin
+        if (rst) begin
+            tag_way1[  0] <= 21'b0;
+            tag_way1[  1] <= 21'b0;
+            tag_way1[  2] <= 21'b0;
+            tag_way1[  3] <= 21'b0;
+            tag_way1[  4] <= 21'b0;
+            tag_way1[  5] <= 21'b0;
+            tag_way1[  6] <= 21'b0;
+            tag_way1[  7] <= 21'b0;
+            tag_way1[  8] <= 21'b0;
+            tag_way1[  9] <= 21'b0;
+            tag_way1[ 10] <= 21'b0;
+            tag_way1[ 11] <= 21'b0;
+            tag_way1[ 12] <= 21'b0;
+            tag_way1[ 13] <= 21'b0;
+            tag_way1[ 14] <= 21'b0;
+            tag_way1[ 15] <= 21'b0;
+            tag_way1[ 16] <= 21'b0;
+            tag_way1[ 17] <= 21'b0;
+            tag_way1[ 18] <= 21'b0;
+            tag_way1[ 19] <= 21'b0;
+            tag_way1[ 20] <= 21'b0;
+            tag_way1[ 21] <= 21'b0;
+            tag_way1[ 22] <= 21'b0;
+            tag_way1[ 23] <= 21'b0;
+            tag_way1[ 24] <= 21'b0;
+            tag_way1[ 25] <= 21'b0;
+            tag_way1[ 26] <= 21'b0;
+            tag_way1[ 27] <= 21'b0;
+            tag_way1[ 28] <= 21'b0;
+            tag_way1[ 29] <= 21'b0;
+            tag_way1[ 30] <= 21'b0;
+            tag_way1[ 31] <= 21'b0;
+            tag_way1[ 32] <= 21'b0;
+            tag_way1[ 33] <= 21'b0;
+            tag_way1[ 34] <= 21'b0;
+            tag_way1[ 35] <= 21'b0;
+            tag_way1[ 36] <= 21'b0;
+            tag_way1[ 37] <= 21'b0;
+            tag_way1[ 38] <= 21'b0;
+            tag_way1[ 39] <= 21'b0;
+            tag_way1[ 40] <= 21'b0;
+            tag_way1[ 41] <= 21'b0;
+            tag_way1[ 42] <= 21'b0;
+            tag_way1[ 43] <= 21'b0;
+            tag_way1[ 44] <= 21'b0;
+            tag_way1[ 45] <= 21'b0;
+            tag_way1[ 46] <= 21'b0;
+            tag_way1[ 47] <= 21'b0;
+            tag_way1[ 48] <= 21'b0;
+            tag_way1[ 49] <= 21'b0;
+            tag_way1[ 50] <= 21'b0;
+            tag_way1[ 51] <= 21'b0;
+            tag_way1[ 52] <= 21'b0;
+            tag_way1[ 53] <= 21'b0;
+            tag_way1[ 54] <= 21'b0;
+            tag_way1[ 55] <= 21'b0;
+            tag_way1[ 56] <= 21'b0;
+            tag_way1[ 57] <= 21'b0;
+            tag_way1[ 58] <= 21'b0;
+            tag_way1[ 59] <= 21'b0;
+            tag_way1[ 60] <= 21'b0;
+            tag_way1[ 61] <= 21'b0;
+            tag_way1[ 62] <= 21'b0;
+            tag_way1[ 63] <= 21'b0;
+        end
+        else if (refresh&lru_r[index]) begin
+            tag_way1[index] <= {cached_v,tag};
         end
     end
-    else if (refresh & (~lru_r[index])) begin
-        tag_way0[index] <= {cached_v, tag};
-    end
-end
 
-always @ (posedge clk) begin
-    if (rst) begin
-        for (i = 0; i < (1 << `INDEX_WIDTH); i = i + 1) begin
-            tag_way1[i] <= 21'b0;
-        end
-    end
-    else if (refresh & lru_r[index]) begin
-        tag_way1[index] <= {cached_v, tag};
-    end
-end
 
 
 //============================refresh=============================

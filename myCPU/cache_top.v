@@ -40,16 +40,31 @@ module cache
     end
     assign data_ok = addr_ok_r;
 
-    reg [31:0] cache_raddr;
-    always@(posedge clk) begin
-        if(rst)begin
-            cache_raddr<=32'b0;
-        end
-        else if(miss&&cache_raddr==32'b0) begin
-            cache_raddr<=sram_addr;
-        end
-        else if(refresh) begin
-            cache_raddr<=32'b0;
+     reg [31:0] cache_raddr;
+     reg        cache_raddr_valid;
+     wire [31:0] selected_addr = cache_raddr_valid ? cache_raddr : sram_addr;
+    // always@(posedge clk) begin
+    //     if(rst)begin
+    //         cache_raddr<=32'b0;
+    //     end
+    //     else if(miss&&cache_raddr==32'b0) begin
+    //         cache_raddr<=sram_addr;
+    //     end
+    //     else if(refresh) begin
+    //         cache_raddr<=32'b0;
+    //     end
+    // end
+
+        always @(posedge clk) begin
+        if (rst) begin
+            cache_raddr       <= 32'h0;
+            cache_raddr_valid <= 1'b0;
+        end else if (refresh) begin
+            cache_raddr       <= 32'h0;
+            cache_raddr_valid <= 1'b0;
+        end else if (miss && !cache_raddr_valid) begin
+            cache_raddr       <= sram_addr;
+            cache_raddr_valid <= 1'b1;
         end
     end
 
@@ -60,7 +75,7 @@ module cache
         .cached     (cached          ),
         .sram_en    (sram_en         ),
         .sram_wen   (sram_wen        ),
-        .sram_addr  (|cache_raddr?cache_raddr:sram_addr),
+        .sram_addr  (selected_addr   ),
         .refresh    (refresh         ),
         .miss       (miss            ),
         .axi_raddr  (raddr           ),
@@ -71,18 +86,18 @@ module cache
     );
 
     cache_data u_cache_data(
-    	.clk           (clk          ),
-        .rst           (rst          ),
-        .write_back    (write_back   ),
-        .hit           (hit          ),
-        .lru           (lru          ),
-        .cached        (cached       ),
-        .sram_en       (sram_en      ),
-        .sram_wen      (sram_wen     ),
-        .sram_addr     (|cache_raddr?cache_raddr:sram_addr    ),
-        .sram_wdata    (sram_wdata   ),
-        .sram_rdata    (sram_rdata   ),
-        .refresh       (refresh      ),
+    	.clk           (clk             ),
+        .rst           (rst             ),
+        .write_back    (write_back      ),
+        .hit           (hit             ),
+        .lru           (lru             ),
+        .cached        (cached          ),
+        .sram_en       (sram_en         ),
+        .sram_wen      (sram_wen        ),
+        .sram_addr     (selected_addr   ),
+        .sram_wdata    (sram_wdata      ),
+        .sram_rdata    (sram_rdata      ),
+        .refresh       (refresh         ),
         .cacheline_new (cacheline_new   ),
         .cacheline_old (cacheline_old   ) 
     );
