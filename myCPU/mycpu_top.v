@@ -60,14 +60,14 @@ module core_top(
     wire clk = aclk;
     wire rst = ~aresetn;
 
-  wire                      id_allowin;
-  wire                      exe_allowin;
-  wire                      mem_allowin;
-  wire                      wb_allowin;
-  wire                      if_to_id_valid;
-  wire                      id_to_exe_valid;
-  wire                      exe_to_mem_valid;
-  wire                      mem_to_wb_valid;
+    wire id_allowin;
+    wire exe_allowin;
+    wire mem_allowin;
+    wire wb_allowin;
+    wire if_to_id_valid;
+    wire id_to_exe_valid;
+    wire exe_to_mem_valid;
+    wire mem_to_wb_valid;
 
   wire [  `IF_TO_ID_WD] if_to_id_bus;
   wire [  `ID_TO_IF_WD] id_to_if_bus;
@@ -85,10 +85,10 @@ module core_top(
   wire [ `WB_TO_CSR_WD] wb_to_csr_bus;
 
 
-wire                           excp_flush    ;
-wire                           ertn_flush    ;
-wire                           refetch_flush ;
-wire                           flush_from_mem;
+  wire excp_flush    ;
+  wire ertn_flush    ;
+  wire refetch_flush ;
+  wire flush_from_mem;
 
 //csr
 wire                           csr_tlbsrch_en  ;
@@ -405,6 +405,7 @@ wire [ 1:0]                   csr_plv_out      ;
       .write_back    (dcache_write_back    ),
       .cacheline_old (dcache_cacheline_old )
   );
+  
   
   uncache u_uncache(
         .clk        (clk                        ),

@@ -23,9 +23,6 @@ always @(posedge clk) begin
         rf[waddr] <= wdata;
     end
 end
-// always @(posedge clk) begin
-//     if (we) rf[waddr] <= wdata;
-// end
 
 //READ OUT 1
 assign rdata1 = (raddr1==5'b0) ? 32'b0  :

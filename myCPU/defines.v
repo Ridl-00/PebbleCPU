@@ -9,7 +9,7 @@
 `define WriteDisable_n      1'b1 //写除能（低有效）
 `define ReadEnable          1'b1
 `define ReadDisable         1'b0
-`define AluOpBus            13:0 //译码阶段的输出aluop_o的宽度
+`define AluOpBus            11:0 //译码阶段的输出aluop_o的宽度
 //流水级间交互
     `define StageValid 1'b1 //由触发器维护，表示当前流水级是否在处理指令
     `define StageInvalid 1'b0
@@ -22,7 +22,7 @@
 
 //各级间总线宽
     `define IF_TO_ID_WD 69-1:0
-    `define ID_TO_EXE_WD 221-1:0
+    `define ID_TO_EXE_WD 218-1:0
     `define EXE_TO_MEM_WD 170-1:0
     `define MEM_TO_WB_WD 168-1:0
 

@@ -1,10 +1,9 @@
-
 // `timescale 1ns / 1ps
 `include "defines.v"
 
 module mem_stage(
-    input                              clk           ,
-    input                              resetn        ,
+    input clk           ,
+    input resetn        ,
 
     //exe-mem
     output wire mem_allowin,
@@ -19,8 +18,7 @@ module mem_stage(
     //从后向前的数据传输（均是组合逻辑）
     output wire [`MEM_TO_ID_WD] mem_to_id_bus,
 
-    //dataRAM读数据
-    // input [31:0] data_sram_rdata,
+    //dcache读数据
     input wire         data_cached  ,
     input wire [31:0]  dcache_temp_rdata ,
     input wire [31:0]  uncache_temp_rdata,
@@ -34,9 +32,9 @@ module mem_stage(
     output wire  flush_from_mem
 
 );
-//======================================================
-//======== Parameter and Internal signals ==========
-//======================================================
+//=========================================================================================
+//========================== Parameter and Internal signals ===============================
+//=========================================================================================
 //当前stage控制信号
   reg mem_valid;
   wire mem_ready_go;
@@ -80,18 +78,6 @@ wire        mem_mem_sign_exted;
 // wire        mem_idle;
 wire [31:0] mem_error_va;
 
-// // difftest
-// wire        mem_cnt_inst     ;
-// wire [63:0] mem_timer_64     ;
-// wire [31:0] mem_inst         ;
-// wire [ 7:0] mem_inst_ld_en   ;
-// wire [31:0] mem_ld_paddr     ;
-// wire [31:0] mem_ld_vaddr     ;
-// wire [ 7:0] mem_inst_st_en   ;
-// wire [31:0] mem_st_data      ;
-// wire        mem_csr_rstat_en ;
-// wire [31:0] mem_csr_data     ;
-
 wire [31:0] mem_result;
 wire [31:0] mem_final_result;
 wire        flush_sign;
@@ -99,12 +85,9 @@ wire        flush_sign;
 wire [31:0] mem_rdata;
 // reg  [31:0] data_rd_buff;
 // reg         data_buff_enable;
-
 wire        access_mem;
-
 // wire [ 4:0] cacop_op;
 // wire [ 1:0] cacop_op_mode;
-
 
 wire        dest_zero;
 
@@ -204,36 +187,12 @@ assign flush_from_mem = (excp | mem_ertn | (mem_csr_we /*| (mem_ll_w | mem_sc_w)
 
 //exe-mem
 assign {
-        // mem_csr_data      ,  //424:393  for difftest
-        // mem_csr_rstat_en  ,  //392:392  for difftest
-        // mem_st_data       ,  //391:360  for difftest
-        // mem_inst_st_en    ,  //359:352  for difftest
-        // mem_ld_vaddr      ,  //351:320  for difftest
-        // mem_inst_ld_en    ,  //319:312  for difftest
-        // mem_cnt_inst      ,  //311:311  for difftest
-        // mem_timer_64      ,  //310:247  for difftest
-        // mem_inst          ,  //246:215  for difftest
-        mem_error_va      ,  //214:183
-        // mem_idle          ,  //182:182
-        // mem_cacop         ,  //181:181
-        // mem_preld_inst    ,  //180:180
-        // mem_br_pre_error  ,  //179:179
-        // mem_br_pre        ,  //178:178
-        // mem_icache_miss   ,  //177:177
-        // mem_br_inst       ,  //176:176
-        // mem_icacop_op_en  ,  //175:175
-        mem_mem_sign_exted,  //174:174
-        // mem_invtlb_vpn    ,  //173:155
-        // mem_invtlb_asid   ,  //154:145
-        // mem_invtlb        ,  //144:144
-        // mem_tlbrd         ,  //143:143
-        // mem_refetch       ,  //142:142
-        // mem_tlbfill       ,  //141:141
-        // mem_tlbwr         ,  //140:140
-        // mem_tlbsrch       ,  //139:139
-        mem_store_op      ,  //138:138
-        // mem_sc_w          ,  //137:137
-        // mem_ll_w          ,  //136:136
+        mem_error_va      ,  //169:138
+
+        mem_mem_sign_exted,  //137:137
+
+        mem_store_op      ,  //136:136
+
         mem_excp_num      ,  //135:126
         mem_csr_we        ,  //125:125
         mem_csr_idx       ,  //124:111
@@ -251,39 +210,8 @@ assign {
 
 //mem-wb
 assign mem_to_wb_bus = {
-                    //    mem_csr_data    ,  //492:461 for difftest
-                    //    mem_csr_rstat_en,  //460:460 for difftest
-                    //    mem_st_data     ,  //459:428 for difftest
-                    //    mem_inst_st_en  ,  //427:420 for difftest
-                    //    mem_ld_vaddr    ,  //419:388 for difftest
-                    //    mem_ld_paddr    ,  //387:356 for difftest
-                    //    mem_inst_ld_en  ,  //355:348 for difftest
-                    //    mem_cnt_inst    ,  //347:347 for difftest
-                    //    mem_timer_64    ,  //346:283 for difftest
-                    //    mem_inst        ,  //282:251 for difftest
-					//    data_uncache_en,  //250:250
-					//    paddr          ,  //249:218
-                    //    mem_idle        ,  //217:217
-                    //    mem_br_pre_error,  //216:216
-                    //    mem_br_pre      ,  //215:215
-                    //    dcache_miss    ,  //214:214
-                       access_mem     ,  //213:213
-                    //    mem_icache_miss ,  //212:212
-                    //    mem_br_inst     ,  //211:211
-                    //    mem_icacop_op_en,  //210:210
-                    //    mem_invtlb_vpn  ,  //209:191
-                    //    mem_invtlb_asid ,  //190:181
-                    //    mem_invtlb      ,  //180:180
-                    //    mem_tlbrd       ,  //179:179
-                    //    mem_refetch     ,  //178:178
-                    //    mem_tlbfill     ,  //177:177
-                    //    mem_tlbwr       ,  //176:176
-                    //    data_tlb_index ,  //175:171
-                    //    data_tlb_found ,  //170:170
-                    //    mem_tlbsrch     ,  //169:169
-                       mem_error_va    ,  //168:137
-                    //    mem_sc_w        ,  //136:136
-                    //    mem_ll_w        ,  //135:135
+                       access_mem     ,  //167:167
+                       mem_error_va    ,  //166:135
                        excp_num       ,  //134:119
                        mem_csr_we      ,  //118:118
                        mem_csr_idx     ,  //117:104
@@ -298,8 +226,8 @@ assign mem_to_wb_bus = {
 
 //mem-id
 assign mem_to_id_bus = {dep_need_stall,  //38:38
-                               forward_enable,  //37:37
-                               mem_dest       ,  //36:32
-                               mem_final_result  //31:0
-                              };
+                        forward_enable,  //37:37
+                        mem_dest       ,  //36:32
+                        mem_final_result  //31:0
+                       };
 endmodule

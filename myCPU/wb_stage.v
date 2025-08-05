@@ -27,9 +27,9 @@ module wb_stage (
     output wire [ 4:0] debug_wb_rf_wnum,
     output wire [31:0] debug_wb_rf_wdata
 );
-//======================================================
-//======== Parameter and Internal signals ==========
-//======================================================
+//=========================================================================================
+//========================== Parameter and Internal signals ===============================
+//=========================================================================================
 //当前stage控制信号
   reg wb_valid;
   wire wb_ready_go;
@@ -96,9 +96,9 @@ assign wb_to_csr_bus = {
   bad_va        // 32
 };
 
-//======================================================
-//=================== Main Code ====================
-//======================================================
+//==============================================================================================
+//======================================== Main Code ===========================================
+//==============================================================================================
 //当前stage控制信号
   assign wb_allowin  = ~wb_valid || wb_ready_go;
   assign wb_ready_go = 1'b1;  //写回寄存器堆在一拍之内一定可以完成
@@ -130,66 +130,35 @@ assign wr_csr_addr  = wb_csr_idx;
 assign wr_csr_data  = wb_csr_result; 
 
 
-//exception have piority, onle one exception is valid 
+//异常按照优先级触发
 assign {csr_ecode, 
         va_error, 
         bad_va, 
         csr_esubcode//, 
         /*excp_tlbrefill,
         excp_tlb, 
-        excp_tlb_vppn*/} = wb_excp_num[ 0] ? {`ECODE_INT , 1'b0    , 32'b0      , 9'b0         /* , 1'b0    , 1'b0    , 19'b0   */          } :
-                         wb_excp_num[ 1] ? {`ECODE_ADEF, wb_valid, wb_pc      , `ESUBCODE_ADEF/*, 1'b0    , 1'b0    , 19'b0      */       } :
-                         wb_excp_num[ 2] ? {`ECODE_TLBR, wb_valid, wb_pc      , 9'b0          /*, ws_valid, ws_valid, ws_pc[31:13]      */} :
-                         wb_excp_num[ 3] ? {`ECODE_PIF , wb_valid, wb_pc      , 9'b0          /*, 1'b0    , ws_valid, ws_pc[31:13]      */} :
-                         wb_excp_num[ 4] ? {`ECODE_PPI , wb_valid, wb_pc      , 9'b0          /*, 1'b0    , ws_valid, ws_pc[31:13]      */} :
-                         wb_excp_num[ 5] ? {`ECODE_SYS , 1'b0    , 32'b0      , 9'b0          /*, 1'b0    , 1'b0    , 19'b0             */} :
-                         wb_excp_num[ 6] ? {`ECODE_BRK , 1'b0    , 32'b0      , 9'b0          /*, 1'b0    , 1'b0    , 19'b0       */      } :
-                         wb_excp_num[ 7] ? {`ECODE_INE , 1'b0    , 32'b0      , 9'b0         /* , 1'b0    , 1'b0    , 19'b0          */   } :
-                         wb_excp_num[ 8] ? {`ECODE_IPE , 1'b0    , 32'b0      , 9'b0          /*, 1'b0    , 1'b0    , 19'b0             */} :   //close ipe excp now
-                         wb_excp_num[ 9] ? {`ECODE_ALE , wb_valid, wb_error_va, 9'b0          /*, 1'b0    , 1'b0    , 19'b0             */} :
-                         wb_excp_num[11] ? {`ECODE_TLBR, wb_valid, wb_error_va, 9'b0          /*, ws_valid, ws_valid, ws_error_va[31:13]*/} :
-                         wb_excp_num[12] ? {`ECODE_PME , wb_valid, wb_error_va, 9'b0          /*, 1'b0    , ws_valid, ws_error_va[31:13]*/} :
-                         wb_excp_num[13] ? {`ECODE_PPI , wb_valid, wb_error_va, 9'b0          /*, 1'b0    , ws_valid, ws_error_va[31:13]*/} :
-                         wb_excp_num[14] ? {`ECODE_PIS , wb_valid, wb_error_va, 9'b0          /*, 1'b0    , ws_valid, ws_error_va[31:13]*/} :
-                         wb_excp_num[15] ? {`ECODE_PIL , wb_valid, wb_error_va, 9'b0          /*, 1'b0    , ws_valid, ws_error_va[31:13]*/} :
-                         69'b0;
+        excp_tlb_vppn*/} = wb_excp_num[ 0] ? {`ECODE_INT , 1'b0    , 32'b0      , 9'b0          /* , 1'b0    , 1'b0    , 19'b0   */         } :
+                           wb_excp_num[ 1] ? {`ECODE_ADEF, wb_valid, wb_pc      , `ESUBCODE_ADEF/*, 1'b0    , 1'b0    , 19'b0      */       } :
+                           wb_excp_num[ 2] ? {`ECODE_TLBR, wb_valid, wb_pc      , 9'b0          /*, ws_valid, ws_valid, ws_pc[31:13]      */} :
+                           wb_excp_num[ 3] ? {`ECODE_PIF , wb_valid, wb_pc      , 9'b0          /*, 1'b0    , ws_valid, ws_pc[31:13]      */} :
+                           wb_excp_num[ 4] ? {`ECODE_PPI , wb_valid, wb_pc      , 9'b0          /*, 1'b0    , ws_valid, ws_pc[31:13]      */} :
+                           wb_excp_num[ 5] ? {`ECODE_SYS , 1'b0    , 32'b0      , 9'b0          /*, 1'b0    , 1'b0    , 19'b0             */} :
+                           wb_excp_num[ 6] ? {`ECODE_BRK , 1'b0    , 32'b0      , 9'b0          /*, 1'b0    , 1'b0    , 19'b0       */      } :
+                           wb_excp_num[ 7] ? {`ECODE_INE , 1'b0    , 32'b0      , 9'b0          /* , 1'b0    , 1'b0    , 19'b0          */  } :
+                           wb_excp_num[ 8] ? {`ECODE_IPE , 1'b0    , 32'b0      , 9'b0          /*, 1'b0    , 1'b0    , 19'b0             */} :   //close ipe excp now
+                           wb_excp_num[ 9] ? {`ECODE_ALE , wb_valid, wb_error_va, 9'b0          /*, 1'b0    , 1'b0    , 19'b0             */} :
+                           wb_excp_num[11] ? {`ECODE_TLBR, wb_valid, wb_error_va, 9'b0          /*, ws_valid, ws_valid, ws_error_va[31:13]*/} :
+                           wb_excp_num[12] ? {`ECODE_PME , wb_valid, wb_error_va, 9'b0          /*, 1'b0    , ws_valid, ws_error_va[31:13]*/} :
+                           wb_excp_num[13] ? {`ECODE_PPI , wb_valid, wb_error_va, 9'b0          /*, 1'b0    , ws_valid, ws_error_va[31:13]*/} :
+                           wb_excp_num[14] ? {`ECODE_PIS , wb_valid, wb_error_va, 9'b0          /*, 1'b0    , ws_valid, ws_error_va[31:13]*/} :
+                           wb_excp_num[15] ? {`ECODE_PIL , wb_valid, wb_error_va, 9'b0          /*, 1'b0    , ws_valid, ws_error_va[31:13]*/} :
+                           69'b0;
 
 
 
 assign {
-    // wb_csr_data    ,  //492:461 for difftest
-    //     wb_csr_rstat_en,  //460:460 for difftest
-    //     wb_st_data     ,  //459:428 for difftest
-    //     wb_inst_st_en  ,  //427:420 for difftest
-    //     wb_ld_vaddr    ,  //419:388 for difftest
-    //     wb_ld_paddr    ,  //387:356 for difftest
-    //     wb_inst_ld_en  ,  //355:348 for difftest
-    //     wb_cnt_inst    ,  //347:347 for difftest
-    //     wb_timer_64    ,  //346:283 for difftest
-    //     wb_inst        ,  //282:251 for difftest
-	// 	wb_data_uc     ,  //250:250
-	// 	wb_paddr       ,  //249:218
-    //     wb_idle        ,  //217:217
-    //     wb_br_pre_error,  //216:216
-    //     wb_br_pre      ,  //215:215
-    //     wb_dcache_miss ,  //214:214
-        wb_access_mem  ,  //213:213
-    //     wb_icache_miss ,  //212:212
-    //     wb_br_inst     ,  //211:211
-    //     wb_icacop_op_en,  //210:210
-    //     invtlb_vpn     ,  //209:191
-    //     invtlb_asid    ,  //190:181
-    //     wb_invtlb      ,  //180:180
-    //     wb_tlbrd       ,  //179:179
-    //     wb_refetch     ,  //178:178
-    //     wb_tlbfill     ,  //177:177
-    //     wb_tlbwr       ,  //176:176
-    //     tlbsrch_index  ,  //175:171
-    //     tlbsrch_found  ,  //170:170
-    //     wb_tlbsrch     ,  //169:169
-        wb_error_va    ,  //168:137
-    //     wb_sc_w        ,  //136:136
-    //     wb_ll_w        ,  //135:135
+        wb_access_mem  ,  //167:167
+        wb_error_va    ,  //166:135
         wb_excp_num    ,  //134:119
         wb_csr_we      ,  //118:118
         wb_csr_idx     ,  //117:104
@@ -203,21 +172,20 @@ assign {
     } = wb_data;
 
 
-assign real_valid = wb_valid && !wb_excp;  //ws valid and no exception
+assign real_valid = wb_valid && !wb_excp;
 
 assign rf_we    = wb_gr_we && real_valid;
 assign rf_waddr = wb_dest;
 assign rf_wdata = wb_final_result;
 
-
 //wb-id(rf)
   assign wb_to_id_bus   = {
-                            rf_we,         //64:64
-                            rf_waddr,          //63:32
+                            rf_we,     //64:64
+                            rf_waddr,  //63:32
                             rf_wdata   //31:0
                             };
-assign  debug_wb_pc        = wb_pc            ;
-assign  debug_wb_rf_we     = {4{rf_we}}   ;
-assign  debug_wb_rf_wnum   = rf_waddr          ;
-assign  debug_wb_rf_wdata  = rf_wdata  ;
+assign  debug_wb_pc        = wb_pc      ;
+assign  debug_wb_rf_we     = {4{rf_we}} ;
+assign  debug_wb_rf_wnum   = rf_waddr   ;
+assign  debug_wb_rf_wdata  = rf_wdata   ;
 endmodule

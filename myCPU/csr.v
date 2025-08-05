@@ -15,27 +15,11 @@ module csr
     
     input  wire [ `ID_TO_CSR_WD] id_to_csr_bus  ,
     input  wire [ `WB_TO_CSR_WD] wb_to_csr_bus  ,
-    //from to id 
-    // input  [13:0]                   rd_addr      ,
-    // output [31:0]                   rd_data      ,
-    //timer 64
-    // output [63:0]                   timer_64_out ,
-    // output [31:0]                   tid_out      ,
-    //from wb
-    // input                           csr_wr_en    ,
-    // input  [13:0]                   wr_addr      ,
-    // input  [31:0]                   wr_data      ,
     //interrupt
     input  [ 7:0]                   interrupt    , // 外设硬中断源
-    // output                          has_int      ,
-    input                           excp_flush   , //exe
+    input                           excp_flush   , 
     //from wb
     input                           ertn_flush   ,  // ertn异常返回指令触发的流水线冲刷信号
-    // input  [31:0]                   era_in       ,  // 异常返回地址输入
-    // input  [ 8:0]                   esubcode_in  ,
-    // input  [ 5:0]                   ecode_in     ,
-    // input                           va_error_in  ,
-    // input  [31:0]                   bad_va_in    ,
     input                           tlbsrch_en    ,
     input                           tlbsrch_found ,
     input  [ 4:0]                   tlbsrch_index ,
@@ -53,8 +37,7 @@ module csr
     //to mem
     output [27:0]                   lladdr_out   ,
     //to if
-    // output [31:0]                   eentry_out   ,
-    // output [31:0]                   era_out      ,  // 异常返回地址输出
+
     output [31:0]                   tlbrentry_out, //u
     output                          disable_cache_out, //u
     //to addr trans
@@ -79,43 +62,8 @@ module csr
     input  [31:0]                   tlbidx_in    ,
     input  [ 9:0]                   asid_in      ,
     //general use
-    output [ 1:0]                   plv_out      //, //在csr id bus里面多传了一份
-
-    // // csr regs for diff
-    // output [31:0]                   csr_crmd_diff,
-    // output [31:0]                   csr_prmd_diff,
-    // output [31:0]                   csr_ectl_diff,
-    // output [31:0]                   csr_estat_diff,
-    // output [31:0]                   csr_era_diff,
-    // output [31:0]                   csr_badv_diff,
-    // output [31:0]                   csr_eentry_diff,
-    // output [31:0]                   csr_tlbidx_diff,
-    // output [31:0]                   csr_tlbehi_diff,
-    // output [31:0]                   csr_tlbelo0_diff,
-    // output [31:0]                   csr_tlbelo1_diff,
-    // output [31:0]                   csr_asid_diff,
-    // output [31:0]                   csr_save0_diff,
-    // output [31:0]                   csr_save1_diff,
-    // output [31:0]                   csr_save2_diff,
-    // output [31:0]                   csr_save3_diff,
-    // output [31:0]                   csr_tid_diff,
-    // output [31:0]                   csr_tcfg_diff,
-    // output [31:0]                   csr_tval_diff,
-    // output [31:0]                   csr_ticlr_diff,
-    // output [31:0]                   csr_llbctl_diff,
-    // output [31:0]                   csr_tlbrentry_diff,
-    // output [31:0]                   csr_dmw0_diff,
-    // output [31:0]                   csr_dmw1_diff,
-    // output [31:0]                   csr_pgdl_diff,
-    // output [31:0]                   csr_pgdh_diff
+    output [ 1:0]                   plv_out      //在csr id bus里面多传了一份
 );
-
-
-
-
-
-
-
 
 //======================================================
 //======== Parameter and Internal signals ==========
@@ -123,8 +71,7 @@ module csr
 
 wire reset ;
 assign reset = ~resetn;
-  //模块内部使用的常量使用localparam定义，不能通过模块例化修改
-  //使用localparam定义csr寄存器的地址
+//csr寄存器地址
 localparam CRMD  = 14'h0;
 localparam PRMD  = 14'h1;
 localparam ECTL  = 14'h4;
@@ -140,7 +87,7 @@ localparam ASID  = 14'h18;
 localparam PGDL  = 14'h19;
 localparam PGDH  = 14'h1a;
 localparam PGD   = 14'h1b;
-localparam CPUID = 14'h20; //？这个ID可以自由发挥吗
+localparam CPUID = 14'h20; //这个ID疑似可以自由发挥
 localparam SAVE0 = 14'h30;
 localparam SAVE1 = 14'h31;
 localparam SAVE2 = 14'h32;
@@ -256,10 +203,10 @@ wire eret_tlbrefill_excp; // ERTN指令返回时遇到的TLB重填异常
 wire no_forward;  // 1:允许转发当前状态，0:不允许
 
 
-//out bus
+//bus总线io信号
 //if
 wire [31:0]                   eentry_out   ;
-wire [31:0]                   era_out      ; 
+wire [31:0]                   era_out      ; // 异常返回地址输出
 //from to id 
 wire [13:0]                   rd_addr      ;
 wire [31:0]                   rd_data      ;
@@ -270,7 +217,7 @@ wire [31:0]                   tid_out      ;
 
 wire                          has_int      ;
 
-wire  [31:0]                  era_in      ;
+wire  [31:0]                  era_in      ;  // 异常返回地址输入
 wire  [ 8:0]                  esubcode_in ;
 wire  [ 5:0]                  ecode_in    ;
 wire                          va_error_in ;
@@ -502,8 +449,8 @@ always @(posedge clk) begin
 end
 
 //ectl
-//csr_ectl[ `LIE_1] 12：0  局部中断使能组1（13个中断源）
-//csr_ectl[ `LIE_2] 31：16 局部中断使能组2（16个中断源）
+//LIE_1 = 12：0  局部中断使能组1（13个中断源）
+//LIE_2 = 31：16 局部中断使能组2（16个中断源）
 //15：13 保留字段
 always @(posedge clk) begin
     if (reset) begin
@@ -1010,34 +957,5 @@ always @(posedge clk) begin
         csr_cpucfg13 <= 32'h0;
     end 
 end
-
-
-// // difftest
-// assign csr_crmd_diff        = csr_crmd;
-// assign csr_prmd_diff        = csr_prmd;
-// assign csr_ectl_diff        = csr_ectl;
-// assign csr_estat_diff       = csr_estat;
-// assign csr_era_diff         = csr_era;
-// assign csr_badv_diff        = csr_badv;
-// assign csr_eentry_diff      = csr_eentry;
-// assign csr_tlbidx_diff      = csr_tlbidx;
-// assign csr_tlbehi_diff      = csr_tlbehi;
-// assign csr_tlbelo0_diff     = csr_tlbelo0;
-// assign csr_tlbelo1_diff     = csr_tlbelo1;
-// assign csr_asid_diff        = csr_asid;
-// assign csr_save0_diff       = csr_save0;
-// assign csr_save1_diff       = csr_save1;
-// assign csr_save2_diff       = csr_save2;
-// assign csr_save3_diff       = csr_save3;
-// assign csr_tid_diff         = csr_tid;
-// assign csr_tcfg_diff        = csr_tcfg;
-// assign csr_tval_diff        = csr_tval;
-// assign csr_ticlr_diff       = csr_ticlr;
-// assign csr_llbctl_diff      = {csr_llbctl[31:1], llbit};
-// assign csr_tlbrentry_diff   = csr_tlbrentry;
-// assign csr_dmw0_diff        = csr_dmw0;
-// assign csr_dmw1_diff        = csr_dmw1;
-// assign csr_pgdl_diff        = csr_pgdl;
-// assign csr_pgdh_diff        = csr_pgdh;
 
 endmodule
