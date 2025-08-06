@@ -1,5 +1,4 @@
 `include "defines.v"
-`include "define_csr.v"
 
 module csr 
 #(
@@ -8,27 +7,19 @@ module csr
 (
     input                           clk          ,
     input                           resetn        ,
-    //from to id 
-    input  [13:0]                   rd_addr      ,
-    output [31:0]                   rd_data      ,
-    //timer 64
-    output [63:0]                   timer_64_out ,
-    output [31:0]                   tid_out      ,
-    //from wb
-    input                           csr_wr_en    ,
-    input  [13:0]                   wr_addr      ,
-    input  [31:0]                   wr_data      ,
+
+    //bus
+    output wire [ `CSR_TO_IF_WD] csr_to_if_bus   ,
+    output wire [ `CSR_TO_ID_WD] csr_to_id_bus   ,
+    output wire [`CSR_TO_EXE_WD] csr_to_exe_bus  ,
+    
+    input  wire [ `ID_TO_CSR_WD] id_to_csr_bus  ,
+    input  wire [ `WB_TO_CSR_WD] wb_to_csr_bus  ,
     //interrupt
     input  [ 7:0]                   interrupt    , // 外设硬中断源
-    output                          has_int      ,
+    input                           excp_flush   , 
     //from wb
-    input                           excp_flush   ,
     input                           ertn_flush   ,  // ertn异常返回指令触发的流水线冲刷信号
-    input  [31:0]                   era_in       ,  // 异常返回地址输入
-    input  [ 8:0]                   esubcode_in  ,
-    input  [ 5:0]                   ecode_in     ,
-    input                           va_error_in  ,
-    input  [31:0]                   bad_va_in    ,
     input                           tlbsrch_en    ,
     input                           tlbsrch_found ,
     input  [ 4:0]                   tlbsrch_index ,
@@ -46,10 +37,9 @@ module csr
     //to mem
     output [27:0]                   lladdr_out   ,
     //to if
-    output [31:0]                   eentry_out   ,
-    output [31:0]                   era_out      ,  // 异常返回地址输出
-    output [31:0]                   tlbrentry_out,
-    output                          disable_cache_out,
+
+    output [31:0]                   tlbrentry_out, //u
+    output                          disable_cache_out, //u
     //to addr trans
     output [ 9:0]                   asid_out     ,
     output [ 4:0]                   rand_index   ,
@@ -72,42 +62,8 @@ module csr
     input  [31:0]                   tlbidx_in    ,
     input  [ 9:0]                   asid_in      ,
     //general use
-    output [ 1:0]                   plv_out      //,
-    // // csr regs for diff
-    // output [31:0]                   csr_crmd_diff,
-    // output [31:0]                   csr_prmd_diff,
-    // output [31:0]                   csr_ectl_diff,
-    // output [31:0]                   csr_estat_diff,
-    // output [31:0]                   csr_era_diff,
-    // output [31:0]                   csr_badv_diff,
-    // output [31:0]                   csr_eentry_diff,
-    // output [31:0]                   csr_tlbidx_diff,
-    // output [31:0]                   csr_tlbehi_diff,
-    // output [31:0]                   csr_tlbelo0_diff,
-    // output [31:0]                   csr_tlbelo1_diff,
-    // output [31:0]                   csr_asid_diff,
-    // output [31:0]                   csr_save0_diff,
-    // output [31:0]                   csr_save1_diff,
-    // output [31:0]                   csr_save2_diff,
-    // output [31:0]                   csr_save3_diff,
-    // output [31:0]                   csr_tid_diff,
-    // output [31:0]                   csr_tcfg_diff,
-    // output [31:0]                   csr_tval_diff,
-    // output [31:0]                   csr_ticlr_diff,
-    // output [31:0]                   csr_llbctl_diff,
-    // output [31:0]                   csr_tlbrentry_diff,
-    // output [31:0]                   csr_dmw0_diff,
-    // output [31:0]                   csr_dmw1_diff,
-    // output [31:0]                   csr_pgdl_diff,
-    // output [31:0]                   csr_pgdh_diff
+    output [ 1:0]                   plv_out      //在csr id bus里面多传了一份
 );
-
-
-
-
-
-
-
 
 //======================================================
 //======== Parameter and Internal signals ==========
@@ -115,8 +71,7 @@ module csr
 
 wire reset ;
 assign reset = ~resetn;
-  //模块内部使用的常量使用localparam定义，不能通过模块例化修改
-  //使用localparam定义csr寄存器的地址
+//csr寄存器地址
 localparam CRMD  = 14'h0;
 localparam PRMD  = 14'h1;
 localparam ECTL  = 14'h4;
@@ -132,7 +87,7 @@ localparam ASID  = 14'h18;
 localparam PGDL  = 14'h19;
 localparam PGDH  = 14'h1a;
 localparam PGD   = 14'h1b;
-localparam CPUID = 14'h20;
+localparam CPUID = 14'h20; //这个ID疑似可以自由发挥
 localparam SAVE0 = 14'h30;
 localparam SAVE1 = 14'h31;
 localparam SAVE2 = 14'h32;
@@ -148,38 +103,12 @@ localparam DMW0  = 14'h180;
 localparam DMW1  = 14'h181;
 localparam BRK = 14'h100;
 localparam DISABLE_CACHE = 14'h101;
-
-wire crmd_wen   = csr_wr_en & (wr_addr == CRMD);
-wire prmd_wen   = csr_wr_en & (wr_addr == PRMD);
-wire ectl_wen   = csr_wr_en & (wr_addr == ECTL);
-wire estat_wen  = csr_wr_en & (wr_addr == ESTAT);
-wire era_wen    = csr_wr_en & (wr_addr == ERA);
-wire badv_wen   = csr_wr_en & (wr_addr == BADV);
-wire eentry_wen = csr_wr_en & (wr_addr == EENTRY);
-wire tlbidx_wen = csr_wr_en & (wr_addr == TLBIDX);
-wire tlbehi_wen = csr_wr_en & (wr_addr == TLBEHI);
-wire tlbelo0_wen= csr_wr_en & (wr_addr == TLBELO0);
-wire tlbelo1_wen= csr_wr_en & (wr_addr == TLBELO1);
-wire asid_wen   = csr_wr_en & (wr_addr == ASID);
-wire pgdl_wen   = csr_wr_en & (wr_addr == PGDL);
-wire pgdh_wen   = csr_wr_en & (wr_addr == PGDH);
-wire pgd_wen    = csr_wr_en & (wr_addr == PGD);
-wire cpuid_wen  = csr_wr_en & (wr_addr == CPUID);
-wire save0_wen  = csr_wr_en & (wr_addr == SAVE0);
-wire save1_wen  = csr_wr_en & (wr_addr == SAVE1);
-wire save2_wen  = csr_wr_en & (wr_addr == SAVE2);
-wire save3_wen  = csr_wr_en & (wr_addr == SAVE3);
-wire tid_wen    = csr_wr_en & (wr_addr == TID);
-wire tcfg_wen   = csr_wr_en & (wr_addr == TCFG);
-wire tval_wen   = csr_wr_en & (wr_addr == TVAL);
-wire cntc_wen   = csr_wr_en & (wr_addr == CNTC);
-wire ticlr_wen  = csr_wr_en & (wr_addr == TICLR);
-wire llbctl_wen = csr_wr_en & (wr_addr == LLBCTL);
-wire tlbrentry_wen = csr_wr_en & (wr_addr == TLBRENTRY);
-wire DMW0_wen   = csr_wr_en & (wr_addr == DMW0);
-wire DMW1_wen   = csr_wr_en & (wr_addr == DMW1);
-wire BRK_wen    = csr_wr_en & (wr_addr == BRK);
-wire disable_cache_wen = csr_wr_en & (wr_addr == DISABLE_CACHE);
+localparam CPUCFG_1  = 14'hb1;
+localparam CPUCFG_2  = 14'hb2;
+localparam CPUCFG_10 = 14'hc0;
+localparam CPUCFG_11 = 14'hc1;
+localparam CPUCFG_12 = 14'hc2;
+localparam CPUCFG_13 = 14'hc3;
 
 reg [31:0] csr_crmd;  //0x0 当前模式信息
 reg [31:0] csr_prmd;  //1 例外前模式信息
@@ -215,6 +144,12 @@ reg [31:0] csr_pgdl;
 reg [31:0] csr_pgdh;
 reg [31:0] csr_brk;
 reg [31:0] csr_disable_cache;
+reg [31:0] csr_cpucfg1;
+reg [31:0] csr_cpucfg2;
+reg [31:0] csr_cpucfg10;
+reg [31:0] csr_cpucfg11;
+reg [31:0] csr_cpucfg12;
+reg [31:0] csr_cpucfg13;
 
 wire [31:0] csr_pgd;  // 动态页表基址选择器
 
@@ -234,6 +169,113 @@ wire eret_tlbrefill_excp; // ERTN指令返回时遇到的TLB重填异常
 
 //状态转发控制
 wire no_forward;  // 1:允许转发当前状态，0:不允许
+
+
+//bus总线io信号
+//if
+wire [31:0]                   eentry_out   ;
+wire [31:0]                   era_out      ; // 异常返回地址输出
+//from to id 
+wire [13:0]                   rd_addr      ;
+wire [31:0]                   rd_data      ;
+
+//timer 64
+wire [63:0]                   timer_64_out ;
+wire [31:0]                   tid_out      ;
+
+wire                          has_int      ;
+
+wire  [31:0]                  era_in      ;  // 异常返回地址输入
+wire  [ 8:0]                  esubcode_in ;
+wire  [ 5:0]                  ecode_in    ;
+wire                          va_error_in ;
+wire  [31:0]                  bad_va_in   ;
+
+wire                          csr_wr_en       ;
+wire  [13:0]                  wr_addr     ;
+wire  [31:0]                  wr_data     ;
+
+
+//out bus
+assign csr_to_if_bus = {
+    plv_out, //2
+    datf_out,   //2 
+    da_out, //1
+    pg_out, //1
+    dmw1_out, //32
+    dmw0_out, //32
+
+    era_in,
+    eentry_out,
+    era_out   
+};
+
+assign csr_to_id_bus = {
+    timer_64_out,
+    tid_out,
+
+    rd_data,
+    plv_out,
+    has_int
+};
+
+assign csr_to_exe_bus = {
+    plv_out, //2
+    datm_out,   //2 
+    da_out, //1
+    pg_out, //1
+    dmw1_out, //32
+    dmw0_out //32
+};
+
+//in bus
+assign {
+    rd_addr
+} = id_to_csr_bus;
+
+assign {
+  era_in     , //32
+  esubcode_in, //9
+  ecode_in   , //6
+  csr_wr_en   , //1
+  wr_addr , //14
+  wr_data , //32
+  va_error_in    , //1
+  bad_va_in        // 32
+} = wb_to_csr_bus;
+
+
+wire crmd_wen   = csr_wr_en & (wr_addr == CRMD);
+wire prmd_wen   = csr_wr_en & (wr_addr == PRMD);
+wire ectl_wen   = csr_wr_en & (wr_addr == ECTL);
+wire estat_wen  = csr_wr_en & (wr_addr == ESTAT);
+wire era_wen    = csr_wr_en & (wr_addr == ERA);
+wire badv_wen   = csr_wr_en & (wr_addr == BADV);
+wire eentry_wen = csr_wr_en & (wr_addr == EENTRY);
+wire tlbidx_wen = csr_wr_en & (wr_addr == TLBIDX);
+wire tlbehi_wen = csr_wr_en & (wr_addr == TLBEHI);
+wire tlbelo0_wen= csr_wr_en & (wr_addr == TLBELO0);
+wire tlbelo1_wen= csr_wr_en & (wr_addr == TLBELO1);
+wire asid_wen   = csr_wr_en & (wr_addr == ASID);
+wire pgdl_wen   = csr_wr_en & (wr_addr == PGDL);
+wire pgdh_wen   = csr_wr_en & (wr_addr == PGDH);
+wire pgd_wen    = csr_wr_en & (wr_addr == PGD);
+wire cpuid_wen  = csr_wr_en & (wr_addr == CPUID);
+wire save0_wen  = csr_wr_en & (wr_addr == SAVE0);
+wire save1_wen  = csr_wr_en & (wr_addr == SAVE1);
+wire save2_wen  = csr_wr_en & (wr_addr == SAVE2);
+wire save3_wen  = csr_wr_en & (wr_addr == SAVE3);
+wire tid_wen    = csr_wr_en & (wr_addr == TID);
+wire tcfg_wen   = csr_wr_en & (wr_addr == TCFG);
+wire tval_wen   = csr_wr_en & (wr_addr == TVAL);
+wire cntc_wen   = csr_wr_en & (wr_addr == CNTC);
+wire ticlr_wen  = csr_wr_en & (wr_addr == TICLR);
+wire llbctl_wen = csr_wr_en & (wr_addr == LLBCTL);
+wire tlbrentry_wen = csr_wr_en & (wr_addr == TLBRENTRY);
+wire DMW0_wen   = csr_wr_en & (wr_addr == DMW0);
+wire DMW1_wen   = csr_wr_en & (wr_addr == DMW1);
+wire BRK_wen    = csr_wr_en & (wr_addr == BRK);
+wire disable_cache_wen = csr_wr_en & (wr_addr == DISABLE_CACHE);
 
 
 //======================================================
@@ -336,7 +378,14 @@ assign rd_data = {32{rd_addr == CRMD  }}  & csr_crmd    |
                  {32{rd_addr == TVAL  }}  & csr_tval    |
                  {32{rd_addr == TLBRENTRY}} & csr_tlbrentry   |
                  {32{rd_addr == DMW0}}    & csr_dmw0    |
-                 {32{rd_addr == DMW1}}    & csr_dmw1    ;
+                 {32{rd_addr == DMW1}}    & csr_dmw1    |
+                 {32{rd_addr == CPUCFG_1 }}   & csr_cpucfg1    |
+                 {32{rd_addr == CPUCFG_2 }}   & csr_cpucfg2    |
+                 {32{rd_addr == CPUCFG_10 }}  & csr_cpucfg10   |
+                 {32{rd_addr == CPUCFG_11 }}  & csr_cpucfg11   |
+                 {32{rd_addr == CPUCFG_12 }}  & csr_cpucfg12   |
+                 {32{rd_addr == CPUCFG_13 }}  & csr_cpucfg13   ;
+
 
 //crmd
 always @(posedge clk) begin
@@ -386,7 +435,8 @@ end
 //csr_prmd[`PPLV] 1:0 异常前特权级别
 always @(posedge clk) begin
     if (reset) begin
-        csr_prmd[31:3] <= 29'b0;
+        // csr_prmd[31:3] <= 29'b0;
+        csr_prmd<=32'b0;
     end
     //异常处理
     else if (excp_flush) begin
@@ -401,8 +451,8 @@ always @(posedge clk) begin
 end
 
 //ectl
-//csr_ectl[ `LIE_1] 12：0  局部中断使能组1（13个中断源）
-//csr_ectl[ `LIE_2] 31：16 局部中断使能组2（16个中断源）
+//LIE_1 = 12：0  局部中断使能组1（13个中断源）
+//LIE_2 = 31：16 局部中断使能组2（16个中断源）
 //15：13 保留字段
 always @(posedge clk) begin
     if (reset) begin
@@ -426,11 +476,12 @@ end
 
 always @(posedge clk) begin
     if (reset) begin
-        csr_estat[1:0] <= 2'b0; 
-        csr_estat[10]    <= 1'b0;
-        csr_estat[12]    <= 1'b0;
-        csr_estat[15:13] <= 3'b0;
-        csr_estat[31]    <= 1'b0;
+        // csr_estat[1:0] <= 2'b0; 
+        // csr_estat[10]    <= 1'b0;
+        // csr_estat[12]    <= 1'b0;
+        // csr_estat[15:13] <= 3'b0;
+        // csr_estat[31]    <= 1'b0;
+        csr_estat<=32'b0;
         
         timer_en <= 1'b0; //定时器禁用
     end
@@ -464,7 +515,10 @@ end
 
 //era
 always @(posedge clk) begin
-    if (excp_flush) begin
+    if (reset) begin
+        csr_era <= 32'b0;
+    end
+    else if (excp_flush) begin
         csr_era <= era_in;
     end
     else if (era_wen) begin
@@ -475,7 +529,10 @@ end
 //badv 出错虚地址
 //触发地址错误相关例外时，记录出错的虚地址
 always @(posedge clk) begin
-    if (badv_wen) begin
+    if (reset) begin
+        csr_badv <= 32'b0;
+    end
+    else if (badv_wen) begin
         csr_badv <= wr_data;
     end
     else if (va_error_in) begin
@@ -486,7 +543,7 @@ end
 //eentry
 always @(posedge clk) begin
     if (reset) begin
-        csr_eentry[5:0] <= 6'b0;
+        csr_eentry <= 32'b0;
     end
     else if (eentry_wen) begin
         csr_eentry[31:6] <= wr_data[31:6];
@@ -496,9 +553,10 @@ end
 //tlbidx
 always @(posedge clk) begin
     if (reset) begin
-        csr_tlbidx[23: 5] <= 19'b0;
-        csr_tlbidx[30]    <= 1'b0;
-		csr_tlbidx[`INDEX]<= 5'b0;
+        // csr_tlbidx[23: 5] <= 19'b0;
+        // csr_tlbidx[30]    <= 1'b0;
+		// csr_tlbidx[`INDEX]<= 5'b0;
+        csr_tlbidx <= 32'b0;
     end
     else if (tlbidx_wen) begin
 		csr_tlbidx[$clog2(TLBNUM)-1:0] <= wr_data[$clog2(TLBNUM)-1:0];
@@ -527,7 +585,8 @@ end
 //tlbehi
 always @(posedge clk) begin
     if (reset) begin
-        csr_tlbehi[12:0] <= 13'b0;
+        // csr_tlbehi[12:0] <= 13'b0;
+        csr_tlbehi <= 32'b0;
     end
     else if (tlbehi_wen) begin
         csr_tlbehi[`VPPN] <= wr_data[`VPPN];
@@ -546,7 +605,8 @@ end
 //tlbelo0
 always @(posedge clk) begin
     if (reset) begin
-        csr_tlbelo0[7] <= 1'b0;
+        // csr_tlbelo0[7] <= 1'b0;
+        csr_tlbelo0 <= 32'b0;
     end
     else if (tlbelo0_wen) begin
         csr_tlbelo0[`TLB_V]   <= wr_data[`TLB_V];
@@ -577,7 +637,8 @@ end
 //tlbelo1
 always @(posedge clk) begin
     if (reset) begin
-        csr_tlbelo1[7] <= 1'b0;
+        // csr_tlbelo1[7] <= 1'b0;
+        csr_tlbelo1 <= 32'b0;
     end
     else if (tlbelo1_wen) begin
         csr_tlbelo1[`TLB_V]   <= wr_data[`TLB_V];
@@ -605,10 +666,12 @@ always @(posedge clk) begin
     end
 end
 
+//类似TLB参数，先都设0反正没有TLB
 //asid
 always @(posedge clk) begin
     if (reset) begin
-        csr_asid[31:10] <= 22'h280; //ASIDBITS = 10
+        // csr_asid[31:10] <= 22'h280; //ASIDBITS = 10
+        csr_asid <= 32'b0;
     end
     else if (asid_wen) begin
         csr_asid[`TLB_ASID] <= wr_data[`TLB_ASID];
@@ -624,7 +687,8 @@ end
 //TLBRENTRY
 always @(posedge clk) begin
     if (reset) begin
-        csr_tlbrentry[5:0] <= 6'b0;
+        // csr_tlbrentry[5:0] <= 6'b0;
+        csr_tlbrentry <= 32'b0;
     end
     else if (tlbrentry_wen) begin
         csr_tlbrentry[`TLBRENTRY_PA] <= wr_data[`TLBRENTRY_PA];
@@ -634,9 +698,7 @@ end
 //dmw0
 always @(posedge clk) begin
     if (reset) begin
-        csr_dmw0[ 2:1] <= 2'b0;
-        csr_dmw0[24:6] <= 19'b0;
-        csr_dmw0[28]   <= 1'b0;
+        csr_dmw0<=32'b0;
     end
     else if (DMW0_wen) begin
         csr_dmw0[`PLV0]    <= wr_data[`PLV0];
@@ -650,9 +712,7 @@ end
 //dmw1
 always @(posedge clk) begin
     if (reset) begin
-        csr_dmw1[ 2:1] <= 2'b0;
-        csr_dmw1[24:6] <= 19'b0;
-        csr_dmw1[28]   <= 1'b0;
+        csr_dmw1<=32'b0;
     end
     else if (DMW1_wen) begin
         csr_dmw1[`PLV0]    <= wr_data[`PLV0];
@@ -672,28 +732,40 @@ end
 
 //save0
 always @(posedge clk) begin
-    if (save0_wen) begin
+    if (reset) begin
+        csr_save0 <= 32'b0;
+    end
+    else if (save0_wen) begin
         csr_save0 <= wr_data;
     end 
 end
 
 //save1
 always @(posedge clk) begin
-    if (save1_wen) begin
+    if (reset) begin
+        csr_save1 <= 32'b0;
+    end
+    else if (save1_wen) begin
         csr_save1 <= wr_data;
     end 
 end
 
 //save2
 always @(posedge clk) begin
-    if (save2_wen) begin
+    if (reset) begin
+        csr_save2 <= 32'b0;
+    end
+    else if (save2_wen) begin
         csr_save2 <= wr_data;
     end 
 end
 
 //save3
 always @(posedge clk) begin
-    if (save3_wen) begin
+    if (reset) begin
+        csr_save3 <= 32'b0;
+    end
+    else if (save3_wen) begin
         csr_save3 <= wr_data;
     end 
 end
@@ -711,7 +783,8 @@ end
 //tcfg
 always @(posedge clk) begin
     if (reset) begin
-        csr_tcfg[`EN] <= 1'b0;
+        // csr_tcfg[`EN] <= 1'b0;
+        csr_tcfg <= 32'b0;
     end
     else if (tcfg_wen) begin
         csr_tcfg[      `EN] <= wr_data[      `EN];
@@ -732,7 +805,10 @@ end
 
 //tval
 always @(posedge clk) begin
-    if (tcfg_wen) begin
+    if (reset) begin
+        csr_tval <= 32'b0;
+    end
+    else if (tcfg_wen) begin
         csr_tval <= {wr_data[ `INITVAL], 2'b0};
     end
     else if (timer_en) begin
@@ -756,9 +832,10 @@ end
 //llbctl
 always @(posedge clk) begin
     if (reset) begin
-        csr_llbctl[`KLO]   <= 1'b0;
-        csr_llbctl[31:3]   <= 29'b0;
-		csr_llbctl[`WCLLB] <= 1'b0;
+        // csr_llbctl[`KLO]   <= 1'b0;
+        // csr_llbctl[31:3]   <= 29'b0;
+		// csr_llbctl[`WCLLB] <= 1'b0;
+        csr_llbctl <= 32'b0;
         llbit <= 1'b0;
     end 
     else if (ertn_flush) begin
@@ -801,13 +878,19 @@ end
 
 //pgdl
 always @(posedge clk) begin
-    if (pgdl_wen) begin
+    if (reset) begin
+        csr_pgdl <= 32'b0;
+    end
+    else if (pgdl_wen) begin
         csr_pgdl[`BASE] <= wr_data[`BASE];
     end
 end
 
 //pgdh
 always @(posedge clk) begin
+    if (reset) begin
+        csr_pgdh <= 32'b0;
+    end 
     if (pgdh_wen) begin
         csr_pgdh[`BASE] <= wr_data[`BASE];
     end
@@ -833,32 +916,48 @@ always @(posedge clk) begin
     end
 end
 
-// // difftest
-// assign csr_crmd_diff        = csr_crmd;
-// assign csr_prmd_diff        = csr_prmd;
-// assign csr_ectl_diff        = csr_ectl;
-// assign csr_estat_diff       = csr_estat;
-// assign csr_era_diff         = csr_era;
-// assign csr_badv_diff        = csr_badv;
-// assign csr_eentry_diff      = csr_eentry;
-// assign csr_tlbidx_diff      = csr_tlbidx;
-// assign csr_tlbehi_diff      = csr_tlbehi;
-// assign csr_tlbelo0_diff     = csr_tlbelo0;
-// assign csr_tlbelo1_diff     = csr_tlbelo1;
-// assign csr_asid_diff        = csr_asid;
-// assign csr_save0_diff       = csr_save0;
-// assign csr_save1_diff       = csr_save1;
-// assign csr_save2_diff       = csr_save2;
-// assign csr_save3_diff       = csr_save3;
-// assign csr_tid_diff         = csr_tid;
-// assign csr_tcfg_diff        = csr_tcfg;
-// assign csr_tval_diff        = csr_tval;
-// assign csr_ticlr_diff       = csr_ticlr;
-// assign csr_llbctl_diff      = {csr_llbctl[31:1], llbit};
-// assign csr_tlbrentry_diff   = csr_tlbrentry;
-// assign csr_dmw0_diff        = csr_dmw0;
-// assign csr_dmw1_diff        = csr_dmw1;
-// assign csr_pgdl_diff        = csr_pgdl;
-// assign csr_pgdh_diff        = csr_pgdh;
+
+//从右往左数
+//cpucfg1
+always @(posedge clk) begin
+    if (reset) begin
+        csr_cpucfg1 <= 32'b_00011111_00011111_00_00;
+    end 
+end
+
+//cpucfg2
+always @(posedge clk) begin
+    if (reset) begin
+        csr_cpucfg2 <= 32'h0;
+    end 
+end
+
+//cpucfg10
+always @(posedge clk) begin
+    if (reset) begin
+        csr_cpucfg10 <= 32'h0;
+    end 
+end
+
+//cpucfg11
+always @(posedge clk) begin
+    if (reset) begin
+        csr_cpucfg11 <= 32'h0;
+    end 
+end
+
+//cpucfg12
+always @(posedge clk) begin
+    if (reset) begin
+        csr_cpucfg12 <= 32'h0;
+    end 
+end
+
+//cpucfg13
+always @(posedge clk) begin
+    if (reset) begin
+        csr_cpucfg13 <= 32'h0;
+    end 
+end
 
 endmodule

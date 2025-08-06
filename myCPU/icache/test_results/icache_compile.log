@@ -1,2 +1,0 @@
-icache.v:1: error: Variable declaration in unnamed block requires SystemVerilog.
-tb_icache.v:1: error: Variable declaration in unnamed block requires SystemVerilog.

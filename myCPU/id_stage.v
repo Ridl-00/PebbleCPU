@@ -9,48 +9,41 @@ module id_stage (
     output wire id_allowin,
     input wire if_to_id_valid,
     input wire [`IF_TO_ID_WD] if_to_id_bus,
-
     //id-exe
     input wire exe_allowin,
     output wire id_to_exe_valid,
     output wire [`ID_TO_EXE_WD] id_to_exe_bus,
 
 
-    //从后向前的数据传输（均是组合逻辑）
     output wire [`ID_TO_IF_WD] id_to_if_bus,
-
     input wire [`EXE_TO_ID_WD] exe_to_id_bus,
     input wire [`MEM_TO_ID_WD] mem_to_id_bus,
-    //wb-rf
     input wire [`WB_TO_ID_WD]  wb_to_rf_bus,
-    //wb-id
-    input wire                  flush_sign,
-    
-    //csr-id
-    input wire [`CSR_TO_ID_WD] csr_to_id_bus,
 
-    //id-csr
+    input wire                 excp_flush   , //wb
+    input wire                 ertn_flush   , //wb
+    input wire                 refetch_flush, //wb
+
+    input wire  [`CSR_TO_ID_WD] csr_to_id_bus,
     output wire [`ID_TO_CSR_WD] id_to_csr_bus
-
 );
 
-//======================================================
-//======== Parameter and Internal signals ==========
-//======================================================
-
+//=========================================================================================
+//========================== Parameter and Internal signals ===============================
+//=========================================================================================
 //当前stage控制信号
   reg id_valid;
   wire id_ready_go;
 
-  reg [`IF_TO_ID_WD] id_data;  //id_reg的数据
+  reg [`IF_TO_ID_WD] id_data;
 
 
 //if-id
   //拆解if_reg传递过来的数据
   wire [`InstAddrBus] id_pc;
   wire [`InstBus    ] id_inst;
-  wire [ 3:0] id_excp_num; //写着id实际上是if传来的
-  wire        id_excp; //写着id实际上是if传来的
+  wire [ 3:0] id_excp_num;
+  wire        id_excp;
 
 assign {
         id_excp,        //68:68
@@ -120,7 +113,6 @@ wire [63:0] op_31_26_d;
 wire [15:0] op_25_22_d;
 wire [ 3:0] op_21_20_d;
 wire [31:0] op_19_15_d;
-//！la500里把rd rj rk也译码了
 wire [31:0] rd_d;
 wire [31:0] rj_d;
 wire [31:0] rk_d;
@@ -187,6 +179,7 @@ wire inst_csrrd;
 wire inst_csrwr;
 wire inst_csrxchg;
 wire inst_ertn;
+wire inst_cpucfg;
 
 wire inst_rdcntid_w;
 wire inst_rdcntvl_w;
@@ -199,7 +192,7 @@ wire inst_rdcntvh_w;
 // wire inst_tlbfill;
 // wire inst_invtlb;
 
-// wire inst_cacop;
+wire inst_cacop;
 // wire inst_valid_cacop;
 // wire inst_preld;
 // wire inst_dbar;
@@ -210,11 +203,11 @@ wire inst_rdcntvh_w;
 //控制信号译码
 wire br_taken;
 wire [`InstAddrBus] br_target;
-  // wire br_taken_cancel;
-  // reg         branch_slot_cancel;
 wire br_really_taken;
 wire        br_inst;
-// reg         br_jirl;
+
+wire br_stall ; // 在load-branch时阻塞preif的取指
+
 wire        br_need_reg_data; //是分支指令且此分支指令需要寄存器中的数据
 
 wire        inst_need_rj;
@@ -278,7 +271,7 @@ wire        excp_ine; //是否 为非法指令异常
 wire        excp_ipe; //是否 为特权级错误异常
 wire [31:0] csr_data;
 // wire        refetch; //是否 重新取指
-// wire        flush_sign; //是否 刷新指令流水线
+wire        flush_sign; //是否 刷新指令流水线
 
 // wire        if_excp; //是否 if有异常(没用上)
 
@@ -290,15 +283,9 @@ wire        rdcnt_en; //硬件计数器读使能
 // wire        tlb_inst_stall;
 
 
-
 //exception
-//csr-id
-  //！这一串貌似只用到一次，考虑只传递一个结果
-    wire                      excp_flush    ;
-    wire                      ertn_flush    ;
-    wire                      refetch_flush ;
     //interrupt
-    wire                      has_int       ;//是否 有外部中断请求
+    wire                 has_int       ;//是否 有外部中断请求
     //csr
     wire  [31:0]              rd_csr_data   ;//读csr数据
     wire  [ 1:0]              csr_plv       ;//确保特权指令（如 CSR 操作）仅在合法特权级别下执行，防止低特权级代码越权访问系统资源
@@ -315,7 +302,7 @@ assign {
 
     rd_csr_data, //32
     csr_plv, //2
-    has_int //8
+    has_int //1
 
 } = csr_to_id_bus;
 
@@ -323,20 +310,16 @@ assign id_to_csr_bus = {
     rd_csr_addr
 };
 
-//======================================================
-//=================== Main Code ====================
-//======================================================
-//当前stage控制信号
+//==============================================================================================
+//======================================== Main Code ===========================================
+//==============================================================================================
+//stage流水级控制
+  assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
   assign id_allowin = ~id_valid | id_ready_go & exe_allowin;
-  assign id_to_exe_valid = id_valid & id_ready_go;
-// assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall/*|| idle_stall || tlb_inst_stall || ibar_stall || dbar_stall*/) || excp;
-assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
+  assign id_to_exe_valid = id_valid && id_ready_go && !flush_sign;
 
   always @(posedge clk) begin
-    if (~resetn | flush_sign) begin
-      id_valid <= 1'b0;
-    // end else if (branch_slot_cancel) begin  //如果采取分支，那么取消当前IF阶段的指令
-    end else if (br_really_taken) begin
+    if (~resetn || flush_sign) begin
       id_valid <= 1'b0;
     end else if (id_allowin) begin
       id_valid <= if_to_id_valid;
@@ -346,59 +329,49 @@ assign id_ready_go    = !(rf2_forward_stall || rf1_forward_stall) || excp;
   always @(posedge clk) begin
     if (~resetn) begin
         id_data <= `ID_DATA_Reset;
-//西工大的写法是只有 id_allowin，居然不用保证有东西吗...?
-//还是觉得该保证valid...虽然这样得损失握手的周期，但是握手的周期本来就是要浪费的吧
-    end else if (id_allowin & if_to_id_valid) begin
+    end else if (id_allowin && if_to_id_valid) begin
         id_data <= if_to_id_bus;
     end
   end
 
-// //前递和阻塞                 往exe传   exe阶段用的数据（分支判断/分支生成）
-// assign {rf1_forward_stall, rj_value, rj_value_forward_exe} = ((rf_raddr1 == exe_forward_reg) && exe_forward_enable && inst_need_rj) ? {exe_dep_need_stall, exe_forward_data, exe_forward_data} :
-//                                                              ((rf_raddr1 == mem_forward_reg) && mem_forward_enable && inst_need_rj) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data, rf_rdata1} :
-//                                                                                                                                   {1'b0, rf_rdata1, rf_rdata1}; 
-
-// assign {rf2_forward_stall, rkd_value, rkd_value_forward_exe} = ((rf_raddr2 == exe_forward_reg) && exe_forward_enable && inst_need_rkd) ? {exe_dep_need_stall, exe_forward_data, exe_forward_data} :
-//                                                                ((rf_raddr2 == mem_forward_reg) && mem_forward_enable && inst_need_rkd) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data, rf_rdata2} :
-                                                                                                                                      // {1'b0, rf_rdata2, rf_rdata2};
-
+//前递和阻塞
 assign {rf1_forward_stall, rj_value} = ((rf_raddr1 == exe_forward_reg) && exe_forward_enable && inst_need_rj) ? {exe_dep_need_stall, exe_forward_data} :
-                                                             ((rf_raddr1 == mem_forward_reg) && mem_forward_enable && inst_need_rj) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data} :
+                                      ((rf_raddr1 == mem_forward_reg) && mem_forward_enable && inst_need_rj) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data} :
                                                                                                                                   {1'b0, rf_rdata1}; 
 
 assign {rf2_forward_stall, rkd_value} = ((rf_raddr2 == exe_forward_reg) && exe_forward_enable && inst_need_rkd) ? {exe_dep_need_stall, exe_forward_data} :
-                                                               ((rf_raddr2 == mem_forward_reg) && mem_forward_enable && inst_need_rkd) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data} :
+                                        ((rf_raddr2 == mem_forward_reg) && mem_forward_enable && inst_need_rkd) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data} :
                                                                                                                                       {1'b0, rf_rdata2};
 
 //译码
-//指令拆解
-assign op_31_26  = id_inst[31:26];
-assign op_25_22  = id_inst[25:22];
-assign op_21_20  = id_inst[21:20];
-assign op_19_15  = id_inst[19:15];
+  //指令拆解
+  assign op_31_26  = id_inst[31:26];
+  assign op_25_22  = id_inst[25:22];
+  assign op_21_20  = id_inst[21:20];
+  assign op_19_15  = id_inst[19:15];
 
-assign rd   = id_inst[ 4: 0];
-assign rj   = id_inst[ 9: 5];
-assign rk   = id_inst[14:10];
+  assign rd   = id_inst[ 4: 0];
+  assign rj   = id_inst[ 9: 5];
+  assign rk   = id_inst[14:10];
 
-assign i12  = id_inst[21:10];
-assign i14  = id_inst[23:10];
-assign i20  = id_inst[24: 5];
-assign i16  = id_inst[25:10];
-assign i26  = {id_inst[ 9: 0], id_inst[25:10]};
+  assign i12  = id_inst[21:10];
+  assign i14  = id_inst[23:10];
+  assign i20  = id_inst[24: 5];
+  assign i16  = id_inst[25:10];
+  assign i26  = {id_inst[ 9: 0], id_inst[25:10]};
 
-//csr
-assign csr_idx = id_inst[23:10];
+  //csr
+  assign csr_idx = id_inst[23:10];
 
-//译码器译码
-decoder_6_64 u_dec0(.in(op_31_26 ), .out(op_31_26_d ));
-decoder_4_16 u_dec1(.in(op_25_22 ), .out(op_25_22_d ));
-decoder_2_4  u_dec2(.in(op_21_20 ), .out(op_21_20_d ));
-decoder_5_32 u_dec3(.in(op_19_15 ), .out(op_19_15_d ));
-//寄存器数译码
-decoder_5_32 u_dec4(.in(rd  ), .out(rd_d  ));
-decoder_5_32 u_dec5(.in(rj  ), .out(rj_d  ));
-decoder_5_32 u_dec6(.in(rk  ), .out(rk_d  ));
+  //译码器译码
+  decoder_6_64 u_dec0(.in(op_31_26 ), .out(op_31_26_d ));
+  decoder_4_16 u_dec1(.in(op_25_22 ), .out(op_25_22_d ));
+  decoder_2_4  u_dec2(.in(op_21_20 ), .out(op_21_20_d ));
+  decoder_5_32 u_dec3(.in(op_19_15 ), .out(op_19_15_d ));
+  //寄存器数译码
+  decoder_5_32 u_dec4(.in(rd  ), .out(rd_d  ));
+  decoder_5_32 u_dec5(.in(rj  ), .out(rj_d  ));
+  decoder_5_32 u_dec6(.in(rk  ), .out(rk_d  ));
 
 //指令译码
 assign inst_add_w      = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h00];
@@ -444,7 +417,7 @@ assign inst_st_h       = op_31_26_d[6'h0a] & op_25_22_d[4'h5];
 assign inst_st_w       = op_31_26_d[6'h0a] & op_25_22_d[4'h6];
 assign inst_ld_bu      = op_31_26_d[6'h0a] & op_25_22_d[4'h8];
 assign inst_ld_hu      = op_31_26_d[6'h0a] & op_25_22_d[4'h9];
-// assign inst_cacop      = op_31_26_d[6'h01] & op_25_22_d[4'h8];
+assign inst_cacop      = op_31_26_d[6'h01] & op_25_22_d[4'h8];
 // assign inst_preld      = op_31_26_d[6'h0a] & op_25_22_d[4'hb];
 assign inst_jirl       = op_31_26_d[6'h13];
 assign inst_b          = op_31_26_d[6'h14];
@@ -471,6 +444,7 @@ assign inst_ertn       = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0]
 // assign inst_tlbrd      = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0] & op_19_15_d[5'h10] & rk_d[5'h0b] & rj_d[5'h00] & rd_d[5'h00];
 // assign inst_tlbwr      = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0] & op_19_15_d[5'h10] & rk_d[5'h0c] & rj_d[5'h00] & rd_d[5'h00];
 // assign inst_tlbfill    = op_31_26_d[6'h01] & op_25_22_d[4'h9] & op_21_20_d[2'h0] & op_19_15_d[5'h10] & rk_d[5'h0d] & rj_d[5'h00] & rd_d[5'h00];
+assign inst_cpucfg     = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h0] & op_19_15_d[5'h00] & rk_d[5'h1b];
 
 // assign inst_valid_cacop = inst_cacop&&(dest[2:0]==3'b0||dest[2:0]==3'b1)&&(dest[4:3]==2'd0||dest[4:3]==2'd1||dest[4:3]==2'd2);
 // assign inst_nop = inst_cacop&&((dest[2:0]!=3'b0&&dest[2:0]!=3'b1)||(dest[4:3]==2'd3));
@@ -507,8 +481,6 @@ assign alu_op[ 8] = inst_sll_w | inst_slli_w;
 assign alu_op[ 9] = inst_srl_w | inst_srli_w;
 assign alu_op[10] = inst_sra_w | inst_srai_w;
 assign alu_op[11] = inst_lu12i_w;
-// assign alu_op[12] = inst_andn;
-// assign alu_op[13] = inst_orn;
 
 assign mul_div_op[ 0] = inst_mul_w;
 assign mul_div_op[ 1] = inst_mulh_w | inst_mulh_wu;
@@ -603,7 +575,7 @@ assign {rdcnt_en, rdcnt_result} = ({33{inst_rdcntvl_w}} & {1'b1, timer_64[31: 0]
 assign csr_data      = rdcnt_en  ? rdcnt_result      : 
                        /*inst_sc_w ? {31'b0, ds_llbit} :*/ rd_csr_data;                      
                                                                         
-assign res_from_csr  = inst_csrrd | inst_csrwr | inst_csrxchg | inst_rdcntid_w | inst_rdcntvh_w | inst_rdcntvl_w/* | inst_sc_w*/;
+assign res_from_csr  = inst_csrrd | inst_csrwr | inst_csrxchg | inst_rdcntid_w | inst_rdcntvh_w | inst_rdcntvl_w/* | inst_sc_w*/ | inst_cpucfg;
 assign csr_we        = inst_csrwr | inst_csrxchg;
 assign csr_mask      = inst_csrxchg;
 
@@ -654,7 +626,8 @@ assign inst_need_rj = inst_add_w      |
                       // inst_preld      |
                       // inst_ll_w       |
                       // inst_sc_w       |
-                      inst_csrxchg    ;
+                      inst_csrxchg    |
+                      inst_cpucfg   ;
                       // inst_valid_cacop|
                       // inst_invtlb     
                       // ;
@@ -742,6 +715,7 @@ assign rf_raddr2 = src_reg_is_rd ? rd : rk;
 
 regfile u_regfile(
     .clk    (clk      ),
+    .resetn (resetn   ),
     .raddr1 (rf_raddr1),
     .rdata1 (rf_rdata1),
     .raddr2 (rf_raddr2),
@@ -750,16 +724,28 @@ regfile u_regfile(
     .we     (rf_we    ),
     .waddr  (rf_waddr ),
     .wdata  (rf_wdata )
-    );
-
-//分支预测判断
-// assign rj_eq_rd        = (rj_value_forward_exe == rkd_value_forward_exe);
-// assign rj_lt_rd_unsign = (rj_value_forward_exe < rkd_value_forward_exe);   //operate "<" has nice timing
-// assign rj_lt_rd_sign   = (rj_value_forward_exe[31] && ~rkd_value_forward_exe[31]) ? 1'b1 :
-//                          (~rj_value_forward_exe[31] && rkd_value_forward_exe[31]) ? 1'b0 : rj_lt_rd_unsign;                         
+    );                       
 
 //分支实际判断
-assign rj_eq_rd        = (rj_value == rkd_value);
+// assign rj_eq_rd        = (rj_value == rkd_value);
+
+wire [7:0] rj_val_31_24 = rj_value[31:24];
+wire [7:0] rj_val_23_16 = rj_value[23:16];
+wire [7:0] rj_val_15_8  = rj_value[15:8];
+wire [7:0] rj_val_7_0   = rj_value[7:0];
+
+wire [7:0] rk_val_31_24 = rkd_value[31:24];
+wire [7:0] rk_val_23_16 = rkd_value[23:16];
+wire [7:0] rk_val_15_8  = rkd_value[15:8];
+wire [7:0] rk_val_7_0   = rkd_value[7:0];
+
+wire eq_31_24 = (rj_val_31_24 == rk_val_31_24);
+wire eq_23_16 = (rj_val_23_16 == rk_val_23_16);
+wire eq_15_8  = (rj_val_15_8  == rk_val_15_8);
+wire eq_7_0   = (rj_val_7_0   == rk_val_7_0);
+
+assign rj_eq_rd = eq_31_24 & eq_23_16 & eq_15_8 & eq_7_0;
+
 assign rj_lt_rd_unsign = (rj_value < rkd_value);   //operate "<" has nice timing
 assign rj_lt_rd_sign   = (rj_value[31] && ~rkd_value[31]) ? 1'b1 :
                          (~rj_value[31] && rkd_value[31]) ? 1'b0 : rj_lt_rd_unsign;                         
@@ -774,18 +760,18 @@ assign br_taken  = (  inst_beq  &  rj_eq_rd
                     | inst_jirl
                     | inst_bl
                     | inst_b
-                    ) && id_valid /*&& !ds_excp*/; 
-assign br_target = ({32{inst_beq || inst_bne || inst_bl || inst_b || 
-                    inst_blt || inst_bge || inst_bltu || inst_bgeu}} & (id_pc + id_imm   ))            |
-                   ({32{inst_jirl}}                                  & (/*rj_value_forward_exe*/rj_value + id_imm)) ;
+                    );
+assign br_target = ({32{inst_beq | inst_bne | inst_bl | inst_b |
+                    inst_blt | inst_bge | inst_bltu | inst_bgeu}} & (id_pc + id_imm   )) |
+                   ({32{inst_jirl}}                               & (rj_value + id_imm)) ;
 
 assign br_inst = br_need_reg_data || inst_bl || inst_b;
-assign br_need_reg_data = inst_beq   ||
-                          inst_bne   ||
-                          inst_blt   ||
-                          inst_bge   ||
-                          inst_bltu  ||
-                          inst_bgeu  ||
+assign br_need_reg_data = inst_beq   |
+                          inst_bne   |
+                          inst_blt   |
+                          inst_bge   |
+                          inst_bltu  |
+                          inst_bgeu  |
                           inst_jirl;
 
 assign inst_valid = inst_add_w      |
@@ -845,7 +831,7 @@ assign inst_valid = inst_add_w      |
                     inst_rdcntid_w  |
                     inst_rdcntvh_w  |
                     inst_rdcntvl_w  |
-                    inst_ertn       ;//|
+                    inst_ertn       |
                     // inst_valid_cacop|
                     // inst_preld      |
                     // inst_dbar       |
@@ -854,7 +840,9 @@ assign inst_valid = inst_add_w      |
                     // inst_tlbrd      |
                     // inst_tlbwr      |
                     // inst_tlbfill    |
-					// inst_nop        |
+                    inst_cacop      |
+                    inst_cpucfg     ;//|
+					          // inst_nop        |
                     // (inst_invtlb && (rd == 5'd0 || 
                     //                  rd == 5'd1 || 
                     //                  rd == 5'd2 || 
@@ -869,16 +857,14 @@ assign inst_valid = inst_add_w      |
 assign excp     = excp_ipe | inst_syscall | inst_break | id_excp | excp_ine | has_int;
 assign excp_num = {excp_ipe, excp_ine, inst_break, inst_syscall, id_excp_num, has_int};
 
-assign rd_csr_addr = csr_idx;
+assign rd_csr_addr = inst_cpucfg ? (rj_value[13:0]+14'h00b0) : csr_idx;
 
 //when cache operate icache, will refetch inst after this inst.
 // assign refetch = (inst_tlbwr || inst_tlbfill || inst_tlbrd || inst_invtlb || inst_ibar) && ds_valid;  //this inst will change addr trans 
 
 // assign tlb_inst_stall = es_tlb_inst_stall || ms_tlb_inst_stall || ws_tlb_inst_stall;
 
-// assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
-
-// assign if_excp = if_to_id_bus[68]; //if阶段异常的判断信号不能用id_data,因为id_data本身可能会因为异常无法获得数据（但此处没有需求在id知道if有没有异常
+assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
 
 assign excp_ine = ~inst_valid;
 
@@ -897,63 +883,26 @@ assign kernel_inst = inst_csrrd      |
 assign excp_ipe = kernel_inst && (csr_plv == 2'b11);
 
 
-
-
-// //branch slot cancel, need wait next valid inst after branch
-// //only valid br_taken sign can generate slot_cancel.
-// always @(posedge clk) begin
-//     if (reset || flush_sign) begin
-//     //flush signal need flush this buffer
-//         branch_slot_cancel <= 1'b0;
-//     end
-//     else if (btb_pre_error_flush && exe_allowin && !if_to_id_valid) begin
-//         branch_slot_cancel <= 1'b1;
-//     end
-//     else if (branch_slot_cancel && if_to_id_valid) begin
-//         branch_slot_cancel <= 1'b0;
-//     end
-// end
-//！向前，应该要用allowin来判断而不是ready_go吧
-assign br_really_taken = flush_sign ? 1'b0 : br_taken & id_allowin;
-  // assign id_to_if_bus = {br_taken, br_target/*, br_taken_cancel*/};
-assign id_to_if_bus = {br_really_taken, br_target/*, br_taken_cancel*/};
+assign br_really_taken = br_taken && id_ready_go  && id_valid && !excp && !flush_sign ;
+//存在br 且 计算未完成
+assign br_stall = br_need_reg_data && !id_ready_go && id_valid ;
+assign id_to_if_bus = {br_really_taken, br_target, br_stall};
 
 assign id_to_exe_bus = {
-                      // inst_csr_rstat_en,  // 349:349 for difftest
-                      //  inst_st_en       ,  // 348:341 for difftest
-                      //  inst_ld_en       ,  // 340:333 for difftest
-                      //  (inst_rdcntvl_w | inst_rdcntvh_w | inst_rdcntid_w), //332:332  for difftest
-                      //  timer_64      ,  //331:268  for difftest
-                      //  id_inst       ,  //267:236  for difftest
-                      //  inst_idle     ,  //235:235
-                      //  btb_pre_error_flush, //234:234
-                      //  br_to_btb     ,  //233:233
-                      //  ds_icache_miss,  //232:232
-                      //  br_inst       ,  //231:231
-                      //  inst_preld    ,  //230:230
-                      //  inst_valid_cacop,  //229:229
-                       mem_sign_exted,  //228:228
-                      //  inst_invtlb   ,  //227:227
-                      //  inst_tlbrd    ,  //226:226
-                      //  refetch       ,  //225:225
-                      //  inst_tlbfill  ,  //224:224
-                      //  inst_tlbwr    ,  //223:223
-                      //  inst_tlbsrch  ,  //222:222
-                      //  inst_sc_w     ,  //221:221
-                      //  inst_ll_w     ,  //220:220
-                       excp_num      ,  //219:211
-                       csr_mask      ,  //210:210
-                       csr_we        ,  //209:209
-                       csr_idx       ,  //208:195
-                       res_from_csr  ,  //194:194
-                       csr_data      ,  //193:162
-                       inst_ertn     ,  //161:161
-                       excp          ,  //160:160
-                       mem_size      ,  //159:158
-                       mul_div_op    ,  //157:154
-                       mul_div_sign  ,  //153:153
-                       alu_op        ,  //152:139
-                       load_op       ,  //138:138 bug2 load_op
+                       mem_sign_exted,  //218:218
+                       excp_num      ,  //217:209
+                       csr_mask      ,  //208:208
+                       csr_we        ,  //207:207
+                       csr_idx       ,  //206:193
+                       res_from_csr  ,  //192:192
+                       csr_data      ,  //191:160
+                       inst_ertn     ,  //159:159
+                       excp          ,  //158:158
+                       mem_size      ,  //157:156
+                       mul_div_op    ,  //155:152
+                       mul_div_sign  ,  //151:151
+                       alu_op        ,  //150:139
+                       load_op       ,  //138:138
                        src1_is_pc    ,  //137:137
                        src2_is_imm   ,  //136:136
                        src2_is_4     ,  //135:135
