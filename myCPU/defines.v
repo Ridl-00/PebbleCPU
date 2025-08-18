@@ -32,7 +32,7 @@
 
     `define EXE_TO_ID_WD 39-1:0
     `define MEM_TO_ID_WD 39-1:0
-    `define WB_TO_ID_WD 65-1:0
+    `define WB_TO_ID_WD 38-1:0
 
     `define CSR_TO_PREIF_WD 166-1:0
     `define CSR_TO_ID_WD 131-1:0
@@ -41,8 +41,6 @@
     `define ID_TO_CSR_WD 14-1:0
     `define WB_TO_CSR_WD 127-1:0
     `define CSR_TO_MMU_WD 74-1:0
-
-    `define ID_DATA_Reset 64'b0
 
 //取指
     `define PcReset 32'h1bff_fffc

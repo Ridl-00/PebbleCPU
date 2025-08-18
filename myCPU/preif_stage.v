@@ -250,7 +250,7 @@ always @(posedge clk) begin
     if (~resetn) begin
         preif_pc <= `PcReset;
         preif_excp      <= 1'b0;
-        preif_excp_num  <= 4'b0;
+        preif_excp_num  <= 1'b0;
     end else if (preif_allowin || flush_sign || br_really_taken) begin
         preif_pc <= nextpc;
         preif_excp      <= preif_excp_adef;

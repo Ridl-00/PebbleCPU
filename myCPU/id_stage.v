@@ -328,9 +328,7 @@ assign id_to_csr_bus = {
   end
 
   always @(posedge clk) begin
-    if (~resetn) begin
-        id_data <= `ID_DATA_Reset;
-    end else if (id_allowin && if_to_id_valid) begin
+    if (id_allowin && if_to_id_valid) begin
         id_data <= if_to_id_bus;
     end
   end
