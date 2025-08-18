@@ -54,6 +54,10 @@ exe级：不允许发读写dcache请求
 - 类sram握手信号类同exe
 - inst_sram_req
 
+## 在500基础上的修改
+
+![image-20250818220928326](C:\Users\21905\AppData\Roaming\Typora\typora-user-images\image-20250818220928326.png)
+
 
 
 ## vivado玄学
