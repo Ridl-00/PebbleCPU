@@ -34,6 +34,9 @@ module preif_stage (
 //=========================================================================================
 //当前stage控制信号
 reg preif_valid;
+wire real_valid;
+
+wire preif_allowin;
 wire preif_ready_go;
 
 //preif

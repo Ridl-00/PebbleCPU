@@ -145,6 +145,7 @@ wire [ 1:0]                   csr_plv_out      ;
     wire [31:0] inst_sram_rdata;
 
     wire data_sram_en;
+    wire data_sram_wr; //unused
     wire [3:0] data_sram_we;
     wire [31:0] data_sram_addr;
     wire [31:0] data_sram_wdata;

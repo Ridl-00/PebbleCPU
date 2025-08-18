@@ -69,6 +69,7 @@ module exe_stage (
   wire        exe_mul_enable  ;
   wire        exe_div_enable;
   wire        div_stall      ;
+  wire        mul_stall      ;
   // wire        exe_ll_w        ;
   // wire        exe_sc_w        ;
   // wire        exe_tlbsrch     ;
@@ -291,7 +292,7 @@ alu u_alu(
         2'h0:    next_state_mul = (exe_valid && exe_mul_enable) ? 2'h1 : 2'h0;
         2'h1:    next_state_mul = 2'h2;
         2'h2:    next_state_mul = 2'h0;
-        // 2'h3:    next_state_mul = 2'h0;
+        2'h3:    next_state_mul = 2'h0;
         endcase
     end
     assign mul_stall = ~(next_state_mul == 2'h0);
