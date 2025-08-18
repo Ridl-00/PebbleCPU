@@ -31,6 +31,10 @@ id级：不允许发分支跳转信号
 
 exe级：不允许发读写dcache请求
 
+### br_really_taken
+
+类似于只刷新preif和if的flush信号
+
 
 
 ### trys
@@ -38,6 +42,17 @@ exe级：不允许发读写dcache请求
 #### 把excp_flush信号提前到exe阶段发->failed
 
 这样是错误的，因为excp伴随着写csr，如果只是把excp提前，而不把原本在wb的写csr逻辑提前的话，excp和这条excp对应的pc、code等信息就不是对应的了。
+
+而考虑不想增加exe阶段的负担，于是没有把发excp和写csr放到exe
+
+## 结构
+
+### preif阶段
+
+发起取指
+
+- 类sram握手信号类同exe
+- inst_sram_req
 
 
 
@@ -49,5 +64,9 @@ exe级：不允许发读写dcache请求
 
 
 
+## .bit编码
 
+### systemrun
+
+81701_system：system_run工程，33Mhz时钟，cpu版本：br全部不前递。wns -0.98。
 

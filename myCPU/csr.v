@@ -9,7 +9,7 @@ module csr
     input                           resetn        ,
 
     //bus
-    output wire [ `CSR_TO_IF_WD] csr_to_if_bus   ,
+    output wire [ `CSR_TO_PREIF_WD] csr_to_preif_bus   ,
     output wire [ `CSR_TO_ID_WD] csr_to_id_bus   ,
     output wire [`CSR_TO_EXE_WD] csr_to_exe_bus  ,
     
@@ -197,7 +197,7 @@ wire  [31:0]                  wr_data     ;
 
 
 //out bus
-assign csr_to_if_bus = {
+assign csr_to_preif_bus = {
     plv_out, //2
     datf_out,   //2 
     da_out, //1

@@ -60,17 +60,20 @@ module core_top(
     wire clk = aclk;
     wire rst = ~aresetn;
 
+    wire if_allowin;
     wire id_allowin;
     wire exe_allowin;
     wire mem_allowin;
     wire wb_allowin;
+    wire preif_to_if_valid;
     wire if_to_id_valid;
     wire id_to_exe_valid;
     wire exe_to_mem_valid;
     wire mem_to_wb_valid;
 
+  wire [`PREIF_TO_IF_WD] preif_to_if_bus;
   wire [  `IF_TO_ID_WD] if_to_id_bus;
-  wire [  `ID_TO_IF_WD] id_to_if_bus;
+  wire [  `ID_TO_PREIF_WD] id_to_preif_bus;
   wire [ `ID_TO_EXE_WD] id_to_exe_bus;
   wire [`EXE_TO_MEM_WD] exe_to_mem_bus;
   wire [ `MEM_TO_WB_WD] mem_to_wb_bus;
@@ -78,7 +81,7 @@ module core_top(
   wire [ `EXE_TO_ID_WD] exe_to_id_bus;
   wire [ `MEM_TO_ID_WD] mem_to_id_bus;
 
-  wire [ `CSR_TO_IF_WD] csr_to_if_bus;
+  wire [ `CSR_TO_PREIF_WD] csr_to_preif_bus;
   wire [ `CSR_TO_ID_WD] csr_to_id_bus;
   wire [`CSR_TO_EXE_WD] csr_to_exe_bus;
   wire [ `ID_TO_CSR_WD] id_to_csr_bus;
@@ -89,6 +92,7 @@ module core_top(
   wire ertn_flush    ;
   wire refetch_flush ;
   wire flush_from_mem;
+  wire br_really_taken;
 
 //csr
 wire                           csr_tlbsrch_en  ;
@@ -176,7 +180,7 @@ wire [ 1:0]                   csr_plv_out      ;
         .clk                (aclk),
         .resetn             (aresetn),
 
-        .csr_to_if_bus      (csr_to_if_bus    ),
+        .csr_to_preif_bus   (csr_to_preif_bus ),
         .csr_to_id_bus      (csr_to_id_bus    ),
         .csr_to_exe_bus     (csr_to_exe_bus   ),
 
@@ -188,10 +192,10 @@ wire [ 1:0]                   csr_plv_out      ;
         .ertn_flush         (ertn_flush       ),
 
         //tlb-mmu地址翻译信号
-        // .pg_out             (csr_pg_out       ),
-        // .da_out             (csr_da_out       ),
-        // .dmw0_out           (csr_dmw0_out     ),
-        // .dmw1_out           (csr_dmw1_out     ),
+        .pg_out             (csr_pg_out       ),
+        .da_out             (csr_da_out       ),
+        .dmw0_out           (csr_dmw0_out     ),
+        .dmw1_out           (csr_dmw1_out     ),
 
         //未实现的无效信号
           .tlbsrch_en         (0/*csr_tlbsrch_en*/   ),
@@ -235,30 +239,75 @@ wire [ 1:0]                   csr_plv_out      ;
           .plv_out            (csr_plv_out      )
     );
 
-  if_stage u_if_stage (
+//   if_stage u_if_stage (
+//       .clk              (aclk),
+//       .resetn           (aresetn),
+
+//       .id_allowin       (id_allowin),
+//       .if_to_id_valid   (if_to_id_valid),
+//       .if_to_id_bus     (if_to_id_bus),
+
+//       .excp_flush       (excp_flush   ),
+//       .ertn_flush       (ertn_flush   ),
+//       .refetch_flush    (refetch_flush),
+
+//       .id_to_if_bus     (id_to_if_bus),
+//       .csr_to_if_bus    (csr_to_if_bus),
+
+//       .cache_v          (inst_cached       ),
+
+//       .inst_sram_req    (inst_sram_en),
+//       .inst_sram_wstrb  (inst_sram_we),
+//       .inst_sram_addr   (inst_sram_addr),
+//       .inst_sram_wdata  (inst_sram_wdata),
+//       .inst_sram_rdata  (inst_sram_rdata),
+//       .inst_sram_addr_ok(icache_addr_ok),
+//       .inst_sram_data_ok(icache_data_ok)
+// );
+
+  preif_stage u_preif_stage (
       .clk              (aclk),
       .resetn           (aresetn),
 
-      .id_allowin       (id_allowin),
-      .if_to_id_valid   (if_to_id_valid),
-      .if_to_id_bus     (if_to_id_bus),
+      .if_allowin       (if_allowin),
+      .preif_to_if_valid   (preif_to_if_valid),
+      .preif_to_if_bus     (preif_to_if_bus),
 
-      .excp_flush       (excp_flush   ),
-      .ertn_flush       (ertn_flush   ),
-      .refetch_flush    (refetch_flush),
-
-      .id_to_if_bus     (id_to_if_bus),
-      .csr_to_if_bus    (csr_to_if_bus),
-
+      .id_to_preif_bus     (id_to_preif_bus),
+      .csr_to_preif_bus    (csr_to_preif_bus),
       .cache_v          (inst_cached       ),
 
       .inst_sram_req    (inst_sram_en),
       .inst_sram_wstrb  (inst_sram_we),
       .inst_sram_addr   (inst_sram_addr),
       .inst_sram_wdata  (inst_sram_wdata),
-      .inst_sram_rdata  (inst_sram_rdata),
       .inst_sram_addr_ok(icache_addr_ok),
-      .inst_sram_data_ok(icache_data_ok)
+
+      .excp_flush       (excp_flush   ),
+      .ertn_flush       (ertn_flush   ),
+      .refetch_flush    (refetch_flush)
+);
+
+  if_stage2 u_if_stage2 (
+      .clk              (aclk),
+      .resetn           (aresetn),
+
+      .if_allowin       (if_allowin),
+      .preif_to_if_valid   (preif_to_if_valid),
+      .preif_to_if_bus     (preif_to_if_bus),
+
+      .id_allowin       (id_allowin),
+      .if_to_id_valid   (if_to_id_valid),
+      .if_to_id_bus     (if_to_id_bus),
+
+      .br_really_taken  (br_really_taken),
+
+      .inst_sram_rdata  (inst_sram_rdata),
+      .inst_sram_data_ok(icache_data_ok),
+
+      .excp_flush       (excp_flush   ),
+      .ertn_flush       (ertn_flush   ),
+      .refetch_flush    (refetch_flush)      
 );
 
   id_stage u_id_stage(
@@ -272,7 +321,8 @@ wire [ 1:0]                   csr_plv_out      ;
       .id_to_exe_valid          (id_to_exe_valid),
       .id_to_exe_bus            (id_to_exe_bus),
 
-      .id_to_if_bus             (id_to_if_bus),
+      .id_to_preif_bus          (id_to_preif_bus),
+      .br_really_taken          (br_really_taken),
       .exe_to_id_bus            (exe_to_id_bus),
 
       .mem_to_id_bus            (mem_to_id_bus),

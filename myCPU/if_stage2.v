@@ -1,35 +1,30 @@
 // `timescale 1ns / 1ps
 `include "defines.v"
 
-module if_stage (
+module if_stage2 (
     input wire clk,
     input wire resetn,
+
+    //preif-if
+    output wire if_allowin,
+    input wire preif_to_if_valid,
+    input wire [`PREIF_TO_IF_WD] preif_to_if_bus,
 
     //if-id
     input wire id_allowin,
     output wire if_to_id_valid,
     output wire [`IF_TO_ID_WD] if_to_id_bus,
 
-    //id组合逻辑传递给if组合逻辑的一些用于生成nextpc的信号
-    input wire [`ID_TO_IF_WD] id_to_if_bus,
+    // input wire [`ID_TO_IF_WD] id_to_if_bus,
+    input         br_really_taken , //用于取消跳转导致无效的指令,类似flush
 
-    output        inst_sram_req,
-    output        inst_sram_wr,
-    output [ 3:0] inst_sram_wstrb,
-    output [ 1:0] inst_sram_size,
-    output [31:0] inst_sram_addr,
-    output [31:0] inst_sram_wdata,
     input  [31:0] inst_sram_rdata,
-    input         inst_sram_addr_ok,
     input         inst_sram_data_ok,
 
     input wire                 excp_flush   , //wb
     input wire                 ertn_flush   , //wb
-    input wire                 refetch_flush, //wb 
+    input wire                 refetch_flush  //wb 
 
-    output wire  cache_v                    ,
-    //例外（实际上是wb来的）
-    input wire [`CSR_TO_IF_WD] csr_to_if_bus
 );
 
 //=========================================================================================
@@ -38,66 +33,86 @@ module if_stage (
 //当前stage控制信号
 reg if_valid;  //当前流水级是否在处理指令
 wire if_ready_go;  //if是否需要被阻塞
+reg [`PREIF_TO_IF_WD] if_data;
 
-wire if_allowin;  //控制preIF组合逻辑数据是否可以传递进if_reg
+// wire if_allowin;  //控制preIF组合逻辑数据是否可以传递进if_reg
 
+/*preif
+// wire preif_to_if_valid;
+// wire preif_ready_go;
 
-wire preif_to_if_valid;
-wire preif_ready_go;
+// //if-preIF
+// wire [`InstAddrBus] seq_pc;  //+4自增
+// wire [`InstAddrBus] nextpc;  //最终更新到PC寄存器的指令地址
 
-//if-preIF
-wire [`InstAddrBus] seq_pc;  //+4自增
-wire [`InstAddrBus] nextpc;  //最终更新到PC寄存器的指令地址
+// wire         inst_addr_trans_en; //地址转换使能
 
-wire         inst_addr_trans_en; //地址转换使能
+// wire         preif_excp_adef; //地址对齐错误
 
-wire         preif_excp_adef; //地址对齐错误
+*/
+
+wire [`InstAddrBus] if_pc;
+wire         if_excp;
+wire         if_excp_num;
+
+assign {
+    if_excp_num,
+    if_excp,
+    if_pc
+} = if_data;
+
 // wire         if_excp_tlbr; //TLB 相关异常
-wire         if_excp_pif; //预取指异常
-wire         if_excp_ppi; //保护异常 违反保护机制（如内存访问权限、特权级限制等）
-reg          if_excp;
-reg          if_excp_num;
+// wire         if_excp_pif; //预取指异常
+// wire         if_excp_ppi; //保护异常 违反保护机制（如内存访问权限、特权级限制等）
+
 wire         excp;
 wire [3:0]   excp_num;
+
+/*preif
 wire         preif_excp;
 wire         preif_excp_num;
+*/
 
 wire         flush_sign;
-wire         flush_sign_wire_o;
 
-reg  [31:0]  inst_rd_buff;
-reg          inst_buff_enable;
+// reg  [31:0]  inst_rd_buff;
+// reg          inst_buff_enable;
 
+/*preif
 wire  [31:0] excp_entry;
 wire  [31:0] inst_flush_pc;
+*/
 
 
 //id-if
   //拆解id组合逻辑传递给if组合逻辑的数据
-  wire br_really_taken;
-  // wire br_taken_cancel;
-  wire [`InstAddrBus] br_target;
-  wire br_stall;
-  // assign {br_taken, br_target, br_taken_cancel} = id_to_if_bus;
-  assign {br_really_taken, br_target, br_stall} = id_to_if_bus;
+//   wire br_really_taken;
+//   wire [`InstAddrBus] br_target;
+//   wire br_stall;
+//   assign {br_really_taken, br_target, br_stall} = id_to_if_bus;
 
-//跳转总线寄存器(防止因branch指令离开id阶段而导致br_bus数据丢失)
-reg  [33:0]  br_bus_r;  
-reg          br_bus_r_valid;
-wire         br_taken_r;
-wire [31:0]  br_target_r;
-wire br_stall_r;
+// //跳转总线寄存器(防止因branch指令离开id阶段而导致br_bus数据丢失)
+// reg  [33:0]  br_bus_r;  
+// reg          br_bus_r_valid;
+// wire         br_taken_r;
+// wire [31:0]  br_target_r;
+// wire br_stall_r;
 
-assign {br_taken_r,br_target_r, br_stall_r} = br_bus_r;
+// assign {br_taken_r,br_target_r, br_stall_r} = br_bus_r;
+
+
+
 
 
 //if-id
-  //组合传递给id_reg的数据
-  wire [`InstBus] if_inst;
-  reg  [`InstAddrBus] if_pc;
+wire [      `InstBus] if_inst;
+//   reg  [`InstAddrBus] if_pc;
 
-reg  [31:0] if_inst_r;  //IF阶段指令寄存器
-reg         if_inst_valid;
+
+reg  [  `InstAddrBus] if_inst_r;  //IF阶段指令寄存器
+reg                   if_inst_valid;
+
+reg if_inst_cancel;
 
 assign if_to_id_bus = {
                        excp,            //68:68
@@ -107,19 +122,25 @@ assign if_to_id_bus = {
                       };
 
 //csr-if
-    // wire                          icacop_flush     ;
-    wire  [31:0]                  wb_pc            ; //用来刷新流水线后接着最后一条已完成的pc refetch
-    wire  [31:0]                  csr_eentry       ; //csr来的例外入口(提前靠指令写好)
-    wire  [31:0]                  csr_era          ; //上一条触发例外的指令的 PC 32
-    // wire                          excp_tlbrefill   ;
-    // wire  [31:0]                  csr_tlbrentry    ;
-    // wire                          has_int          ;
+// wire                          icacop_flush     ;
+/*preif
+wire  [31:0]                  wb_pc            ; //用来刷新流水线后接着最后一条已完成的pc refetch
+wire  [31:0]                  csr_eentry       ; //csr来的例外入口(提前靠指令写好)
+wire  [31:0]                  csr_era          ; //上一条触发例外的指令的 PC 32
+*/
 
-    reg                          excp_flush_r       ;
-    reg                          ertn_flush_r       ;
-    reg                          refetch_flush_r    ;
-reg if_inst_cancel;
+// wire                          excp_tlbrefill   ;
+// wire  [31:0]                  csr_tlbrentry    ;
+// wire                          has_int          ;
 
+/*pre
+reg                          excp_flush_r       ;
+reg                          ertn_flush_r       ;
+reg                          refetch_flush_r    ;
+*/
+
+
+/*pre
 //addr trans(cache)
 wire  [`InstAddrBus] p_inst_sram_addr;
 wire  [ 1:0]  crmd_plv ;
@@ -145,38 +166,39 @@ assign {
     //disable_cache     
 
 }=csr_to_if_bus;
+*/
 
 //==============================================================================================
 //======================================== Main Code ===========================================
 //==============================================================================================
-// preIF
-assign preif_to_if_valid = resetn && preif_ready_go; //表示这拍刚好在发req 或 其余可以继续进行的（如excp
+// // preIF
+// assign preif_to_if_valid = resetn && preif_ready_go; //表示这拍刚好在发req 或 其余可以继续进行的（如excp
 
-//preif发完req即为完成preif阶段任务，即 preif to if valid为1。即，req决定preif readygo 进而决定preif to if valid
-assign preif_ready_go = (inst_sram_req && inst_sram_addr_ok /*&& !br_stall*/) || preif_excp;
-assign seq_pc            = if_pc + 32'h4;
-//例外后的pc
-assign excp_entry   = /*{32{excp_tlbrefill}}  & csr_tlbrentry |*/
-                      /*{32{!excp_tlbrefill}} & */csr_eentry    ;
+// //preif发完req即为完成preif阶段任务，即 preif to if valid为1。即，req决定preif readygo 进而决定preif to if valid
+// assign preif_ready_go = (inst_sram_req && inst_sram_addr_ok && !br_stall) || preif_excp;
+// assign seq_pc            = if_pc + 32'h4;
+// //例外后的pc
+// assign excp_entry   = /*{32{excp_tlbrefill}}  & csr_tlbrentry |*/
+//                       /*{32{!excp_tlbrefill}} & */csr_eentry    ;
 
-//刷新后的pc
-assign inst_flush_pc = {32{ertn_flush || ertn_flush_r}}                                  & csr_era         |
-                       {32{refetch_flush || refetch_flush_r /*|| icacop_flush || idle_flush*/}} & (wb_pc + 32'h4) ;
+// //刷新后的pc
+// assign inst_flush_pc = {32{ertn_flush || ertn_flush_r}}                                  & csr_era         |
+//                        {32{refetch_flush || refetch_flush_r /*|| icacop_flush || idle_flush*/}} & (wb_pc + 32'h4) ;
 
-assign nextpc = 
-                excp_flush  || excp_flush_r                                      ? excp_entry      :
-                (ertn_flush || ertn_flush_r || refetch_flush || refetch_flush_r 
-                /*|| icacop_flush || idle_flush*/)                               ? inst_flush_pc   :
-                br_really_taken                                                  ? br_target       :
-                br_taken_r && br_bus_r_valid                                     ? br_target_r     : seq_pc ;
+// assign nextpc = 
+//                 excp_flush  || excp_flush_r                                      ? excp_entry      :
+//                 (ertn_flush || ertn_flush_r || refetch_flush || refetch_flush_r 
+//                 /*|| icacop_flush || idle_flush*/)                               ? inst_flush_pc   :
+//                 br_really_taken                                                  ? br_target       :
+//                 br_taken_r && br_bus_r_valid                                     ? br_target_r     : seq_pc ;
 
 //preif发起req，当if能进入 && preif valid && 不需要stall（id来的load-br）
-  assign inst_sram_req   = if_allowin && !preif_excp ;// && (!br_stall /*&& !if_inst_cancel*/ /*|| flush_sign*/); //仅当if_allowin为1时才能发出req是较简单但时序较差的解决方案
-  assign inst_sram_wr = 1'b0;
-  assign inst_sram_wstrb = 4'h0;
-  assign inst_sram_size = 2'b10;
-  assign inst_sram_addr = p_inst_sram_addr;//翻译后的nextpc;
-  assign inst_sram_wdata = 32'b0;
+//   assign inst_sram_req   = if_allowin && !preif_excp && (!br_stall /*&& !if_inst_cancel*/ /*|| flush_sign*/); //仅当if_allowin为1时才能发出req是较简单但时序较差的解决方案
+//   assign inst_sram_wr = 1'b0;
+//   assign inst_sram_wstrb = 4'h0;
+//   assign inst_sram_size = 2'b10;
+//   assign inst_sram_addr = p_inst_sram_addr;//翻译后的nextpc;
+//   assign inst_sram_wdata = 32'b0;
 
 
 /* 一些if的阶段状态指示
@@ -195,12 +217,12 @@ assign nextpc =
 //不readygo表示需在等dataok，即（（正好接到dataok || 已经接到dataok ）|| 有其余更高优先级的事件 ）时
 assign if_ready_go       = (inst_sram_data_ok || if_inst_valid ) || excp; //握手当拍或者有存下来的inst_r 且在等待data ok时（即使是需要被取消的）不应继续下去
 assign if_allowin        = !if_valid || if_ready_go && id_allowin; //if级没有在处理指令 或 if不需要被阻塞且id允许if进入
-assign if_to_id_valid    = if_valid && if_ready_go && !(br_really_taken || (br_taken_r && br_bus_r_valid) || if_inst_cancel || flush_sign);
+assign if_to_id_valid    = if_valid && if_ready_go && !(if_inst_cancel || flush_sign || br_really_taken /*|| (br_taken_r && br_bus_r_valid)*/);
 
 
 always @(posedge clk) begin
 //！把括号内的改为判断式会不会增加逻辑层次 路径变长？
-    if (resetn==`RstEnable) begin //if不需要被冲刷，因为本身就是第一级，直接取被刷后的pc正常用就行
+    if (resetn==`RstEnable || flush_sign || br_really_taken) begin
         if_valid <= `StageInvalid;
     end else if (if_allowin) begin
       if_valid <= preif_to_if_valid;
@@ -208,14 +230,18 @@ always @(posedge clk) begin
 end
 
 always @(posedge clk) begin
+    /*
     if (~resetn) begin
         if_pc <= `PcReset;
         if_excp      <= 1'b0;
         if_excp_num  <= 4'b0;
-    end else if (preif_to_if_valid && if_allowin) begin
-        if_pc <= nextpc;
-        if_excp      <= preif_excp;
-        if_excp_num  <= preif_excp_num;
+        if_data <= 0;
+    end else */
+    if (preif_to_if_valid && if_allowin) begin
+        // if_pc <= nextpc;
+        // if_excp      <= preif_excp;
+        // if_excp_num  <= preif_excp_num;
+        if_data <= preif_to_if_bus;
     end
 end
 
@@ -225,7 +251,7 @@ assign if_inst = inst_sram_data_ok ? inst_sram_rdata :
 // 指令缓存：只存有效的指令。状态变化类同 if 的阶段状态
 // 应对 if_ready_go=1，id allowin=0（遇到乘除法时、遇load branch时）（如果不是乘除，不用寄存器也是来得及 具体原因不详
 always @(posedge clk) begin
-    if (~resetn /*|| flush_sign*/) begin
+    if (~resetn || flush_sign || br_really_taken) begin
         if_inst_r <= 32'h0;
         if_inst_valid <= 1'b0;
     end
@@ -240,22 +266,24 @@ always @(posedge clk) begin
     end
 end   
 
-//br从id来，当拍可能就要，所以用 逻辑和时序两个共同判分支
-always @(posedge clk) begin
-    if (~resetn /*|| flush_sign*/) begin
-        br_bus_r_valid <=  1'b0;
-        br_bus_r       <= 34'b0;
-    end
-    else if(preif_ready_go && if_allowin) begin
-        br_bus_r_valid <= 1'b0;
-    end
-    else if (br_really_taken) begin
-        br_bus_r_valid <= 1'b1;
-        br_bus_r <= id_to_if_bus;
-    end
-end
+
+// //br从id来，当拍可能就要，所以用 逻辑和时序两个共同判分支
+// always @(posedge clk) begin
+//     if (~resetn /*|| flush_sign*/) begin
+//         br_bus_r_valid <=  1'b0;
+//         br_bus_r       <= 34'b0;
+//     end
+//     else if(preif_ready_go && if_allowin) begin
+//         br_bus_r_valid <= 1'b0;
+//     end
+//     else if (br_really_taken) begin
+//         br_bus_r_valid <= 1'b1;
+//         br_bus_r <= id_to_if_bus;
+//     end
+// end
 
 
+/*
 //flush_r用于在flush发生时，flush过去的npc无法立即地址握手成功（即完成其在preif阶段的任务）时置起，用于保留npc状态等待 地址握手成功
     //flush_r应当在flush发生，但当拍无法地址握手成功时置起
 //以下逻辑只能应对有一条需要取消的指令：在req时用if allowin保证最多只有一条需要取消的
@@ -297,7 +325,7 @@ always @(posedge clk) begin
     end
 end 
 
-
+*/
 
 
 //cancel
@@ -311,7 +339,7 @@ always @ (posedge clk) begin
     end
 //flush信号只在来的那一拍会影响if级状态（指valid和inst cancel）(? 此处用wire_o和原本的都能PASS)
     //需要取消当前级指令
-    else if(flush_sign_wire_o) begin
+    else if(flush_sign || br_really_taken) begin
         //if有指令 && 在等。此处不用if allowin是因为，if allowin包含if没指令的情况（没指令就代表preif没握手成功就不用取消
         if(if_valid && !if_ready_go) begin
             if_inst_cancel <= 1'b1;
@@ -320,30 +348,28 @@ always @ (posedge clk) begin
 end
 
 //exception
+/*preif
 assign preif_excp_adef = (nextpc[0] | nextpc[1]); //word align 4 字节对齐时末两位都应该是0
+*/
 
 // assign if_excp_tlbr = !inst_tlb_found && inst_addr_trans_en;
 // assign if_excp_pif  = !inst_tlb_v && inst_addr_trans_en;
 // assign if_excp_ppi  = (csr_plv > inst_tlb_plv) && inst_addr_trans_en;
-assign if_excp_tlbr = 1'b0; //因为inst_addr_trans_en为0，所以都暂时赋为0
-assign if_excp_pif  = 1'b0;
-assign if_excp_ppi  = 1'b0;
 
+
+/*preif
 assign preif_excp = preif_excp_adef;
 assign preif_excp_num = {preif_excp_adef};
+*/
 
 assign excp = if_excp /*|| if_excp_tlbr || if_excp_pif || if_excp_ppi */;
 assign excp_num = {/*if_excp_ppi, if_excp_pif, if_excp_tlbr,*/3'b0, if_excp_num};
 
-//addr trans
-// assign inst_addr_trans_en = pg_mode && !dmw0_en && !dmw1_en;
-assign inst_addr_trans_en = 1'b0;
-
 
 //csr
-assign flush_sign = ertn_flush || ertn_flush_r || excp_flush || excp_flush_r || refetch_flush || refetch_flush_r /*|| icacop_flush || idle_flush*/;
-assign flush_sign_wire_o = ertn_flush || excp_flush || refetch_flush;
+assign flush_sign = ertn_flush || excp_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
 
+/*preif
 //mmu-inst
   //地址翻译addr_i=>addr_o
     wire [2:0] addr_head_i;
@@ -366,5 +392,5 @@ assign flush_sign_wire_o = ertn_flush || excp_flush || refetch_flush;
                     32'b0;
   //存储访问控制逻辑dmw/tlb
     assign cache_v = 1'b1; 
-
+*/
 endmodule
