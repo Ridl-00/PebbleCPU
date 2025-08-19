@@ -70,7 +70,269 @@ wire common_ena_part; // 提取公共部分
 // 计算公共使能部分 (cached & refresh | write_back)
 assign common_ena_part = (cached & refresh) | write_back;
 
+`ifdef DIFFTEST_EN
+// data_bram_way0 begin
+    data_bram_bank_reg bank0_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[0] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[31:0]:sram_wdata),    // 32
+        .douta(rdata_way0[0])    //32
+    );
+    data_bram_bank_reg bank1_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[1] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[63:32]:sram_wdata),    // 32
+        .douta(rdata_way0[1])    //32
+    );
+    data_bram_bank_reg bank2_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[2] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[95:64]:sram_wdata),    // 32
+        .douta(rdata_way0[2])    //32
+    );
+    data_bram_bank_reg bank3_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[3] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[127:96]:sram_wdata),    // 32
+        .douta(rdata_way0[3])    //32
+    );
+    data_bram_bank_reg bank4_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[4] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[159:128]:sram_wdata),    // 32
+        .douta(rdata_way0[4])    //32
+    );
+    data_bram_bank_reg bank5_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[5] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[191:160]:sram_wdata),    // 32
+        .douta(rdata_way0[5])    //32
+    );
+    data_bram_bank_reg bank6_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[6] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[223:192]:sram_wdata),    // 32
+        .douta(rdata_way0[6])    //32
+    );
+    data_bram_bank_reg bank7_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[7] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[255:224]:sram_wdata),    // 32
+        .douta(rdata_way0[7])    //32
+    );
+    data_bram_bank_reg bank8_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[8] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[287:256]:sram_wdata),    // 32
+        .douta(rdata_way0[8])    //32
+    );
+    data_bram_bank_reg bank9_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[9] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[319:288]:sram_wdata),    // 32
+        .douta(rdata_way0[9])    //32
+    );
+    data_bram_bank_reg bank10_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[10] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[351:320]:sram_wdata),    // 32
+        .douta(rdata_way0[10])    //32
+    );
+    data_bram_bank_reg bank11_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[11] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[383:352]:sram_wdata),    // 32
+        .douta(rdata_way0[11])    //32
+    );
+    data_bram_bank_reg bank12_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[12] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[415:384]:sram_wdata),    // 32
+        .douta(rdata_way0[12])    //32
+    );
+    data_bram_bank_reg bank13_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[13] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[447:416]:sram_wdata),    // 32
+        .douta(rdata_way0[13])    //32
+    );
+    data_bram_bank_reg bank14_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[14] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[479:448]:sram_wdata),    // 32
+        .douta(rdata_way0[14])    //32
+    );
+    data_bram_bank_reg bank15_way0(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[15] & hit[0])),     // 1
+        .wea(refresh?lru?4'b0000:4'b1111:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[511:480]:sram_wdata),    // 32
+        .douta(rdata_way0[15])    //32
+    );
+// data_bram_way0 end
 
+// data_bram_way1 begin
+    data_bram_bank_reg bank0_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[0] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[31:0]:sram_wdata),    // 32
+        .douta(rdata_way1[0])    //32
+    );
+    data_bram_bank_reg bank1_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[1] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[63:32]:sram_wdata),    // 32
+        .douta(rdata_way1[1])    //32
+    );
+    data_bram_bank_reg bank2_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[2] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[95:64]:sram_wdata),    // 32
+        .douta(rdata_way1[2])    //32
+    );
+    data_bram_bank_reg bank3_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[3] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[127:96]:sram_wdata),    // 32
+        .douta(rdata_way1[3])    //32
+    );
+    data_bram_bank_reg bank4_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[4] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[159:128]:sram_wdata),    // 32
+        .douta(rdata_way1[4])    //32
+    );
+    data_bram_bank_reg bank5_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[5] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[191:160]:sram_wdata),    // 32
+        .douta(rdata_way1[5])    //32
+    );
+    data_bram_bank_reg bank6_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[6] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[223:192]:sram_wdata),    // 32
+        .douta(rdata_way1[6])    //32
+    );
+    data_bram_bank_reg bank7_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[7] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[255:224]:sram_wdata),    // 32
+        .douta(rdata_way1[7])    //32
+    );
+    data_bram_bank_reg bank8_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[8] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[287:256]:sram_wdata),    // 32
+        .douta(rdata_way1[8])    //32
+    );
+    data_bram_bank_reg bank9_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[9] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[319:288]:sram_wdata),    // 32
+        .douta(rdata_way1[9])    //32
+    );
+    data_bram_bank_reg bank10_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[10] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[351:320]:sram_wdata),    // 32
+        .douta(rdata_way1[10])    //32
+    );
+    data_bram_bank_reg bank11_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[11] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[383:352]:sram_wdata),    // 32
+        .douta(rdata_way1[11])    //32
+    );
+    data_bram_bank_reg bank12_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[12] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[415:384]:sram_wdata),    // 32
+        .douta(rdata_way1[12])    //32
+    );
+    data_bram_bank_reg bank13_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[13] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[447:416]:sram_wdata),    // 32
+        .douta(rdata_way1[13])    //32
+    );
+    data_bram_bank_reg bank14_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[14] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[479:448]:sram_wdata),    // 32
+        .douta(rdata_way1[14])    //32
+    );
+    data_bram_bank_reg bank15_way1(
+        .clka(clk),
+        .ena(common_ena_part | (sram_en & bank_sel[15] & hit[1])),     // 1
+        .wea(refresh?lru?4'b1111:4'b0000:write_back?4'b0000:sram_wen),     // 4
+        .addra(index),   // 7
+        .dina(refresh?cacheline_new[511:480]:sram_wdata),    // 32
+        .douta(rdata_way1[15])    //32
+    );
+
+`else
 // data_bram_way0 begin
     data_bram_bank bank0_way0(
         .clka(clk),
@@ -331,6 +593,7 @@ assign common_ena_part = (cached & refresh) | write_back;
         .dina(refresh?cacheline_new[511:480]:sram_wdata),    // 32
         .douta(rdata_way1[15])    //32
     );
+`endif
 
 reg [31:0] sram_rdata_way0, sram_rdata_way1;
 

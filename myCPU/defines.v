@@ -1,4 +1,10 @@
 
+//sim frame
+//打开DIFFTEST_EN时
+    //cache data中的 data_bram_bank_reg 由代码模块实现而非IP核
+    //mycpu_top中例化difftest相关模块
+`define DIFFTEST_EN
+
 // global
 `define RstEnable           1'b0
 `define RstDisable          1'b1
@@ -23,9 +29,9 @@
 //各级间总线宽
     `define PREIF_TO_IF_WD 34-1:0
     `define IF_TO_ID_WD 69-1:0
-    `define ID_TO_EXE_WD 219-1:0
-    `define EXE_TO_MEM_WD 170-1:0
-    `define MEM_TO_WB_WD 167-1:0
+    `define ID_TO_EXE_WD 302-1:0 //219+83
+    `define EXE_TO_MEM_WD 380-1:0 //170+210
+    `define MEM_TO_WB_WD 409-1:0 //167+242
 
     `define ID_TO_PREIF_WD 34-1:0
     `define ID_TO_IF_WD 34-1:0

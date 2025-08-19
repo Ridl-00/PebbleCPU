@@ -118,6 +118,17 @@ wire data_sram_data_ok;
 assign data_sram_rdata = dcache_data_ok ? dcache_temp_rdata : uncache_temp_rdata;
 assign data_sram_data_ok = dcache_data_ok || uncache_data_ok; //从某种程度上来说，cached由上一个发req的addr决定
                                                               //但鉴于同时读写机制，或许直接或一下就行
+// difftest
+wire        mem_cnt_inst     ;
+wire [63:0] mem_timer_64     ;
+wire [31:0] mem_inst         ;
+wire [ 7:0] mem_inst_ld_en   ;
+wire [31:0] mem_ld_paddr     ;
+wire [31:0] mem_ld_vaddr     ;
+wire [ 7:0] mem_inst_st_en   ;
+wire [31:0] mem_st_data      ;
+wire        mem_csr_rstat_en ;
+wire [31:0] mem_csr_data     ;
 
 //======================================================
 //=================== Main Code ====================
@@ -185,6 +196,16 @@ assign flush_from_mem = (excp | mem_ertn | (mem_csr_we /*| (mem_ll_w | mem_sc_w)
 
 //exe-mem
 assign {
+        mem_csr_data      ,  //424:393  for difftest
+        mem_csr_rstat_en  ,  //392:392  for difftest
+        mem_st_data       ,  //391:360  for difftest
+        mem_inst_st_en    ,  //359:352  for difftest
+        mem_ld_vaddr      ,  //351:320  for difftest
+        mem_inst_ld_en    ,  //319:312  for difftest
+        mem_cnt_inst      ,  //311:311  for difftest
+        mem_timer_64      ,  //310:247  for difftest
+        mem_inst          ,  //246:215  for difftest
+
         mem_error_va      ,  //169:138
 
         mem_mem_sign_exted,  //137:137
@@ -208,6 +229,17 @@ assign {
 
 //mem-wb
 assign mem_to_wb_bus = {
+                       mem_csr_data    ,  //492:461 for difftest
+                       mem_csr_rstat_en,  //460:460 for difftest
+                       mem_st_data     ,  //459:428 for difftest
+                       mem_inst_st_en  ,  //427:420 for difftest
+                       mem_ld_vaddr    ,  //419:388 for difftest
+                       mem_ld_paddr    ,  //387:356 for difftest
+                       mem_inst_ld_en  ,  //355:348 for difftest
+                       mem_cnt_inst    ,  //347:347 for difftest
+                       mem_timer_64    ,  //346:283 for difftest
+                       mem_inst        ,  //282:251 for difftest
+
                        mem_error_va    ,  //166:135
                        excp_num       ,  //134:119
                        mem_csr_we      ,  //118:118

@@ -25,7 +25,26 @@ module wb_stage (
     output wire [31:0] debug_wb_pc,
     output wire [ 3:0] debug_wb_rf_we,
     output wire [ 4:0] debug_wb_rf_wnum,
-    output wire [31:0] debug_wb_rf_wdata
+    output wire [31:0] debug_wb_rf_wdata,
+    output wire [31:0] debug_wb_inst 
+
+    // difftest
+`ifdef DIFFTEST_EN
+    ,
+    output        wb_valid_diff                    ,
+    output        wb_cnt_inst_diff                 ,
+    output [63:0] wb_timer_64_diff                 ,
+    output [ 7:0] wb_inst_ld_en_diff               ,
+    output [31:0] wb_ld_paddr_diff                 ,
+    output [31:0] wb_ld_vaddr_diff                 ,
+    output [ 7:0] wb_inst_st_en_diff               ,
+    output [31:0] wb_st_paddr_diff                 ,
+    output [31:0] wb_st_vaddr_diff                 ,
+    output [31:0] wb_st_data_diff                  ,
+    output        wb_csr_rstat_en_diff             ,
+    output [31:0] wb_csr_data_diff
+`endif
+
 );
 //=========================================================================================
 //========================== Parameter and Internal signals ===============================
@@ -96,6 +115,18 @@ assign wb_to_csr_bus = {
   bad_va        // 32
 };
 
+// difftest
+wire [31:0] wb_inst         ;
+wire        wb_cnt_inst     ;
+wire [63:0] wb_timer_64     ;
+wire [ 7:0] wb_inst_ld_en   ;
+wire [31:0] wb_ld_paddr     ;
+wire [31:0] wb_ld_vaddr     ;
+wire [ 7:0] wb_inst_st_en   ;
+wire [31:0] wb_st_data      ;
+wire        wb_csr_rstat_en ;
+wire [31:0] wb_csr_data     ;
+
 //==============================================================================================
 //======================================== Main Code ===========================================
 //==============================================================================================
@@ -154,7 +185,17 @@ always @(*) begin
 end
 assign {csr_ecode, va_error, bad_va, csr_esubcode} = excp_info;
 
-assign {
+assign {wb_csr_data    ,  //492:461 for difftest
+        wb_csr_rstat_en,  //460:460 for difftest
+        wb_st_data     ,  //459:428 for difftest
+        wb_inst_st_en  ,  //427:420 for difftest
+        wb_ld_vaddr    ,  //419:388 for difftest
+        wb_ld_paddr    ,  //387:356 for difftest
+        wb_inst_ld_en  ,  //355:348 for difftest
+        wb_cnt_inst    ,  //347:347 for difftest
+        wb_timer_64    ,  //346:283 for difftest
+        wb_inst        ,  //282:251 for difftest
+
         wb_error_va    ,  //166:135
         wb_excp_num    ,  //134:119
         wb_csr_we      ,  //118:118
@@ -185,4 +226,25 @@ assign  debug_wb_pc        = wb_pc      ;
 assign  debug_wb_rf_we     = {4{rf_we}} ;
 assign  debug_wb_rf_wnum   = rf_waddr   ;
 assign  debug_wb_rf_wdata  = rf_wdata   ;
+assign  debug_wb_inst     = wb_inst;
+assign  debug_wb_valid    = wb_valid;
+
+`ifdef DIFFTEST_EN
+assign wb_valid_diff        = real_valid        ;
+assign wb_timer_64_diff     = wb_timer_64       ;
+assign wb_cnt_inst_diff     = wb_cnt_inst       ;
+
+assign wb_inst_ld_en_diff   = wb_inst_ld_en     ;
+assign wb_ld_paddr_diff     = wb_ld_paddr       ;
+assign wb_ld_vaddr_diff     = wb_ld_vaddr       ;
+
+assign wb_inst_st_en_diff   = wb_inst_st_en     ;
+assign wb_st_paddr_diff     = wb_ld_paddr_diff  ;
+assign wb_st_vaddr_diff     = wb_ld_vaddr_diff  ;
+assign wb_st_data_diff      = wb_st_data        ;
+
+assign wb_csr_rstat_en_diff = wb_csr_rstat_en   ;
+assign wb_csr_data_diff     = wb_csr_data       ;
+`endif
+
 endmodule

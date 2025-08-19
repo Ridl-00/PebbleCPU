@@ -27,6 +27,13 @@ module id_stage (
 
     input wire  [`CSR_TO_ID_WD] csr_to_id_bus,
     output wire [`ID_TO_CSR_WD] id_to_csr_bus
+
+    `ifdef DIFFTEST_EN
+    ,
+    // difftest
+    output [31:0]                       rf_to_diff [31:0]
+    `endif
+
 );
 
 //=========================================================================================
@@ -311,6 +318,10 @@ assign id_to_csr_bus = {
     rd_csr_addr
 };
 
+// difftest
+wire [7:0]  inst_ld_en;
+wire [7:0]  inst_st_en;
+wire        inst_csr_rstat_en;
 //==============================================================================================
 //======================================== Main Code ===========================================
 //==============================================================================================
@@ -723,6 +734,11 @@ regfile u_regfile(
     .we     (rf_we    ),
     .waddr  (rf_waddr ),
     .wdata  (rf_wdata )
+
+    `ifdef DIFFTEST_EN
+    ,
+    .rf_o   (rf_to_diff)
+    `endif
     );                       
 
 //分支实际判断
@@ -887,7 +903,22 @@ assign br_really_taken = br_taken && id_ready_go  && id_valid && !excp && !flush
 assign br_stall = br_need_reg_data && !id_ready_go && id_valid ;
 assign id_to_preif_bus = {br_really_taken, br_target, br_stall};
 
+//difftest
+// ll ldw ldhu ldh ldbu ldb
+assign inst_ld_en = {2'b0, 1'b0/*inst_ll_w*/, inst_ld_w, inst_ld_hu, inst_ld_h, inst_ld_bu, inst_ld_b};
+// sc(llbit = 1) stw sth stb
+assign inst_st_en = {4'b0, 1'b0/*id_llbit && inst_sc_w*/, inst_st_w, inst_st_h, inst_st_b};
+assign inst_csr_rstat_en = (inst_csrrd || inst_csrwr || inst_csrxchg) && (csr_idx == 14'd5);
+
+
 assign id_to_exe_bus = {
+                       inst_csr_rstat_en,  // 349:349 for difftest
+                       inst_st_en       ,  // 348:341 for difftest
+                       inst_ld_en       ,  // 340:333 for difftest
+                       (inst_rdcntvl_w | inst_rdcntvh_w | inst_rdcntid_w), //332:332  for difftest
+                       timer_64      ,  //331:268  for difftest
+                       id_inst       ,  //267:236  for difftest
+
                        mem_sign_exted,  //218:218
                        excp_num      ,  //217:209
                        csr_mask      ,  //208:208

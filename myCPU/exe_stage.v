@@ -119,14 +119,6 @@ wire        exe_load_op     ;
 // wire        exe_br_pre_error  ;
 // wire        exe_br_pre        ;
 
-// difftest
-// wire [31:0] exe_inst         ;
-// wire [63:0] exe_timer_64     ;
-// wire        exe_cnt_inst     ;
-// wire [ 7:0] exe_inst_ld_en   ;
-// wire [ 7:0] exe_inst_st_en   ;
-// wire        exe_csr_rstat_en ;
-
 //alu
   wire [31:0] exe_alu_src1   ;
   wire [31:0] exe_alu_src2   ;
@@ -168,7 +160,13 @@ assign {
     csr_dmw0  //32
 } = csr_to_exe_bus;
 
-
+// difftest
+wire [31:0] exe_inst         ;
+wire [63:0] exe_timer_64     ;
+wire        exe_cnt_inst     ;
+wire [ 7:0] exe_inst_ld_en   ;
+wire [ 7:0] exe_inst_st_en   ;
+wire        exe_csr_rstat_en ;
 
 //======================================================
 //=================== Main Code ====================
@@ -370,6 +368,13 @@ assign exe_csr_result   = exe_csr_mask ? csr_mask_result : exe_rkd_value;
 
 //id-exe
 assign {
+        exe_csr_rstat_en  ,  //349:349  for difftest
+        exe_inst_st_en    ,  //348:341  for difftest
+        exe_inst_ld_en    ,  //340:333  for difftst
+        exe_cnt_inst      ,  //332:332  for difftest
+        exe_timer_64      ,  //331:268  for difftest
+        exe_inst          ,  //236:267  for difftest
+
         exe_mem_sign_exted,  //218:218
         exe_excp_num      ,  //217:209
         exe_csr_mask      ,  //208:208
@@ -403,6 +408,16 @@ assign exe_to_id_bus = {dep_need_stall ,  //38:38
                        };
 
 assign exe_to_mem_bus = {
+                       exe_csr_data      ,  //424:393  for difftest
+                       exe_csr_rstat_en  ,  //392:392  for difftest
+                       data_sram_wdata       ,  //391:360  for difftest
+                       exe_inst_st_en    ,  //359:352  for difftest
+                       data_sram_addr        ,  //351:320  for difftest
+                       exe_inst_ld_en    ,  //319:312  for difftest
+                       exe_cnt_inst      ,  //311:311  for difftest
+                       exe_timer_64      ,  //310:247  for difftest
+                       exe_inst          ,  //246:215  for difftest
+
                        error_va          ,  //169:138
                        exe_mem_sign_exted,  //137:137
                        exe_store_op      ,  //136:136
