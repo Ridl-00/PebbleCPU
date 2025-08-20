@@ -16,7 +16,7 @@ module id_stage (
 
 
     output wire [`ID_TO_PREIF_WD] id_to_preif_bus,
-    output wire                br_really_taken,
+    output wire                br_flush,
     input wire [`EXE_TO_ID_WD] exe_to_id_bus,
     input wire [`MEM_TO_ID_WD] mem_to_id_bus,
     input wire [`WB_TO_ID_WD]  wb_to_rf_bus,
@@ -45,8 +45,11 @@ module id_stage (
   wire [`InstBus    ] id_inst;
   wire [ 3:0] id_excp_num;
   wire        id_excp;
-
+ wire        pre_taken_o;    
+ wire [31:0] pre_target_o ;
 assign {
+        pre_taken_o,//101
+        pre_target_o,   //100:69
         id_excp,        //68:68
         id_excp_num,    //67:64
         id_inst,        //63:32
@@ -310,6 +313,15 @@ assign {
 assign id_to_csr_bus = {
     rd_csr_addr
 };
+
+wire br_really_taken;
+// wire br_flush;
+wire [31:0] real_pc;
+wire pretarget_eq_realpc;
+
+assign real_pc=br_really_taken?br_target:id_pc+4;
+assign pretarget_eq_realpc = pre_target_o == real_pc;
+assign br_flush = (pre_taken_o && !pretarget_eq_realpc || (!pre_taken_o && br_really_taken)) && id_valid;
 
 //==============================================================================================
 //======================================== Main Code ===========================================
@@ -885,7 +897,14 @@ assign excp_ipe = kernel_inst && (csr_plv == 2'b11);
 assign br_really_taken = br_taken && id_ready_go  && id_valid && !excp && !flush_sign ;
 //存在br 且 计算未完成
 assign br_stall = br_need_reg_data && !id_ready_go && id_valid ;
-assign id_to_preif_bus = {br_really_taken, br_target, br_stall};
+assign id_to_preif_bus = {
+  br_flush,
+  br_inst && id_ready_go  && id_valid && !excp && !flush_sign,
+  id_pc,
+  br_really_taken,
+  // br_target,
+  real_pc,
+  br_stall};
 
 assign id_to_exe_bus = {
                        mem_sign_exted,  //218:218

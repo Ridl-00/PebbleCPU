@@ -54,8 +54,12 @@ reg [`PREIF_TO_IF_WD] if_data;
 wire [`InstAddrBus] if_pc;
 wire         if_excp;
 wire         if_excp_num;
+ wire        pre_taken_o;    
+ wire [31:0] pre_target_o ;
 
 assign {
+    pre_taken_o,
+    pre_target_o,
     if_excp_num,
     if_excp,
     if_pc
@@ -115,6 +119,8 @@ reg                   if_inst_valid;
 reg if_inst_cancel;
 
 assign if_to_id_bus = {
+        pre_taken_o,//101
+    pre_target_o,   //100:69
                        excp,            //68:68
                        excp_num,        //67:64
                        if_inst,         //63:32

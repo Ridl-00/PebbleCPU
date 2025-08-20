@@ -323,7 +323,7 @@ wire [ 1:0]                   csr_plv_out      ;
       .id_to_exe_bus            (id_to_exe_bus),
 
       .id_to_preif_bus          (id_to_preif_bus),
-      .br_really_taken          (br_really_taken),
+      .br_flush          (br_really_taken),
       .exe_to_id_bus            (exe_to_id_bus),
 
       .mem_to_id_bus            (mem_to_id_bus),

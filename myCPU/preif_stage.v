@@ -74,12 +74,7 @@ wire  [31:0] excp_entry;
 wire  [31:0] inst_flush_pc;
 
 
-//id-preif
-  //拆解id组合逻辑传递给if组合逻辑的数据
-  wire br_really_taken;
-  wire [`InstAddrBus] br_target;
-  wire br_stall;
-  assign {br_really_taken, br_target, br_stall} = id_to_preif_bus;
+
 
 // //跳转总线寄存器(防止因branch指令离开id阶段而导致br_bus数据丢失)
 // reg  [33:0]  br_bus_r;  
@@ -150,6 +145,45 @@ assign {
 
 }=csr_to_preif_bus;
 
+ wire        pre_taken_o;    
+ wire [31:0] pre_target_o ;
+
+//id-preif
+  //拆解id组合逻辑传递给if组合逻辑的数据
+  wire is_br;
+  wire [31:0] br_pc;
+  wire br_really_taken;
+//   wire [`InstAddrBus] br_target;
+wire [`InstAddrBus] real_pc;
+  wire br_stall;
+
+  assign {
+    br_flush,           //67 //预测错，刷流水线走real pc
+    is_br,              //66
+    br_pc,              //65：34
+    br_really_taken,    //33
+    // br_target,          //32：1
+    real_pc, //id给出的正确地址
+    br_stall            //0
+    } = id_to_preif_bus;
+
+
+
+bpu u_bpu(
+   .clk             (clk),
+   .rst_n           (resetn),
+   .pc_i            (preif_pc),           // PC of current branch instruction
+
+   .set_i           (is_br),           // 更新BTB的使能信号
+   .set_pc_i        (br_pc),       // 要更新的分支指令PC
+   .set_taken_i     (br_really_taken),     // 实际的分支结果
+   .set_target_i    (real_pc),   // 实际的分支目标地址
+
+   .pre_taken_o     (pre_taken_o),     // 预测的分支结果
+   .pre_target_o    (pre_target_o)// 预测的分支目标地址
+);
+
+
 //==============================================================================================
 //======================================== Main Code ===========================================
 //==============================================================================================
@@ -173,7 +207,8 @@ assign nextpc =
                 excp_flush  /*|| excp_flush_r*/                                  ? excp_entry      :
                 (ertn_flush /*|| ertn_flush_r*/ || refetch_flush /*|| refetch_flush_r*/ 
                 /*|| icacop_flush || idle_flush*/)                               ? inst_flush_pc   :
-                br_really_taken                                                  ? br_target       :
+                br_flush                                                  ? real_pc       :
+                pre_taken_o ? pre_target_o:
                 // br_taken_r && br_bus_r_valid                                     ? br_target_r     :
                                                                                                     seq_pc ;
 
@@ -254,7 +289,7 @@ always @(posedge clk) begin
         preif_pc <= `PcReset;
         preif_excp      <= 1'b0;
         preif_excp_num  <= 1'b0;
-    end else if (preif_allowin || flush_sign || br_really_taken) begin
+    end else if (preif_allowin || flush_sign || br_flush) begin
         preif_pc <= nextpc;
         preif_excp      <= preif_excp_adef;
         preif_excp_num  <= {preif_excp_adef};
@@ -414,6 +449,8 @@ assign flush_sign = ertn_flush /*|| ertn_flush_r */|| excp_flush /*|| excp_flush
 
 
 assign preif_to_if_bus = {
+    pre_taken_o,//66
+    pre_target_o,//65:34
     preif_excp_num, //33
     preif_excp,     //32
     preif_pc        //31:0
