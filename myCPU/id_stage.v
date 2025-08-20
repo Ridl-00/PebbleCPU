@@ -321,7 +321,7 @@ wire pretarget_eq_realpc;
 
 assign real_pc=br_really_taken?br_target:id_pc+4;
 assign pretarget_eq_realpc = pre_target_o == real_pc;
-assign br_flush = (pre_taken_o && !pretarget_eq_realpc || (!pre_taken_o && br_really_taken)) && id_valid;
+assign br_flush = (pre_taken_o && !pretarget_eq_realpc || (!pre_taken_o && br_really_taken))  && id_ready_go  && id_valid && !excp && !flush_sign;
 
 //==============================================================================================
 //======================================== Main Code ===========================================
