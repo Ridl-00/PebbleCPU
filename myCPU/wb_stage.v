@@ -49,25 +49,7 @@ wire [31:0] wb_pc;
 wire [31:0] wb_csr_result;
 wire [13:0] wb_csr_idx;
 wire        wb_csr_we;
-// wire        wb_ll_w;
-// wire        wb_sc_w;
 wire [31:0] wb_error_va;
-// wire        wb_tlbsrch;
-// wire        wb_tlbfill;
-// wire        wb_tlbwr;
-// wire        wb_tlbrd;
-// wire        wb_refetch;
-// wire        wb_invtlb;
-// wire        wb_icacop_op_en;
-// wire        wb_br_inst;
-// wire        wb_icache_miss;
-// wire        wb_access_mem;
-// wire        wb_dcache_miss;
-// wire        wb_br_pre;
-// wire        wb_br_pre_error;
-// wire        wb_idle;
-// wire [31:0] wb_paddr;
-// wire        wb_data_uc;
 
 wire real_valid; 
 
@@ -118,11 +100,11 @@ always @(posedge clk) begin
     end
 end
 
-assign flush_sign = excp_flush || ertn_flush || refetch_flush/* || icacop_flush || idle_flush*/;
+assign flush_sign = excp_flush || ertn_flush || refetch_flush ;
 
 assign excp_flush   = wb_excp && wb_valid;
 assign ertn_flush   = wb_ertn && real_valid;
-assign refetch_flush = (wb_csr_we /*|| ((wb_ll_w || wb_sc_w) && !wb_excp) || wb_refetch*/) && wb_valid;
+assign refetch_flush = (wb_csr_we) && wb_valid;
 
 assign csr_era      = wb_pc;
 assign csr_wr_en    = wb_csr_we && real_valid;

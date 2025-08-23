@@ -240,32 +240,6 @@ wire [ 1:0]                   csr_plv_out      ;
           .plv_out            (csr_plv_out      )
     );
 
-//   if_stage u_if_stage (
-//       .clk              (aclk),
-//       .resetn           (aresetn),
-
-//       .id_allowin       (id_allowin),
-//       .if_to_id_valid   (if_to_id_valid),
-//       .if_to_id_bus     (if_to_id_bus),
-
-//       .excp_flush       (excp_flush   ),
-//       .ertn_flush       (ertn_flush   ),
-//       .refetch_flush    (refetch_flush),
-
-//       .id_to_if_bus     (id_to_if_bus),
-//       .csr_to_if_bus    (csr_to_if_bus),
-
-//       .cache_v          (inst_cached       ),
-
-//       .inst_sram_req    (inst_sram_en),
-//       .inst_sram_wstrb  (inst_sram_we),
-//       .inst_sram_addr   (inst_sram_addr),
-//       .inst_sram_wdata  (inst_sram_wdata),
-//       .inst_sram_rdata  (inst_sram_rdata),
-//       .inst_sram_addr_ok(icache_addr_ok),
-//       .inst_sram_data_ok(icache_data_ok)
-// );
-
   preif_stage u_preif_stage (
       .clk              (aclk),
       .resetn           (aresetn),

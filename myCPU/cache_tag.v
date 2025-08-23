@@ -61,8 +61,6 @@ module cache_tag(
         end
     end
 //============================refresh=============================
-    //axi返回refresh的下一拍，tag写入，tag一旦写入，hit就高了，此时miss解除
-    //refresh当拍data就开始写入（wea拉高）,miss解除时已经是写入的下一拍
     // way0
     always @ (posedge clk) begin
         if (rst) begin

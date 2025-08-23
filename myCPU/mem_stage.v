@@ -116,8 +116,7 @@ wire        forward_enable;
 wire [31:0] data_sram_rdata;
 wire data_sram_data_ok;
 assign data_sram_rdata = dcache_data_ok ? dcache_temp_rdata : uncache_temp_rdata;
-assign data_sram_data_ok = dcache_data_ok || uncache_data_ok; //从某种程度上来说，cached由上一个发req的addr决定
-                                                              //但鉴于同时读写机制，或许直接或一下就行
+assign data_sram_data_ok = dcache_data_ok || uncache_data_ok; 
 
 //======================================================
 //=================== Main Code ====================
@@ -145,7 +144,7 @@ end
 
 assign access_mem = mem_store_op || mem_load_op;
 
-assign flush_sign = excp_flush || ertn_flush || refetch_flush /*|| icacop_flush || idle_flush*/;
+assign flush_sign = excp_flush || ertn_flush || refetch_flush ;
 
 assign mem_rdata = data_sram_rdata;
 
@@ -169,28 +168,22 @@ assign mem_result = ({32{mem_mem_size[0] &&  mem_mem_sign_exted}} & {{24{mem_byt
 assign mem_final_result = ({32{mem_load_op      }} & mem_result       )  |
                           ({32{!mem_load_op}} & mem_exe_result);
 
-//forward仅表示是否当级是否有需要写寄存器的指令（不标识当前写的数据是否正确。
-  //即，即使当前级并未生成有效数据，也需要为其提供一个前递的位置
-//dep_need_stall用于阻塞流水线，等待当级生成有效数据
 assign dest_zero            = (mem_dest == 5'b0);
 assign forward_enable       = mem_gr_we && !dest_zero && mem_valid;
 assign dep_need_stall       = mem_load_op && !data_sram_data_ok;
 
 //exception
-assign excp = /*excp_tlbr || excp_pil || excp_pis || excp_ppi || excp_pme || */mem_excp;
-assign excp_num = {/*excp_pil, excp_pis, excp_ppi, excp_pme, excp_tlbr, 1'b0,*/6'b0, mem_excp_num};
+assign excp = mem_excp;
+assign excp_num = {6'b0, mem_excp_num};
 
-assign flush_from_mem = (excp | mem_ertn | (mem_csr_we /*| (mem_ll_w | mem_sc_w) & !excp*/) /*| mem_refetch | mem_idle*/) & mem_valid;
+assign flush_from_mem = (excp | mem_ertn | mem_csr_we  ) & mem_valid;
 
 
 //exe-mem
 assign {
         mem_error_va      ,  //169:138
-
         mem_mem_sign_exted,  //137:137
-
         mem_store_op      ,  //136:136
-
         mem_excp_num      ,  //135:126
         mem_csr_we        ,  //125:125
         mem_csr_idx       ,  //124:111

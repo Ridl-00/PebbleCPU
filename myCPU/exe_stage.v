@@ -70,21 +70,6 @@ module exe_stage (
   wire        exe_div_enable;
   wire        div_stall      ;
   wire        mul_stall      ;
-  // wire        exe_ll_w        ;
-  // wire        exe_sc_w        ;
-  // wire        exe_tlbsrch     ;
-  // wire        exe_tlbwr       ;
-  // wire        exe_tlbfill     ;
-  // wire        exe_tlbrd       ;
-  // wire        exe_refetch     ;
-  // wire        exe_invtlb      ;
-  // wire [ 9:0] exe_invtlb_asid ;
-  // wire [18:0] exe_invtlb_vpn  ;
-  // wire        exe_cacop       ;
-  // wire        exe_preld       ;
-  // wire        exe_br_inst     ;
-  // wire        exe_icache_miss ;
-  // wire        exe_idle        ;
 
 wire [31:0] error_va      ;
 
@@ -102,30 +87,6 @@ wire        exe_load_op     ;
   wire        access_mem      ; //读写ram使能
   wire        exe_mem_sign_exted; //有符号的操作
   wire [ 1:0] sram_addr_low2bit;
-
-// wire        tlbsrch_stall  ;
-
-// wire [31:0] pv_addr        ;
-
-// wire [ 4:0] cacop_op        ;
-
-// wire        dcache_req_or_inst_en;
-
-// wire        icacop_inst      ;
-// wire        icacop_inst_stall;
-// wire        dcacop_inst      ;
-// wire        preld_inst       ;
-
-// wire        exe_br_pre_error  ;
-// wire        exe_br_pre        ;
-
-// difftest
-// wire [31:0] exe_inst         ;
-// wire [63:0] exe_timer_64     ;
-// wire        exe_cnt_inst     ;
-// wire [ 7:0] exe_inst_ld_en   ;
-// wire [ 7:0] exe_inst_st_en   ;
-// wire        exe_csr_rstat_en ;
 
 //alu
   wire [31:0] exe_alu_src1   ;
@@ -195,11 +156,6 @@ assign {
     end
   end
 
-// exe_mul_div_op[ 0] = inst_mul_w;
-// exe_mul_div_op[ 1] = inst_mulh_w | inst_mulh_wu;
-// exe_mul_div_op[ 2] = inst_div_w  | inst_div_wu;
-// exe_mul_div_op[ 3] = inst_mod_w  | inst_mod_wu;
-
   //访存接口
 assign sram_addr_low2bit = {exe_alu_result[1], exe_alu_result[0]};
                                                                 //前向后有例外不行&有csr来的例外不行&有mem来的例外不行
@@ -240,15 +196,6 @@ alu u_alu(
     .alu_src2   (exe_alu_src2  ),
     .alu_result (exe_alu_result)
     );
-
-  // //mul
-  // wire [63:0] exe_mul_result;
-  // wire [63:0] mul_result_signed, mul_result_unsigned;
-
-  // assign mul_result_unsigned = exe_rj_value * exe_rkd_value;
-  // assign mul_result_signed = $signed(exe_rj_value) * $signed(exe_rkd_value);
-  // assign exe_mul_result = exe_mul_div_sign ? mul_result_signed : mul_result_unsigned;
-
 
   //div
   assign div_stall     = exe_div_enable & ~div_complete;//除法暂停高有效

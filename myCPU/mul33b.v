@@ -129,13 +129,5 @@ module mul33_3cycle(
     wire [65:0] final_result;
     wire        final_cout;
     assign {final_cout,final_result} = sum_reg + carry_reg + final_cin_reg;
-
-    //加入第三级流水
-    //? 如果非关键路径可不可以去掉
-    /*
-    reg [65:0] res_reg;
-    always @(posedge clk)begin
-        res_reg <= final_result;
-    end*/
     assign res = final_result;
 endmodule
