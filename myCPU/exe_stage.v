@@ -173,7 +173,7 @@ assign {
 //=================== Main Code ====================
 //======================================================
   assign exe_ready_go = (!div_stall && !mul_stall && (!(access_mem)||(data_sram_req && data_sram_addr_ok)))|| excp;
-  assign exe_allowin = ~exe_valid | exe_ready_go & mem_allowin;
+  assign exe_allowin = ~exe_valid || exe_ready_go && mem_allowin;
   assign exe_to_mem_valid = exe_valid && exe_ready_go && !flush_sign;
 
   assign access_mem = exe_load_op || exe_store_op;
