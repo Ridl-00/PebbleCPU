@@ -20,6 +20,7 @@ soc_verify/soc_hs_bram/run_vivado/project
 
 gettrace/
 module_verify/
+func/
 soc_verify/
 *.vhd
 *.dmp
