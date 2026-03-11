@@ -2,7 +2,7 @@ module data_bram_bank_reg (
     input wire clka,
     input wire ena,
     input wire [3:0] wea,
-    input wire [6:0] addra,
+    input wire [5:0] addra,
     input wire [31:0] dina,
     output reg [31:0] douta
 );
