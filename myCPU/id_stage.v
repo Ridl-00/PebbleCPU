@@ -15,7 +15,8 @@ module id_stage (
     output wire [`ID_TO_EXE_WD] id_to_exe_bus,
 
 
-    output wire [`ID_TO_IF_WD] id_to_if_bus,
+    output wire [`ID_TO_PREIF_WD] id_to_preif_bus,
+    output wire                br_really_taken,
     input wire [`EXE_TO_ID_WD] exe_to_id_bus,
     input wire [`MEM_TO_ID_WD] mem_to_id_bus,
     input wire [`WB_TO_ID_WD]  wb_to_rf_bus,
@@ -203,7 +204,7 @@ wire inst_cacop;
 //控制信号译码
 wire br_taken;
 wire [`InstAddrBus] br_target;
-wire br_really_taken;
+// wire br_really_taken;
 wire        br_inst;
 
 wire br_stall ; // 在load-branch时阻塞preif的取指
@@ -327,19 +328,17 @@ assign id_to_csr_bus = {
   end
 
   always @(posedge clk) begin
-    if (~resetn) begin
-        id_data <= `ID_DATA_Reset;
-    end else if (id_allowin && if_to_id_valid) begin
+    if (id_allowin && if_to_id_valid) begin
         id_data <= if_to_id_bus;
     end
   end
 
 //前递和阻塞
-assign {rf1_forward_stall, rj_value} = ((rf_raddr1 == exe_forward_reg) && exe_forward_enable && inst_need_rj) ? {exe_dep_need_stall, exe_forward_data} :
+assign {rf1_forward_stall, rj_value} = ((rf_raddr1 == exe_forward_reg) && exe_forward_enable && inst_need_rj) ? {exe_dep_need_stall || br_need_reg_data, exe_forward_data} :
                                       ((rf_raddr1 == mem_forward_reg) && mem_forward_enable && inst_need_rj) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data} :
                                                                                                                                   {1'b0, rf_rdata1}; 
 
-assign {rf2_forward_stall, rkd_value} = ((rf_raddr2 == exe_forward_reg) && exe_forward_enable && inst_need_rkd) ? {exe_dep_need_stall, exe_forward_data} :
+assign {rf2_forward_stall, rkd_value} = ((rf_raddr2 == exe_forward_reg) && exe_forward_enable && inst_need_rkd) ? {exe_dep_need_stall || br_need_reg_data, exe_forward_data} :
                                         ((rf_raddr2 == mem_forward_reg) && mem_forward_enable && inst_need_rkd) ? {mem_dep_need_stall || br_need_reg_data, mem_forward_data} :
                                                                                                                                       {1'b0, rf_rdata2};
 
@@ -886,7 +885,7 @@ assign excp_ipe = kernel_inst && (csr_plv == 2'b11);
 assign br_really_taken = br_taken && id_ready_go  && id_valid && !excp && !flush_sign ;
 //存在br 且 计算未完成
 assign br_stall = br_need_reg_data && !id_ready_go && id_valid ;
-assign id_to_if_bus = {br_really_taken, br_target, br_stall};
+assign id_to_preif_bus = {br_really_taken, br_target, br_stall};
 
 assign id_to_exe_bus = {
                        mem_sign_exted,  //218:218

@@ -21,26 +21,26 @@
     `define StageToNextstageInvalid 1'b0
 
 //各级间总线宽
+    `define PREIF_TO_IF_WD 34-1:0
     `define IF_TO_ID_WD 69-1:0
     `define ID_TO_EXE_WD 219-1:0
     `define EXE_TO_MEM_WD 170-1:0
     `define MEM_TO_WB_WD 167-1:0
 
+    `define ID_TO_PREIF_WD 34-1:0
     `define ID_TO_IF_WD 34-1:0
 
     `define EXE_TO_ID_WD 39-1:0
     `define MEM_TO_ID_WD 39-1:0
-    `define WB_TO_ID_WD 65-1:0
+    `define WB_TO_ID_WD 38-1:0
 
-    `define CSR_TO_IF_WD 166-1:0
+    `define CSR_TO_PREIF_WD 166-1:0
     `define CSR_TO_ID_WD 131-1:0
     `define CSR_TO_EXE_WD 70-1:0
 
     `define ID_TO_CSR_WD 14-1:0
     `define WB_TO_CSR_WD 127-1:0
     `define CSR_TO_MMU_WD 74-1:0
-
-    `define ID_DATA_Reset 64'b0
 
 //取指
     `define PcReset 32'h1bff_fffc
