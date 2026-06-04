@@ -26,3 +26,6 @@ soc_verify/
 *.dmp
 *.wcg
 *.wdb
+*.sdb
+xvlog.pb
+xsim.dir/
