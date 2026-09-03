@@ -14,12 +14,11 @@ module id_stage (
     output wire id_to_exe_valid,
     output wire [`ID_TO_EXE_WD] id_to_exe_bus,
 
-
-    output wire [`ID_TO_PREIF_WD] id_to_preif_bus,
-    output wire                br_flush,
-    input wire [`EXE_TO_ID_WD] exe_to_id_bus,
-    input wire [`MEM_TO_ID_WD] mem_to_id_bus,
-    input wire [`WB_TO_ID_WD]  wb_to_rf_bus,
+    output wire [`ID_TO_PREIF_WD] id_to_preif_bus,//id-preif
+    output wire                br_flush,      //id-if
+    input wire [`EXE_TO_ID_WD] exe_to_id_bus, //forward
+    input wire [`MEM_TO_ID_WD] mem_to_id_bus, //forward
+    input wire [`WB_TO_ID_WD]  wb_to_rf_bus,  //wb
 
     input wire                 excp_flush   , //wb
     input wire                 ertn_flush   , //wb
